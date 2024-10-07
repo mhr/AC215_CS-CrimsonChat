@@ -8,8 +8,6 @@ Never commit large data files,trained models, personal API Keys/secrets to GitHu
 #### Project Milestone 2 Organization
 
 ```
-.
-├── LICENSE
 ├── Readme.md
 ├── data # DO NOT UPLOAD DATA TO GITHUB, only .gitkeep to keep the directory or a really small sample
 ├── notebooks
@@ -24,7 +22,8 @@ Never commit large data files,trained models, personal API Keys/secrets to GitHu
     │   ├── Pipfile.lock
     │   ├── dataloader.py
     │   ├── docker-shell.sh
-    │   └── preprocess.py
+    │   ├── preprocess_cv.py
+    │   ├── preprocess_rag.py
     ├── docker-compose.yml
     └── models
         ├── Dockerfile
@@ -32,7 +31,6 @@ Never commit large data files,trained models, personal API Keys/secrets to GitHu
         ├── infer_model.py
         ├── model_rag.py
         └── train_model.py
-
 ```
 
 # AC215 - Milestone2 - Cheesy App
@@ -44,33 +42,51 @@ Pavlos Parmigianopapas, Pavlos Ricottapapas and Pavlos Gouda-papas
 The Grate Cheese Group
 
 **Project**
-In this project, we aim to develop an application that can identify various types of cheese by using AI-powered visual recognition technology. Users can simply take a photo of the cheese, and the app will identify it for them, offering a wealth of information about the cheese.
+In this project, we aim to develop an AI-powered cheese application. The app will feature visual recognition technology to identify various types of cheese and include a chatbot for answering all kinds of cheese-related questions. Users can simply take a photo of the cheese, and the app will identify it, providing detailed information. Additionally, the chatbot will allow users to ask cheese-related questions. It will be powered by a RAG model and fine-tuned models, making it a specialist in cheese expertise.
 
 ### Milestone2 ###
 
-We gathered a dataset of 100,000 cheese images representing approximately 1,500 different varieties. Our dataset comes from the following sources—(1), (2), (3) — with approximately 100GB in size. We stored our dataset in a private Google Cloud Bucket.
+In this milestone, we have the components for data management, including versioning, as well as the computer vision and language models.
 
-**Data Pipeline container**
-- This container reads 100GB of data and resizes the image sizes and stores it back to GCP
-- Input to this container is source and destincation GCS location, parameters for resizing, secrets needed - via docker
-- Output from this container stored at GCS location
+**Data**
+We gathered a dataset of 100,000 cheese images representing approximately 1,500 different varieties. The dataset, approximately 100GB in size, was collected from the following sources: (1), (2), (3). We have stored it in a private Google Cloud Bucket.
+Additionally, we compiled 250 bibliographical sources on cheese, including books and reports, from sources such as (4) and (5).
 
-(1) `src/datapipeline/preprocess.py`  - Here we do preprocessing on our dataset of 100GB, we reduce the image sizes (a parameter that can be changed later) to 128x128 for faster iteration with our process. Now we have dataset at 10GB and saved on GCS. 
+**Data Pipeline Containers**
+1. One container processes the 100GB dataset by resizing the images and storing them back to Google Cloud Storage (GCS).
 
-(2) `src/datapipeline/Pipfile` - We used following packages to help us preprocess here - `special cheese package` 
+	**Input:** Source and destination GCS locations, resizing parameters, and required secrets (provided via Docker).
 
-(3) `src/preprocessing/Dockerfile` - This dockerfile starts with  `python:3.11-slim-buster`. This <statement> attaches volume to the docker container and also uses secrets (not to be stored on GitHub) to connect to GCS.
+	**Output:** Resized images stored in the specified GCS location.
 
+2. Another container prepares data for the RAG model, including tasks such as chunking, embedding, and populating the vector database.
+
+## Data Pipeline Overview
+
+1. **`src/datapipeline/preprocess_cv.py`**
+   This script handles preprocessing on our 100GB dataset. It reduces the image sizes to 128x128 (a parameter that can be changed later) to enable faster iteration during processing. The preprocessed dataset is now reduced to 10GB and stored on GCS.
+
+2. **`src/datapipeline/preprocess_rag.py`**
+   This script prepares the necessary data for setting up our vector database. It performs chunking, embedding, and loads the data into a vector database (ChromaDB).
+
+3. **`src/datapipeline/Pipfile`**
+   We used the following packages to help with preprocessing:
+   - `special cheese package`
+
+4. **`src/preprocessing/Dockerfile(s)`**
+   Our Dockerfiles follow standard conventions, with the exception of some specific modifications described in the Dockerfile/described below.
+
+
+## Running Dockerfile
+Instructions for running the Dockerfile can be added here.
 To run Dockerfile - `Instructions here`
 
 **Models container**
 - This container has scripts for model training, rag pipeline and inference
-
 - Instructions for running the model container - `Instructions here`
 
-
-**Notebooks/Reports** 
-This folder contains code that is not part of container - for e.g: Application mockup, EDA, any 🔍 🕵️‍♀️ 🕵️‍♂️ crucial insights, reports or visualizations. 
+**Notebooks/Reports**
+This folder contains code that is not part of container - for e.g: Application mockup, EDA, any 🔍 🕵️‍♀️ 🕵️‍♂️ crucial insights, reports or visualizations.
 
 ----
 You may adjust this template as appropriate for your project.
