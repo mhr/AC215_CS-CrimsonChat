@@ -435,8 +435,8 @@ This container specifically handles the embedding of plaintext documents. It pro
 ### Requirements
 1. Qdrant Cloud vector storage
 2. Google Cloud Platform access key with permissions for:
-	a. GCP storage - buckeet (containing JSON dataset in required format)
-	b. GCP Vertex AI - with API enabled
+   a. GCP storage - buckeet (containing JSON dataset in required format)
+   b. GCP Vertex AI - with API enabled
 
 ### How It Works
 1. Configuration Loading\
@@ -570,6 +570,8 @@ For an inference test after training:
 ```
 python cli.py --chat
 ```
+
+A screenshot of the finetuned model instance running at an endpoint is included in src/model_training
 
 ### Secrets and Environment Variables
 
