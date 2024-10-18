@@ -1,0 +1,6 @@
+{
+    "epochs": 2,
+    "adapter_size": 4,
+    "learning_rate_multiplier": 1.0,
+    "version": 1
+}

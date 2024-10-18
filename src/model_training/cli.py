@@ -24,13 +24,13 @@ VAL_DATASET = f"gs://{bucket_name}/mental_dataset_VAL.jsonl"
 TEST_DATASET = f"gs://{bucket_name}/mental_dataset_TEST.jsonl"
 GENERATIVE_SOURCE_MODEL = "gemini-1.5-flash-002" # gemini-1.5-pro-002
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../secrets/llm-service-account.json"
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../secrets/llm-service-account.json"
 
-generation_config = {
-    "max_output_tokens": 3000,  # Maximum number of tokens for output
-    "temperature": 0.75,  # Control randomness in output
-    "top_p": 0.95,  # Use nucleus sampling
-}
+# generation_config = {
+#     "max_output_tokens": 3000,  # Maximum number of tokens for output
+#     "temperature": 0.75,  # Control randomness in output
+#     "top_p": 0.95,  # Use nucleus sampling
+# }
 
 def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
     storage_client = storage.Client()
@@ -39,7 +39,7 @@ def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
     blob.upload_from_filename(source_file_name)
     print(f"File {source_file_name} uploaded to {destination_blob_name}.")
 
-def clean():
+def clean(dataset_fname="kaggle_mental_dataset.json"):
     # Download and unzip https://www.kaggle.com/datasets/jiscecseaiml/mental-health-dataset
     """
     {'contents': [{'parts': [{'text': 'Can you explain the difference between AI '
@@ -51,7 +51,7 @@ def clean():
     """
     new_dataset = []
     systemInstruction = {"parts": [{"text": "Welcome to CrimsonChat, a chat service for stressed out Harvard CS students."}], "role": "system"}
-    with open("kaggle_mental_dataset.json", "r") as f:
+    with open(dataset_fname, "r") as f:
         dataset = json.loads(f.read())
         for intent in dataset["intents"]:
             for pattern, response in zip(intent["patterns"], intent["responses"]):
@@ -81,16 +81,16 @@ def clean():
     upload_to_bucket(bucket_name, "mental_dataset_TEST.jsonl", "mental_dataset_TEST.jsonl")
 
 # Task 2: finetune on it
-def train(wait_for_job=False):
+def train(wait_for_job=False, train_config=None):
     # Supervised Fine Tuning
     sft_tuning_job = sft.train(
         source_model=GENERATIVE_SOURCE_MODEL,
         train_dataset=TRAIN_DATASET,
         validation_dataset=VAL_DATASET,
-        epochs=2, # should be 2-3
-        adapter_size=4,
-        learning_rate_multiplier=1.0,
-        tuned_model_display_name="crimson-chat-v1",
+        epochs=train_config["epochs"], # should be 2-3
+        adapter_size=train_config["adapter_size"], # should be ~4
+        learning_rate_multiplier=train_config["learning_rate_multiplier"], # should be ~1.0
+        tuned_model_display_name=f"crimson-chat-v{train_config['version']}",
     )
     print("Training job started. Monitoring progress...\n\n")
 
@@ -111,12 +111,11 @@ def train(wait_for_job=False):
     print(f"Tuned model endpoint name: {sft_tuning_job.tuned_model_endpoint_name}")
     print(f"Experiment: {sft_tuning_job.experiment}")
 
-def chat():
+def chat(query="I'm feeling so sad about my stressful homework. What should I do?", generation_config=None):
     print("chat()")
     # Get the model endpoint from Vertex AI: https://console.cloud.google.com/vertex-ai/studio/tuning?project=ac2215-project
     generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
 
-    query = "I'm feeling so sad about my stressful homework. What should I do?"
     print("query: ", query)
     response = generative_model.generate_content(
         [query],  # Input prompt
@@ -130,26 +129,67 @@ def main(args=None):
     print("CLI Arguments:", args)
 
     if args.train:
-        clean()
-        train(wait_for_job=True)
+        assert args.dataset and args.train_config
+
+        if args.dataset:
+            clean(dataset_fname=args.dataset)
+        else:
+            clean()
+
+        with open(args.train_config, "r") as f:
+            train_config = json.loads(f.read())
+            train(wait_for_job=True, train_config=train_config)
 
     if args.chat:
-        chat()
+        assert args.query and args.generation_config
+
+        with open(args.generation_config, "r") as f:
+            generation_config = json.loads(f.read())
+
+        chat(query=args.query, generation_config=generation_config)
 
 if __name__ == "__main__":
     # Generate the inputs arguments parser
     # if you type into the terminal '--help', it will provide the description
     parser = argparse.ArgumentParser(description="CLI")
 
+    # $ python cli.py  --train --train_config train_config.json --dataset kaggle_mental_dataset.json
     parser.add_argument(
         "--train",
         action="store_true",
         help="Train model",
     )
     parser.add_argument(
+        "--train_config",
+        action="store",  # Store the provided value (filename)
+        type=str,  # Ensure the argument is treated as a string (filename)
+        help="Path to the train_config file (JSON format)"
+    )
+    parser.add_argument(
+        "--dataset",
+        action="store",  # Store the provided value (filename)
+        type=str,  # Ensure the argument is treated as a string (filename)
+        help="Path to the dataset file (JSONL format)"
+    )
+
+
+    # $ python cli.py --chat --generation_config generation_config.json --query "I'm so stressed out."
+    parser.add_argument(
         "--chat",
         action="store_true",
         help="Chat with model",
+    )
+    parser.add_argument(
+        "--generation_config",
+        action="store",  # Store the provided value (filename)
+        type=str,  # Ensure the argument is treated as a string (filename)
+        help="Path to the generation_config file (JSON format)"
+    )
+    parser.add_argument(
+        "--query",
+        action="store",  # Store the provided value (filename)
+        type=str,  # Ensure the argument is treated as a string (filename)
+        help="Ask something to the finetuned model"
     )
 
     args = parser.parse_args()

@@ -512,8 +512,10 @@ To run a container that will automatically install all dependencies required for
 Run the main script for training:
 
 ```
-python cli.py --train
+python cli.py  --train --train_config train_config.json --dataset kaggle_mental_dataset.json
 ```
+
+You can use your own train_config.json and dataset that you'd like.
 
 1. After finetuning, go to the Model Registry: https://console.cloud.google.com/vertex-ai/models?project=YOUR-PROJECT-NAME-HERE (substitute in your actual project name, see below at the environmental variables) and validate that the job has succeeded.
 2. Click the successful model, named `crimson-chat-v1`, and then click `Deploy & Test` and `Deploy to Endpoint`.
@@ -522,10 +524,13 @@ python cli.py --train
 For an inference test after training:
 
 ```
-python cli.py --chat
+python cli.py --chat --generation_config generation_config.json --query "I'm so stressed out."
 ```
 
-A screenshot of the finetuned model instance running at an endpoint is included in src/model_training
+You can switch out your own generation_config or query.
+
+A screenshot of the finetuned model instance running at an endpoint:
+![Running instance at endpoint](/src/model_training/screenshot-endpoint.png)
 
 ### Secrets and Environment Variables
 
