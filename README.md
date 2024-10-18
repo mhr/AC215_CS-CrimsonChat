@@ -434,16 +434,16 @@ This container specifically handles the embedding of plaintext documents. It pro
 
 ### Requirements
 1. Qdrant Cloud vector storage
-2. Google Cloud Platform access key with permissions for:
-   a. GCP storage - buckeet (containing JSON dataset in required format)
+2. Google Cloud Platform access key with permissions for:\
+   a. GCP storage - buckeet (containing JSON dataset in required format)\
    b. GCP Vertex AI - with API enabled
 
 ### How It Works
-1. Configuration Loading\
-2. Document Loading from GCP bucket\
-3. Batch Document Processing\
-a. Document Chunking (simple or semantic)\
-b. Embedding Generation using Vertex AI\
+1. Configuration Loading
+2. Document Loading from GCP bucket
+3. Batch Document Processing
+a. Document Chunking (simple or semantic)
+b. Embedding Generation using Vertex AI
 c. Vector Storage in Qdrant database
 
 ### Input JSON Schema
@@ -529,11 +529,6 @@ export QDRANT_API_KEY=YOUR_QDRANT_API_KEY
 Ensure you replace the placeholder values (YOUR_GCP_PROJECT_ID, YOUR_GCP_REGION, etc.) with your actual configuration details.
 The GOOGLE_APPLICATION_CREDENTIALS variable should point to the location of your GCP service account key file. The path shown assumes the variable is being accessed from within container.
 
-**Models container**
-- This container has scripts for model training and inference.
-- Instructions for running the model container - `Instructions here`
-**Notebooks/Reports**
-This folder contains code that is not part of container.
 
 ## Model Training Pipeline: src/model_training
 
