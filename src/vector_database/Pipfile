@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+user-agent = "*"
+requests = "*"
+langchain = "*"
+langchain-community = "*"
+langchain-google-vertexai = "*"
+google-cloud-storage = "*"
+google-cloud-aiplatform = ">=1.38"
+google-auth = "*"
+python-dotenv = "*"
+pandas = "*"
+scikit-learn = "*"
+qdrant-client = "*"
+numpy = "*"
+
+[requires]
+python_version = "3.11"

@@ -1,0 +1,6 @@
+outs:
+- md5: 68d85625da324adbfc11160ffce83813.dir
+  size: 64576
+  nfiles: 3
+  hash: md5
+  path: gcp_dynamic_data

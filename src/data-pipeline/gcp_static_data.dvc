@@ -1,0 +1,6 @@
+outs:
+- md5: 7fa9cf381edf50979c897b9a6ff28ce5.dir
+  size: 2473863
+  nfiles: 3
+  hash: md5
+  path: gcp_static_data

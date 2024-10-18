@@ -1,0 +1,10 @@
+embedding_model = text-embedding-004
+vector_dim = 256
+chunking_method = simple
+qdrant_collection = ms2-production_v256_te004
+chunk_size = 500
+chunk_overlap = 20
+breakpoint_threshold_type = percentile
+buffer_size = 1
+breakpoint_threshold_amount = 95
+bucket_file_path = rag_knowledge/scraped_data_harvard.json

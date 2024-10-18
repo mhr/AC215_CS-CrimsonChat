@@ -1,0 +1,493 @@
+[
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Neuroprostheses to restore hand and bladder function after spinal cord injury",
+        "description": "Thu, Oct 17, 2024 2pm to 3pm Science and Engineering Complex (SEC), 4.307/4.308",
+        "startDate": "2024-10-17T14:00:00-04:00",
+        "endDate": "2024-10-17T15:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/neuroprostheses-to-restore-hand-and-bladder-function-after-spinal-cord-injury",
+        "image": "https://localist-images.azureedge.net/photos/47683490465067/huge/3f57cf416ea3f9a5e86d6a36ed80118382249d5b.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Inclusion by Design - State of Play: Women in Sport",
+        "description": "Thu, Oct 17, 2024 5pm to 6:30pm Harvard Science and Engineering Complex, SEC 2.118",
+        "startDate": "2024-10-17T17:00:00-04:00",
+        "endDate": "2024-10-17T18:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Harvard Science and Engineering Complex",
+            "address": "150 Western Ave, Boston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363194",
+                "longitude": "-71.127301"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/inclusion-by-design-state-of-play-women-in-sport",
+        "image": "https://localist-images.azureedge.net/photos/47755394947176/huge/ec8200744154e3cbf4070ea04214d3b368f1108a.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Ed Boyden: Tools for Analyzing, Controlling, and Simulating Biological Systems",
+        "description": "Fri, Oct 18, 2024 11am to 12pm Pierce Hall, 209 Stream Available",
+        "startDate": "2024-10-18T11:00:00-04:00",
+        "endDate": "2024-10-18T12:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Pierce Hall",
+            "address": "29 Oxford Street, Cambridge, MA 02138",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.3783",
+                "longitude": "-71.117081"
+            },
+            "sameAs": "https://events.seas.harvard.edu/pierce_hall",
+            "url": "https://events.seas.harvard.edu/pierce_hall"
+        },
+        "url": "https://events.seas.harvard.edu/event/tools-for-analyzing-controlling-and-simulating-biological-systems",
+        "image": "https://localist-images.azureedge.net/photos/47162796808070/huge/6e098b4faa8c77a390bc200ade0ce9ef6f7aca28.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Composable Optimization for Robotic Motion Planning and Control",
+        "description": "Fri, Oct 18, 2024 3pm to 4pm Science and Engineering Complex (SEC), LL2.221",
+        "startDate": "2024-10-18T15:00:00-04:00",
+        "endDate": "2024-10-18T16:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/composable-optimization-for-robotic-motion-planning-and-control",
+        "image": "https://localist-images.azureedge.net/photos/47659538233333/huge/d8084caca8b18fe992adc8b5f7034b40e3aa6bd2.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "CRCS Seminar: Rada Mihalcea",
+        "description": "Mon, Oct 21, 2024 11:30am to 12:30pm Science and Engineering Complex (SEC), 3.301/302/303",
+        "startDate": "2024-10-21T11:30:00-04:00",
+        "endDate": "2024-10-21T12:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "offers": {
+            "@type": "Offer",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSe1hk1ZwEgRypsTkL2K-7YkCkQbwBpm65VtcULeVuGIY9t9FQ/viewform",
+            "price": "0"
+        },
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/crcs-seminar-rada-mihalcea",
+        "image": "https://localist-images.azureedge.net/photos/47622322485560/huge/e079dd783708b51db557f8d78eca8825f47f0183.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": " INDUSTRY INSIGHTS: Bill Peine, Ph.D. (Medtronic)",
+        "description": "Tue, Oct 22, 2024 3:30pm to 5pm Harvard Science and Engineering Complex, LL2.224",
+        "startDate": "2024-10-22T15:30:00-04:00",
+        "endDate": "2024-10-22T17:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Harvard Science and Engineering Complex",
+            "address": "150 Western Ave Boston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363194",
+                "longitude": "-71.127301"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/industry-insights-bill-peine-phd-medtronic",
+        "image": "https://localist-images.azureedge.net/photos/47728341219734/huge/60c1961eba7ad33a323a9360d28258f21183a4af.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "PhD to VC - Demystifying the Path to Venture Capital",
+        "description": "Wed, Oct 23, 2024 12pm to 1pm Science and Engineering Complex (SEC), The Node, SEC Rm 2.203",
+        "startDate": "2024-10-23T12:00:00-04:00",
+        "endDate": "2024-10-23T13:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/phd-to-vc-demystifying-the-path-to-venture-capital",
+        "image": "https://localist-images.azureedge.net/photos/47676443959963/huge/e31f082d2afb49b16da6f81c29944b1554175206.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Why climatic uncertainty matters to building energy performance: case studies in a subtropical high-density city",
+        "description": "Wed, Oct 23, 2024 3pm to 4pm Pierce Hall, 100F",
+        "startDate": "2024-10-23T15:00:00-04:00",
+        "endDate": "2024-10-23T16:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Pierce Hall",
+            "address": "29 Oxford Street, Cambridge, MA 02138",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.3783",
+                "longitude": "-71.117081"
+            },
+            "sameAs": "https://events.seas.harvard.edu/pierce_hall",
+            "url": "https://events.seas.harvard.edu/pierce_hall"
+        },
+        "url": "https://events.seas.harvard.edu/event/why-climatic-uncertainty-matters-to-building-energy-performance-case-studies-in-a-subtropical-high-density-city",
+        "image": "https://localist-images.azureedge.net/photos/47798376774075/huge/b17d4b3cc545ed79570c02dced5af90b2e9e2b98.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "After Dark Series:  SEC Oktoberfest",
+        "description": "Wed, Oct 23, 2024 4:30pm to 6:30pm Science and Engineering Complex (SEC)",
+        "startDate": "2024-10-23T16:30:00-04:00",
+        "endDate": "2024-10-23T18:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/after-dark-series-sec-oktoberfest",
+        "image": "https://localist-images.azureedge.net/photos/47604257598390/huge/03228002472c110e9595e396b3f0a1780ad1e1a4.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "President\u2019s Innovation Challenge Launch Event",
+        "description": "Wed, Oct 23, 2024 5:30pm to 8pm Harvard Innovation Labs",
+        "startDate": "2024-10-23T17:30:00-04:00",
+        "endDate": "2024-10-23T20:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "offers": {
+            "@type": "Offer",
+            "url": "https://innovationlabs.harvard.edu/events/presidents-innovation-challenge-launch-event-2",
+            "price": "0"
+        },
+        "location": {
+            "@type": "Place",
+            "name": "Harvard Innovation Labs",
+            "address": "Harvard Innovation Labs  125 Western Avenue Boston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363833",
+                "longitude": "-71.124071"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/presidents-innovation-challenge-launch-event",
+        "image": "https://localist-images.azureedge.net/photos/47755044755343/huge/2c44c39b5b0f1a260f1b46c16379b9e03cca46d5.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Engineering Viruses, Aging & Germlines",
+        "description": "Thu, Oct 24, 2024 10am to 11am Wyss Institute, 4th Floor Conference Center",
+        "startDate": "2024-10-24T10:00:00-04:00",
+        "endDate": "2024-10-24T11:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "offers": {
+            "@type": "Offer",
+            "url": "https://facultyforum102424.splashthat.com",
+            "price": "0"
+        },
+        "location": {
+            "@type": "Place",
+            "name": "Wyss Institute",
+            "address": "201 Brookline Avenue, Boston",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.34502",
+                "longitude": "-71.10182"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/engineering-viruses-aging-germlines",
+        "image": "https://localist-images.azureedge.net/photos/47745052626772/huge/effd6d8e008161806976309ef8aca57d747a81a7.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Psychiatric Brain Computer Interfaces: Treating mental illness with bioelectronic networks",
+        "description": "Thu, Oct 24, 2024 2pm to 3pm Science and Engineering Complex (SEC), 4.307/4.308",
+        "startDate": "2024-10-24T14:00:00-04:00",
+        "endDate": "2024-10-24T15:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/psychiatric-brain-computer-interfaces-treating-mental-illness-with-bioelectronic-networks",
+        "image": "https://localist-images.azureedge.net/photos/41775337349670/huge/699518e17901feab8cf7e731cd03e6f28e7ae79c.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Efficient Data Movement for Machine Learning",
+        "description": "Thu, Oct 24, 2024 2:30pm to 3:30pm Science and Engineering Complex (SEC), LL2.224",
+        "startDate": "2024-10-24T14:30:00-04:00",
+        "endDate": "2024-10-24T15:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/efficient-data-movement-for-machine-learning",
+        "image": "https://localist-images.azureedge.net/photos/47808252767436/huge/8925f3962109d865c6a5c06430b4b180772ad4c0.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Lab-to-Launch Lounge",
+        "description": "Thu, Oct 24, 2024 4pm to 6pm Maxwell Dworkin, MD 119",
+        "startDate": "2024-10-24T16:00:00-04:00",
+        "endDate": "2024-10-24T18:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Maxwell Dworkin",
+            "address": "33 Oxford Street, Cambridge, MA 02138",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.378796",
+                "longitude": "-71.117354"
+            },
+            "sameAs": "https://events.seas.harvard.edu/maxwell_dworkin",
+            "url": "https://events.seas.harvard.edu/maxwell_dworkin"
+        },
+        "url": "https://events.seas.harvard.edu/event/lab-to-launch-lounge-8970",
+        "image": "https://localist-images.azureedge.net/photos/47676592698441/huge/2935f8947d0100c4d49c6290b9ed1758505c3d37.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "First-order Methods for Linear and Quadratic Programming",
+        "description": "Fri, Oct 25, 2024 11am to 12pm Science and Engineering Complex (SEC), LL2.221",
+        "startDate": "2024-10-25T11:00:00-04:00",
+        "endDate": "2024-10-25T12:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/first-order-methods-for-linear-and-quadratic-programming",
+        "image": "https://localist-images.azureedge.net/photos/47694812834750/huge/8eb9b9aecab21fdc23dadc401fc6d8f3c93d3fba.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Flavio Noca: Shaping the Wind in the Laboratory",
+        "description": "Fri, Oct 25, 2024 11am to 12pm Pierce Hall, 209",
+        "startDate": "2024-10-25T11:00:00-04:00",
+        "endDate": "2024-10-25T12:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Pierce Hall",
+            "address": "29 Oxford Street, Cambridge, MA 02138",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.3783",
+                "longitude": "-71.117081"
+            },
+            "sameAs": "https://events.seas.harvard.edu/pierce_hall",
+            "url": "https://events.seas.harvard.edu/pierce_hall"
+        },
+        "url": "https://events.seas.harvard.edu/event/flavio-noca-shaping-the-wind-in-the-laboratory",
+        "image": "https://localist-images.azureedge.net/photos/47481501958002/huge/1298af32960f3e4d902f36ce1f6e67c4d4918106.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Stratospheric heterogeneous chemistry after the 2019\u20132020 Australian wildfires",
+        "description": "Fri, Oct 25, 2024 12pm to 1pm Pierce Hall, 100F Stream Available",
+        "startDate": "2024-10-25T12:00:00-04:00",
+        "endDate": "2024-10-25T13:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Pierce Hall",
+            "address": "29 Oxford Street, Cambridge, MA 02138",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.3783",
+                "longitude": "-71.117081"
+            },
+            "sameAs": "https://events.seas.harvard.edu/pierce_hall",
+            "url": "https://events.seas.harvard.edu/pierce_hall"
+        },
+        "url": "https://events.seas.harvard.edu/event/stratospheric-heterogeneous-chemistry-after-the-20192020-australian-wildfires",
+        "image": "https://localist-images.azureedge.net/photos/47490222524738/huge/256bfee8a205633c42aa0de359cefd08b79d1e8a.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "CRCS Seminar: Judd Walson",
+        "description": "Mon, Oct 28, 2024 11:30am to 12:30pm Science and Engineering Complex (SEC), 3.301/302/303",
+        "startDate": "2024-10-28T11:30:00-04:00",
+        "endDate": "2024-10-28T12:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "offers": {
+            "@type": "Offer",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSct2yro0QmCykharhXaC9ymkRBRU1XRNzWs8lKQTHzJ_p3ivw/viewform",
+            "price": "0"
+        },
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/crcs-seminar-judd-walson",
+        "image": "https://localist-images.azureedge.net/photos/47622353483769/huge/f23bdbfefe9e8963fa73537cf013f4362ab6b6ef.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Rock x i-lab x Grid Mixer",
+        "description": "Mon, Oct 28, 2024 5pm to 6:30pm Chao Center",
+        "startDate": "2024-10-28T17:00:00-04:00",
+        "endDate": "2024-10-28T18:30:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Chao Center",
+            "address": "25 Harvard Way Boston, MA 02163",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.366598",
+                "longitude": "-71.122774"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/rock-x-i-lab-x-grid-mixer",
+        "image": "https://localist-images.azureedge.net/photos/47676851081335/huge/99ec6c2d46fc9d21efbd7fdd27d0536007f76534.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": " INDUSTRY INSIGHTS: Center for Astrophysics",
+        "description": "Tue, Oct 29, 2024 3:30pm to 5pm Harvard Science and Engineering Complex, LL2.224",
+        "startDate": "2024-10-29T15:30:00-04:00",
+        "endDate": "2024-10-29T17:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Harvard Science and Engineering Complex",
+            "address": "150 Western Ave, Boston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363194",
+                "longitude": "-71.127301"
+            }
+        },
+        "url": "https://events.seas.harvard.edu/event/industry-insights-center-for-astrophysics",
+        "image": "https://localist-images.azureedge.net/photos/47737887896686/huge/4b6e9cbdf1ce4b03111480fe073427be715e6c9f.jpg"
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "The excitement of non-excitable cells in the heart",
+        "description": "Thu, Oct 31, 2024 2pm to 3pm Science and Engineering Complex (SEC), 4.307/4.308",
+        "startDate": "2024-10-31T14:00:00-04:00",
+        "endDate": "2024-10-31T15:00:00-04:00",
+        "eventStatus": "EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Science and Engineering Complex (SEC)",
+            "address": "150 Western Avenue, Allston, MA 02134",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "42.363197",
+                "longitude": "-71.127278"
+            },
+            "sameAs": "https://events.seas.harvard.edu/SEC",
+            "url": "https://events.seas.harvard.edu/SEC"
+        },
+        "url": "https://events.seas.harvard.edu/event/the-excitement-of-non-excitable-cells-in-the-heart",
+        "image": "https://localist-images.azureedge.net/photos/47790066980996/huge/beab81d21d688c0216e3aded442ba2f0a4fc5a49.jpg"
+    }
+]
