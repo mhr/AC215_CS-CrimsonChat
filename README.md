@@ -307,6 +307,9 @@ In summary:
 - For regular updates, just use **Git commits** without tagging.
 - When ready to share or finalize a version of your data, consider using `git tag` to mark that point.
 
+### Final Screenshot of Working Container
+![Working container](/src/data-pipeline/working-container-screenshot.png)
+
 ## Dynamic Data Pipeline: src/data-pipeline-dynamic
 
 ### 1. Edit `.env.dev` file
@@ -379,54 +382,8 @@ Run this outside the container.
 - Push changes `git push --atomic origin main dataset_v20`
   It's not mandatory to tag every time before you `dvc add` and `dvc push`, but **tagging is helpful** when you want to mark specific data versions for easy access later.
 
-### When to Use Git Tags:
-
-1. **Major Milestones:**
-   You should use **Git tags** for major milestones, like when you have reached a significant version of your data that you might want to retrieve later.
-
-   For example:
-
-   - After completing a major scraping session or data update.
-   - After pre-processing or cleaning a dataset.
-   - Before conducting a large analysis or model training run.
-
-   **Example:**
-
-   ##### Update Git to track DVC changes (again remember this should be done outside the container)
-
-   - First run git status `git status`
-   - Add changes `git add .`
-   - Commit changes `git commit -m 'dataset updates...'`
-   - Add a dataset tag `git tag -a 'dataset_v21' -m 'tag dataset'`
-   - Push changes `git push --atomic origin main dataset_v21`
-
-   By doing this, you'll have a clear marker (tag) to reference that specific version.
-
-#### When Not to Use Git Tags:
-
-**Every Minor Update:**
-You don't need to tag **every minor update** unless it's a major milestone in your project. For smaller changes, you can simply commit them to Git and continue versioning with `dvc add`, `git commit`, and `dvc push` as usual. The Git commit history itself will track changes without needing a tag for each.
-
-**Example (minor updates):**
-
-```bash
-# Add new data or changes
-
-git commit -m "Updated dataset with recent scraping"
-
-# Push data and commit to remote
-git push
-```
-
-#### When Not to Use Tags:
-
-You don't need to tag every single minor data update unless you need to quickly reference a particular version later. Use regular Git commits for small changes or incremental updates. Tags are for **important points** in your project when you want to remember a particular version of the data.
-
-#### Tag Summary
-
-- **Tag** before significant or major updates to easily reference important versions.
-- For regular updates, just use **Git commits** without tagging.
-- When ready to share or finalize a version of your data, consider using `git tag` to mark that point.
+### Final Screenshot of Working Container
+![Working container](/src/data-pipeline-dynamic/working-container-screenshot.png)
 
 ## Embedding and Inserting into Vector Database: src/vector_database
 **Container Purpose**
@@ -529,6 +486,8 @@ export QDRANT_API_KEY=YOUR_QDRANT_API_KEY
 Ensure you replace the placeholder values (YOUR_GCP_PROJECT_ID, YOUR_GCP_REGION, etc.) with your actual configuration details.
 The GOOGLE_APPLICATION_CREDENTIALS variable should point to the location of your GCP service account key file. The path shown assumes the variable is being accessed from within container.
 
+### Final Screenshot of Working Container
+![Working container](/src/vector_database/working-container-screenshot.png)
 
 ## Model Training Pipeline: src/model_training
 
@@ -594,6 +553,9 @@ export MODEL_ENDPOINT="YOUR_MODEL_ID"
 ```
 
 Using your specific service account key and project name for the credentials.
+
+### Final Screenshot of Working Container
+![Working container](/src/model_training/working-container-screenshot.png)
 
 ## RAG Pipeline: src/rag_pipeline
 
@@ -677,3 +639,6 @@ The RAG Pipeline uses environment variables to manage secrets and global configu
    export GOOGLE_APPLICATION_CREDENTIALS=path/to/your/credentials.json
    export MODEL_ENDPOINT="YOUR_MODEL_ID"
    ```
+
+### Final Screenshot of Working Container
+![Working container](/src/rag_pipeline/working-container-screenshot.png)
