@@ -529,11 +529,6 @@ export QDRANT_API_KEY=YOUR_QDRANT_API_KEY
 Ensure you replace the placeholder values (YOUR_GCP_PROJECT_ID, YOUR_GCP_REGION, etc.) with your actual configuration details.
 The GOOGLE_APPLICATION_CREDENTIALS variable should point to the location of your GCP service account key file. The path shown assumes the variable is being accessed from within container.
 
-**Models container**
-- This container has scripts for model training and inference.
-- Instructions for running the model container - `Instructions here`
-**Notebooks/Reports**
-This folder contains code that is not part of container.
 
 ## Model Training Pipeline: src/model_training
 
