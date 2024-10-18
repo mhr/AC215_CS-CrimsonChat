@@ -68,6 +68,7 @@
 │   └── embed_and_insert_vectordb_crimsonchat_1008.ipynb
 ├── references
 ├── reports
+│   └── Milestone 2 CS-CrimsonChat Report.pdf
 └── src
     ├── data-pipeline
     │   ├── Dockerfile
@@ -85,7 +86,8 @@
     │   ├── gcp_static_data
     │   ├── gcp_static_data.dvc
     │   ├── scrape_content_scrapy.py
-    │   └── scrape_links.py
+    │   ├── scrape_links.py
+    │   └── working-container-screenshot.png
     ├── data-pipeline-dynamic
     │   ├── Dockerfile
     │   ├── Pipfile
@@ -99,7 +101,8 @@
     │   ├── dynamic_1.py
     │   ├── dynamic_google_doc.py
     │   ├── gcp_dynamic_data
-    │   └── gcp_dynamic_data.dvc
+    │   ├── gcp_dynamic_data.dvc
+    │   └── working-container-screenshot.png
     ├── model_training
     │   ├── Dockerfile
     │   ├── Pipfile
@@ -108,10 +111,14 @@
     │   ├── docker-entrypoint.sh
     │   ├── docker-shell.sh
     │   ├── env.dev
+    │   ├── generation_config.json
     │   ├── kaggle_mental_dataset.json
     │   ├── mental_dataset_TEST.jsonl
     │   ├── mental_dataset_TRAIN.jsonl
-    │   └── mental_dataset_VAL.jsonl
+    │   ├── mental_dataset_VAL.jsonl
+    │   ├── screenshot-endpoint.png
+    │   ├── train_config.json
+    │   └── working-container-screenshot.png
     ├── rag_pipeline
     │   ├── Dockerfile
     │   ├── Pipfile
@@ -123,14 +130,15 @@
     │   ├── env.dev
     │   ├── sample.json
     │   ├── test_gcp_locally.py
-    │   └── utils
-    │       ├── chunker_utils.py
-    │       ├── config_utils.py
-    │       ├── embedding_utils.py
-    │       ├── json_utils.py
-    │       ├── qdrant_utils.py
-    │       ├── semantic_splitter.py
-    │       └── simple_text_splitter.py
+    │   ├── utils
+    │   │   ├── chunker_utils.py
+    │   │   ├── config_utils.py
+    │   │   ├── embedding_utils.py
+    │   │   ├── json_utils.py
+    │   │   ├── qdrant_utils.py
+    │   │   ├── semantic_splitter.py
+    │   │   └── simple_text_splitter.py
+    │   └── working-container-screenshot.png
     └── vector_database
         ├── Dockerfile
         ├── Pipfile
@@ -141,17 +149,18 @@
         ├── docker-shell.sh
         ├── env.dev
         ├── requirements.txt
-        └── utils
-            ├── chunker_utils.py
-            ├── config_utils.py
-            ├── embedding_utils.py
-            ├── json_utils.py
-            ├── qdrant_utils.py
-            ├── semantic_splitter.py
-            └── simple_text_splitter.py
+        ├── utils
+        │   ├── chunker_utils.py
+        │   ├── config_utils.py
+        │   ├── embedding_utils.py
+        │   ├── json_utils.py
+        │   ├── qdrant_utils.py
+        │   ├── semantic_splitter.py
+        │   └── simple_text_splitter.py
+        └── working-container-screenshot.png
 ```
 
-This is 15 directories containing 72 files. (Generated using the `tree` command.)
+This is 15 directories containing 81 files. (Generated using the `tree` command.)
 
 # AC215 - Milestone2 - CS-CrimsonChat App
 
