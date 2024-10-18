@@ -434,16 +434,16 @@ This container specifically handles the embedding of plaintext documents. It pro
 
 ### Requirements
 1. Qdrant Cloud vector storage
-2. Google Cloud Platform access key with permissions for:
-   a. GCP storage - buckeet (containing JSON dataset in required format)
+2. Google Cloud Platform access key with permissions for:\
+   a. GCP storage - buckeet (containing JSON dataset in required format)\
    b. GCP Vertex AI - with API enabled
 
 ### How It Works
-1. Configuration Loading\
-2. Document Loading from GCP bucket\
-3. Batch Document Processing\
-a. Document Chunking (simple or semantic)\
-b. Embedding Generation using Vertex AI\
+1. Configuration Loading
+2. Document Loading from GCP bucket
+3. Batch Document Processing
+a. Document Chunking (simple or semantic)
+b. Embedding Generation using Vertex AI
 c. Vector Storage in Qdrant database
 
 ### Input JSON Schema
