@@ -47,7 +47,7 @@ def chat(query, documents_llm):
 
     generation_config = {
         "temperature": 0.75,
-        "max_output_tokens": 150,
+        "max_output_tokens": 1500,
         "top_p": 0.95,
     }
 
@@ -100,7 +100,7 @@ def main():
         # Perform search
 
     query = config['query']
-    search_results = qdrant_search(curr_qdrant_client, config['qdrant_collection'], get_dense_embedding(query, config['embedding_model'], config['vector_dim']), 5)
+    search_results = qdrant_search(curr_qdrant_client, config['qdrant_collection'], get_dense_embedding(query, config['embedding_model'], config['vector_dim']), 50)
     query_results = {"query": query, "results": search_results}
 
     
@@ -111,7 +111,7 @@ def main():
     # print(query_results['results'])
 
     results = []
-    for result in query_results['results'][:5]:
+    for result in query_results['results'][:20]:
         results.append(result['payload']['text'])
 
     # print(results)
