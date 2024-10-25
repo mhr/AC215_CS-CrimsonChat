@@ -48,7 +48,7 @@ def process_batch(batch: List[Dict[str, Any]], config: Dict[str, Any], gcp_proje
     chunked_batch = run_chunking(batch, config, get_dense_embedding)
     print(f"Documents chunked: {len(chunked_batch)} total chunks")
     
-    if len(chunked_batch) > 200:
+    if len(chunked_batch) > 300:
         print("WARNING: Chunked batch is too large, processing in smaller batches")
         # Process chunks in batches of 100
         def batch_iterator(data, batch_size=100):
@@ -68,12 +68,12 @@ def process_batch(batch: List[Dict[str, Any]], config: Dict[str, Any], gcp_proje
             total_processed += len(current_chunk_batch)
             print(f"Batch {i}: Processed and upserted {len(current_chunk_batch)} chunks "
                 f"({total_processed}/{len(chunked_batch)} total)")
-    # else:
-    #     # Embed the chunks
-    #     embedded_chunks = process_and_embed_documents(gcp_project, location, chunked_batch, config['embedding_model'], config['vector_dim'])
-    #     # Upsert the embedded chunks to Qdrant Cloud
-    #     qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_chunks, config['qdrant_collection'])
-    #     total_processed = len(chunked_batch)
+    else:
+        # Embed the chunks
+        embedded_chunks = process_and_embed_documents(gcp_project, location, chunked_batch, config['embedding_model'], config['vector_dim'])
+        # Upsert the embedded chunks to Qdrant Cloud
+        qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_chunks, config['qdrant_collection'])
+        total_processed = len(chunked_batch)
     print(f"Complete: Processed all {total_processed} chunks")
 
 def batch_process_documents(documents: List[Dict[str, Any]], config: Dict[str, Any], gcp_project: str, location: str, qdrant_url: str, qdrant_api_key: str, batch_size: int = 10):
@@ -85,6 +85,9 @@ def batch_process_documents(documents: List[Dict[str, Any]], config: Dict[str, A
 
     for i in range(0, total_documents, batch_size):
         batch = documents[i:i+batch_size]
+        curr_batch_number = i//batch_size + 1
+        if curr_batch_number >= 1596: 
+            continue
         print(f"\nProcessing batch {i//batch_size + 1}/{num_batches}")
         process_batch(batch, config, gcp_project, location, qdrant_url, qdrant_api_key)
     print("RAG TESTING COMPLETED, V2, 10/16/2024")
