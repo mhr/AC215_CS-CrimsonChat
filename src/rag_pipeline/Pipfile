@@ -21,6 +21,7 @@ google-auth = "*"
 python-dotenv = "*"
 qdrant-client = "*"
 numpy = "*"
+streamlit = "*"
 
 [requires]
 python_version = "3.11"
