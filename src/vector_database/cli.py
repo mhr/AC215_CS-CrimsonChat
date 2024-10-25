@@ -40,17 +40,41 @@ BUCKET_NAME = os.environ["BUCKET_NAME"]
 QDRANT_URL = os.environ.get("QDRANT_URL")
 QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
 GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") # not really used, Vertex AI library looks for global env automatically
+from typing import List, Dict, Any
+from itertools import islice
 
 def process_batch(batch: List[Dict[str, Any]], config: Dict[str, Any], gcp_project: str, location: str, qdrant_url: str, qdrant_api_key: str):
     # Chunk the documents
     chunked_batch = run_chunking(batch, config, get_dense_embedding)
-    print(f"Batch chunked: {len(chunked_batch)} chunks")
-    # Embed chunks
-    embedded_batch = process_and_embed_documents(gcp_project, location, chunked_batch, config['embedding_model'], config['vector_dim'])
-    print(f"Batch embedded: {len(embedded_batch)} embeddings")
-    # Upsert the data to Qdrant Cloud
-    qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_batch, config['qdrant_collection'])
-    print(f"Batch upserted to Qdrant")
+    print(f"Documents chunked: {len(chunked_batch)} total chunks")
+    
+    if len(chunked_batch) > 200:
+        print("WARNING: Chunked batch is too large, processing in smaller batches")
+        # Process chunks in batches of 100
+        def batch_iterator(data, batch_size=100):
+            iterator = iter(data)
+            return iter(lambda: list(islice(iterator, batch_size)), [])
+        
+        chunk_batches = batch_iterator(chunked_batch, 100)
+        total_processed = 0
+        
+        for i, current_chunk_batch in enumerate(chunk_batches, 1):
+            # Embed current chunk batch
+            embedded_chunks = process_and_embed_documents(gcp_project, location, current_chunk_batch, config['embedding_model'], config['vector_dim'])
+            
+            # Upsert the embedded chunks to Qdrant Cloud
+            qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_chunks, config['qdrant_collection'])
+            
+            total_processed += len(current_chunk_batch)
+            print(f"Batch {i}: Processed and upserted {len(current_chunk_batch)} chunks "
+                f"({total_processed}/{len(chunked_batch)} total)")
+    # else:
+    #     # Embed the chunks
+    #     embedded_chunks = process_and_embed_documents(gcp_project, location, chunked_batch, config['embedding_model'], config['vector_dim'])
+    #     # Upsert the embedded chunks to Qdrant Cloud
+    #     qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_chunks, config['qdrant_collection'])
+    #     total_processed = len(chunked_batch)
+    print(f"Complete: Processed all {total_processed} chunks")
 
 def batch_process_documents(documents: List[Dict[str, Any]], config: Dict[str, Any], gcp_project: str, location: str, qdrant_url: str, qdrant_api_key: str, batch_size: int = 10):
     # process documents in batches: chunk, embed, upsert

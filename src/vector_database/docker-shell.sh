@@ -15,7 +15,7 @@ docker build -t $IMAGE_NAME -f Dockerfile .
 docker run --rm --name $IMAGE_NAME -ti \
 -v "$BASE_DIR":/app \
 -v "$SECRETS_DIR":/secrets \
--e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
+-e GOOGLE_APPLICATION_CREDENTIALS="/secrets/crimsonchat.json" \
 -e GCP_PROJECT=$GCP_PROJECT \
 -e BUCKET_NAME=$BUCKET_NAME \
 -e LOCATION=$LOCATION \
