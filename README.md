@@ -1,4 +1,10 @@
-## Milestone 2: CS-CrimsonChat
+## Milestone 3: CS-CrimsonChat
+
+### Updates:
+
+1. Added History for chats
+2. Made a UI with Streamlit
+3. Improved LLM's response (longer and more relevant response)
 
 # Table of Contents
 1. [Project Milestone 2 Organization](#project-milestone-2-organization)
@@ -57,6 +63,7 @@
    - [Usage](#usage-1)
    - [Secrets and Environment Variables](#secrets-and-environment-variables-1)
      - [Setting Up Environment Variables](#setting-up-environment-variables-1)
+   - [Running with UI](#running-with-ui)
 
 #### Project Milestone 2 Organization
 
@@ -653,6 +660,15 @@ The RAG Pipeline uses environment variables to manage secrets and global configu
    export GOOGLE_APPLICATION_CREDENTIALS=path/to/your/credentials.json
    export MODEL_ENDPOINT="YOUR_MODEL_ID"
    ```
+### Running with UI
+
+```
+streamlit run ui.py --server.address 0.0.0.0
+```
+
+### Screenshot of Working UI
+
+![Working container](/src/rag_pipeline/ui.png)
 
 ### Final Screenshot of Working Container
 ![Working container](/src/rag_pipeline/working-container-screenshot.png)
