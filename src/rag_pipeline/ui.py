@@ -53,7 +53,7 @@ def chat(conversation_history, documents_llm):
 
     generation_config = {
         "temperature": 0.75,
-        "max_output_tokens": 150,
+        "max_output_tokens": 2000, # response length limit
         "top_p": 0.95,
     }
 
@@ -120,7 +120,7 @@ def main():
                 "question_embedding": get_dense_embedding(
                     prompt, "text-embedding-004", 256
                 ),
-                "limit": 5,
+                "limit": 30,
             }
             response = st.session_state.db_client.query(query_dict)
             logger.info("Performed Qdrant search")

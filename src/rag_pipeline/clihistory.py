@@ -134,12 +134,12 @@ def main():
             curr_qdrant_client,
             config['qdrant_collection'],
             get_dense_embedding(query, config['embedding_model'], config['vector_dim']),
-            5
+            50
         )
         
         #setting documents inputting into the model as 5 temporarily - this can change
         results = []
-        for result in search_results[:5]:
+        for result in search_results[:20]:
             results.append(result['payload']['text'])
 
         documents_llm = str(results)
