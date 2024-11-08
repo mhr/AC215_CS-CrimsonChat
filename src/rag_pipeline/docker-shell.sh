@@ -3,6 +3,9 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Disable path conversion for Windows
+export MSYS_NO_PATHCONV=1
+
 # Load the settings from the env.dev file
 source ./env.dev
 
