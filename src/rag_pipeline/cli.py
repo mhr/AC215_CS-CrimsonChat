@@ -47,7 +47,7 @@ def chat(query, documents_llm):
 
     generation_config = {
         "temperature": 0.75,
-        "max_output_tokens": 150,
+        "max_output_tokens": 2000,
         "top_p": 0.95,
     }
 
