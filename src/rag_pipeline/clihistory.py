@@ -134,7 +134,7 @@ def get_llm_response(query, prompt, generative_model, config):
         print(f"Error generating response: {e}")
         return "I apologize, but I encountered an error generating a response. Please try again."
 
-def process_user_query(query, generative_model, config):
+def process_user_query(query, generative_model, config, chat_history, last_intruction_dict):
     """
     Process user query to extract retrieval and LLM instruction components.
     
@@ -142,6 +142,8 @@ def process_user_query(query, generative_model, config):
         query (str): The user's original query
         generative_model: The LLM model instance
         config (dict): Configuration parameters for generation
+        chat_history (list): of chathistory
+        last_intruction_dict (dict): past instructions
         
     Returns:
         dict: Dictionary containing retrieval and LLM instruction components
@@ -183,17 +185,21 @@ def process_user_query(query, generative_model, config):
 
     # Get prompt and try first attempt
     prompts = get_prompts()
+
+    # Combine last chat history message with query if applicable
+    if chat_history and len(chat_history) % 2 == 0:
+        last_message = chat_history[-1]
+        query = f"Context: {last_message}\nUser Query: {query}"
+
+    if last_intruction_dict and last_intruction_dict.get("llm_instruction_component"):
+        query = f"User Query: {query}, prior instructions to keep consistency: {str(last_intruction_dict['llm_instruction_component'])}"
+
     response = get_llm_response(
         query=query,
-        prompt=prompts['query_processing'],
+        prompt="Query might contain context from last message, extract most specific context, as short as possible, and combine with query context into 'retrieval_component'\n "+prompts['query_processing'],
         generative_model=generative_model,
         config=config
     )
-    # # Remove markdown code block indicators if present
-    # if response.startswith("```json") and response.endswith("```"):
-    #     response = response[7:-3].strip()
-    # elif response.startswith("```") and response.endswith("```"):
-    #     response = response[3:-3].strip()
         
     print("Debug First Response query process:, ", response, "\n\n")
     result = try_parse_response(response)
@@ -219,11 +225,6 @@ def process_user_query(query, generative_model, config):
         generative_model=generative_model,
         config=config
     )
-    # # Remove markdown code block indicators if present
-    # if response.startswith("```json") and response.endswith("```"):
-    #     response = response[7:-3].strip()
-    # elif response.startswith("```") and response.endswith("```"):
-    #     response = response[3:-3].strip()
 
     print("Second Response query process, response:, ", response, "\n\n")
     result = try_parse_response(response)
@@ -246,11 +247,6 @@ def process_user_query(query, generative_model, config):
     #        # Get query from frontend (e.g., React state, form input, etc.)
     #        return await fetch_query_from_frontend()
     #
-    # 2. For backend API implementation:
-    #    @app.post("/chat")
-    #    async def chat_endpoint(query: str):
-    #        response = await handle_single_query(query, model, chat_history)
-    #        return {"response": response}
 def get_user_query(config=None):
     """
     Get query from config or command line input.
@@ -279,7 +275,7 @@ def get_documents_from_qdrant(query, config, qdrant_client):
         get_dense_embedding(query, config['embedding_model'], config['vector_dim']),
         get_rag_config()['num_documents']  # Retrieve number of documents from RAG config
     )
-    return [result['payload']['text'] for result in search_results[:get_rag_config()['num_documents_for_llm']]]
+    return [result['payload']['text']+", retrieved from: "+result['payload']['url'] for result in search_results[:get_rag_config()['num_documents_for_llm']]]
 
 def generate_llm_response(user_query, instruction_dict, knowledge_documents, chat_history, generative_model, config):
     """
@@ -344,7 +340,8 @@ def main():
 
     # initialize chat history
     chat_history = []
-        
+    last_intruction_dict = {}
+
     while True:
         # # Get query from config or user input
         # query = config.get('query') or input("What is your query? (or type 'end' to exit): ").strip()
@@ -358,7 +355,8 @@ def main():
             break  # Use break instead of return None to exit the loop
         
         # get LLM to preprocess user query
-        intruction_dict = process_user_query(user_query, generative_model, config)
+        intruction_dict = process_user_query(user_query, generative_model, config, chat_history, last_intruction_dict)
+        
         print("Debug: intruction_dict, ", intruction_dict, "\n\n")
         # perform Qdrant search
         knowledge_documents = get_documents_from_qdrant(intruction_dict["retrieval_component"], config, qdrant_client)
@@ -376,6 +374,7 @@ def main():
         # Update chat history
         chat_history.append(f"User: {user_query}")
         chat_history.append(f"Response: {llm_response}")
+        last_intruction_dict = intruction_dict
         
         # Print the response
         print(f"Response: {llm_response}")

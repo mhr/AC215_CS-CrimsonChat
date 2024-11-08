@@ -36,10 +36,7 @@ You are an AI assistant for the Harvard John A. Paulson School of Engineering an
 ## Response Format:
 Structure your response in this order:
 1. Direct answer to the query
-2. Supporting details and explanation
-3. Relevant caveats or additional context
-4. Source citations where appropriate [Chunk #]
-5. Referenced URLs section (if any URLs are mentioned in chunks):
+2. Source citations where appropriate & Supporting details and explanation [Chunk #] Referenced URLs section (if any URLs are mentioned in chunks):
    - List only the 5 most relevant URLs
    - Format as "Further Information:"
    - Each URL on a new line
