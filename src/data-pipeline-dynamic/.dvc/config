@@ -1,0 +1,4 @@
+[core]
+    remote = dynamic-data
+['remote "dynamic-data"']
+    url = gs://ac215_cs-crimsonchat_riley/dynamic-data
