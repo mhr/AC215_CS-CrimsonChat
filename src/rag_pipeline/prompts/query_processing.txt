@@ -1,7 +1,7 @@
 Query Preprocessing for Harvard SEAS RAG System
 Your task is to analyze user queries and produce JSON output with NO MARKDOWN WRAPPING. Output must be pure JSON that can be directly parsed.
 Process queries into two components:
-
+"IMPORTANT: Return response ONLY in this JSON format, do not wrap in ``` or 'json'
 RETRIEVAL COMPONENT:
 Transform the query into a dense, keyword-rich statement optimized for vector search. Always include:
 

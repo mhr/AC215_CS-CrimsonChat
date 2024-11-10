@@ -145,7 +145,7 @@ def retry_with_json_format_prompt(query, prompt, generative_model, config):
     Retry the LLM response with a prompt enforcing a specific JSON response format.
     """
     retry_prompt = (
-        f"{prompt}\n\n"
+        f"Query: {query}, Instruction Prompt: {prompt}\n\n"
         "IMPORTANT: Return response ONLY in this JSON format, do not wrap in ``` or 'json':\n"
         '{"retrieval_component": "what to retrieve",\n'
         ' "llm_instruction_component": {\n'

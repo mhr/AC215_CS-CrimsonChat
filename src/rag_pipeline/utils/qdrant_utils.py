@@ -41,61 +41,6 @@ def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClie
         api_key=qdrant_api_key,
     )
 
-def qdrant_transform_and_upsert(qdrant_url: str, qdrant_api_key: str, documents: List[Document], collection_name: str) -> None:
-    print("qdrant_transform_and_upsert")
-    # Initialize Qdrant client
-    qdrant_client = initialize_qdrant_client(qdrant_url, qdrant_api_key)
-
-    # Transform embedded documents and perform upsert operation to Qdrant with retry logic
-    max_retries = 1
-    retry_delay = 5  # seconds
-
-    # Transform the documents
-    points = []
-    for doc in documents:
-        # Ensure the document has an embedding
-        embedding = doc.metadata.get('embedding')
-        if not embedding:
-            logging.warning(f"Document with content '{doc.page_content[:50]}...' has no embedding. Skipping.")
-            continue
-
-        # Construct Qdrant point
-        point = models.PointStruct(
-            id=str(uuid.uuid4()),
-            payload={
-                "text": doc.page_content,
-                **{k: v for k, v in doc.metadata.items() if k != 'embedding'}  # Include all metadata fields except 'embedding'
-            },
-            vector=embedding  # Ensure embedding is passed correctly
-        )
-        points.append(point)
-
-    if not points:
-        logging.warning("No valid documents with embeddings to upsert.")
-        return
-
-    # Perform upsert
-    for attempt in range(max_retries):
-        try:
-            result = qdrant_client.upsert(
-                collection_name=collection_name,
-                points=points
-            )
-            logging.info(f"Qdrant upsert successful: {result}")
-            return
-        except qhttp.exceptions.UnexpectedResponse as e:
-            logging.error(f"Unexpected response from Qdrant (Attempt {attempt + 1}/{max_retries}): {e}")
-        except qhttp.exceptions.NetworkError as e:
-            logging.error(f"Network error occurred while communicating with Qdrant (Attempt {attempt + 1}/{max_retries}): {e}")
-        except Exception as e:
-            logging.error(f"An unexpected error occurred during Qdrant upsert (Attempt {attempt + 1}/{max_retries}): {e}")
-
-        if attempt < max_retries - 1:
-            logging.info(f"Retrying in {retry_delay} seconds...")
-            time.sleep(retry_delay)
-        else:
-            logging.error("Max retries reached. Qdrant upsert failed.")
-
 
 def qdrant_search(
     client: QdrantClient,
