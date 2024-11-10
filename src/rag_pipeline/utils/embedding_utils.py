@@ -45,10 +45,8 @@ Date: 10/10/2024
 
 from typing import List
 from google.cloud import aiplatform
-from langchain.docstore.document import Document
-from langchain.embeddings import VertexAIEmbeddings
 import logging
-from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
+from vertexai.language_models import TextEmbeddingModel
 
 def initialize_vertex_ai(project_id: str, location: str):
     """Initialize Vertex AI with the given project ID and location."""
@@ -71,43 +69,3 @@ def get_dense_embedding(text: str, model: TextEmbeddingModel, vector_dim: int = 
     except Exception as e:
         logging.error(f"Error in embedding text: {e}")
         return []
-
-def process_and_embed_documents(
-    project_id: str,
-    location: str,
-    documents: List[Document],
-    model_name: str = "text-embedding-004",
-    vector_dim: int = None
-) -> List[Document]:
-    """
-    Process and embed documents from the input list of LangChain Documents.
-    
-    Args:
-        project_id (str): Google Cloud Project ID
-        location (str): Google Cloud Location
-        documents (List[Document]): List of LangChain Document objects
-        model_name (str): Name of the embedding model to use
-        vector_dim (int): Desired dimensionality of the output embeddings (optional)
-    
-    Returns:
-        List[Document]: List of LangChain Document objects with embeddings added to their metadata
-    """
-    initialize_vertex_ai(project_id, location)
-    model = TextEmbeddingModel.from_pretrained(model_name)
-
-    embedded_documents = []
-    for doc in documents:
-        dense_embedding = get_dense_embedding(doc.page_content, model, vector_dim)
-        if dense_embedding:
-            embedded_doc = Document(
-                page_content=doc.page_content,
-                metadata={
-                    **doc.metadata,
-                    'embedding': dense_embedding
-                }
-            )
-            embedded_documents.append(embedded_doc)
-        else:
-            logging.warning(f"Failed to generate embedding for document with ID: {doc.metadata.get('id', 'Unknown')}")
-
-    return embedded_documents

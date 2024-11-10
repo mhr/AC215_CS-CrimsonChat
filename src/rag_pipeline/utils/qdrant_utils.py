@@ -30,6 +30,7 @@ from qdrant_client import QdrantClient, models
 from qdrant_client.models import Distance, VectorParams, Filter, FieldCondition, MatchValue
 from qdrant_client import http as qhttp
 from langchain.schema import Document
+from utils.embedding_utils import get_dense_embedding
 
 def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClient:
     """
@@ -144,3 +145,23 @@ def qdrant_search(
             "payload": result.payload
         } for result in search_results
     ]
+
+
+def get_documents_from_qdrant(query, config, rag_config, qdrant_client):
+    """
+    Retrieve relevant documents from Qdrant based on the given query.
+    Args:
+        query (str): The search query.
+        config (dict): Configuration settings.
+        rag_config (dict): RAG Configuration settings containing num_documents
+        qdrant_client: The Qdrant client instance.
+    Returns:
+        list: A list of document texts retrieved from Qdrant.
+    """
+    search_results = qdrant_search(
+        qdrant_client,
+        config['qdrant_collection'],
+        get_dense_embedding(query, config['embedding_model'], config['vector_dim']),
+        rag_config['num_documents']  # Retrieve number of documents from RAG config
+    )
+    return [result['payload']['text']+", retrieved from: "+result['payload']['url'] for result in search_results]

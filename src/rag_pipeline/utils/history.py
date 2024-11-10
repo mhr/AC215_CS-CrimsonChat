@@ -43,3 +43,4 @@ class History:
             }
             for msg in self.messages
         ]
+
