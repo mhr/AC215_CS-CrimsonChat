@@ -1,134 +1,181 @@
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
 # URL to scrape
-url = "https://events.seas.harvard.edu/calendar"
+URL = "https://events.seas.harvard.edu/calendar"
 
-# Send a GET request to the website
-response = requests.get(url)
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Get the "Last-Modified" header if available
-    last_modified = response.headers.get("Last-Modified")
+def fetch_webpage(url):
+    """
+    Sends a GET request to the specified URL.
+
+    Args:
+        url (str): The URL to fetch.
+
+    Returns:
+        requests.Response: The response object from the GET request.
+    """
+    response = requests.get(url)
+    if response.status_code != 200:
+        print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
+    return response
+
+
+def get_last_modified(headers):
+    """
+    Extracts and formats the 'Last-Modified' header if available.
+
+    Args:
+        headers (requests.structures.CaseInsensitiveDict): HTTP headers from the response.
+
+    Returns:
+        str or None: The ISO 8601 formatted last modified time or None if unavailable.
+    """
+    last_modified = headers.get("Last-Modified")
     if last_modified:
         last_modified_datetime = parsedate_to_datetime(last_modified)
         last_modified_datetime = last_modified_datetime.replace(tzinfo=timezone.utc)
-        last_modified_iso = last_modified_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
-    else:
-        last_modified_iso = None
+        return last_modified_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
+    return None
+
+
+def parse_events(soup):
+    """
+    Parses events from the BeautifulSoup object.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML content.
+
+    Returns:
+        list: A list of event data dictionaries.
+    """
+    event_results_div = soup.find("div", id="event_results")
+    if not event_results_div:
+        print("The div with id 'event_results' was not found on the page.")
+        return []
+
+    card_text_divs = event_results_div.find_all("div", class_="em-card_text")
+    script_tags = event_results_div.find_all("script", type="application/ld+json")
+    min_length = min(len(card_text_divs), len(script_tags))
+
+    processed_data = []
+    for i in range(min_length):
+        card_text_div = card_text_divs[i]
+        script_tag = script_tags[i]
+
+        # Extract event description
+        p_elements = card_text_div.find_all("p", class_="em-card_event-text")
+        p_text = " ".join([p.get_text(strip=True) for p in p_elements])
+
+        # Parse JSON data from script tag
+        try:
+            json_data = json.loads(script_tag.string)
+            if isinstance(json_data, list):
+                for event_data in json_data:
+                    event_data["description"] = p_text
+                    processed_data.append(event_data)
+            elif isinstance(json_data, dict):
+                json_data["description"] = p_text
+                processed_data.append(json_data)
+        except json.JSONDecodeError:
+            print("Error decoding JSON for event.")
+
+    return processed_data
+
+
+def save_json_data(file_path, data):
+    """
+    Saves data to a JSON file.
+
+    Args:
+        file_path (str): The file path where JSON data will be saved.
+        data (dict or list): The data to be saved in JSON format.
+    """
+    with open(file_path, "w") as json_file:
+        json.dump(data, json_file, indent=4)
+    print(f"Processed content saved to {file_path}")
+
+
+def format_for_database(processed_data):
+    """
+    Formats processed data for database ingestion.
+
+    Args:
+        processed_data (list): List of event data dictionaries.
+
+    Returns:
+        str: A formatted string for database ingestion.
+    """
+    big_string = ""
+    for event in processed_data:
+        for key, value in event.items():
+            if isinstance(value, dict):
+                big_string += f"{key}:\n"
+                for sub_key, sub_value in value.items():
+                    big_string += f"    {sub_key}: {sub_value}\n"
+            else:
+                big_string += f"{key}: {value}\n"
+        big_string += "\n"
+    return big_string
+
+
+def create_metadata(last_modified_iso, big_string):
+    """
+    Creates metadata for the scraped data.
+
+    Args:
+        last_modified_iso (str): The last modified date in ISO 8601 format.
+        big_string (str): The formatted string for database ingestion.
+
+    Returns:
+        dict: Metadata for the JSON output.
+    """
+    return {
+        "last_modified": last_modified_iso,
+        "scraped_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "word_count": len(big_string.split()),
+        "url": URL,
+    }
+
+
+def main():
+    # Fetch webpage content
+    response = fetch_webpage(URL)
+    if response.status_code != 200:
+        return
+
+    # Get last modified date if available
+    last_modified_iso = get_last_modified(response.headers)
 
     # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(response.text, "html.parser")
+    processed_data = parse_events(soup)
 
-    # Find the div with id="event_results"
-    event_results_div = soup.find("div", id="event_results")
+    # Save processed data
+    save_json_data("/app/data/dynamic_events_1.json", processed_data)
+    save_json_data("/app/gcp_dynamic_data/dynamic_events_1.json", processed_data)
 
-    if event_results_div:
-        # Extract all <div class="em-card_text"> within event_results
-        card_text_divs = event_results_div.find_all("div", class_="em-card_text")
+    # Format data for database ingestion
+    big_string = format_for_database(processed_data)
 
-        # Extract all <script> tags with type="application/ld+json"
-        script_tags = event_results_div.find_all("script", type="application/ld+json")
-
-        # Handle the case where the number of <p> and <script> tags do not match
-        min_length = min(len(card_text_divs), len(script_tags))
-
-        print(f"Processing {min_length} matching pairs of <p> and <script> tags...")
-
-        # List to store all the processed JSON objects
-        processed_data = []
-
-        for i in range(min_length):
-            card_text_div = card_text_divs[i]
-            script_tag = script_tags[i]
-
-            # Extract all <p class="em-card_event-text"> inside each <div class="em-card_text">
-            p_elements = card_text_div.find_all("p", class_="em-card_event-text")
-
-            # Get the combined text from all <p> tags
-            p_text = " ".join([p.get_text(strip=True) for p in p_elements])
-
-            # Try parsing the JSON content inside the script tag
-            try:
-                json_data = json.loads(script_tag.string)  # Parse the JSON content
-
-                # Check if the parsed JSON is a list or a dictionary
-                if isinstance(json_data, list):
-                    # If it's a list, add 'description' to each object in the list
-                    for event_data in json_data:
-                        event_data["description"] = p_text
-                        processed_data.append(
-                            event_data
-                        )  # Add each event object to the list
-                elif isinstance(json_data, dict):
-                    # If it's a dictionary, directly add 'description'
-                    json_data["description"] = p_text
-                    processed_data.append(
-                        json_data
-                    )  # Add the single event object to the list
-            except json.JSONDecodeError:
-                print(f"Error decoding JSON for event.")
-
-        # Save the processed data into a JSON file
-        with open("/app/data/dynamic_events_1.json", "w") as json_file:
-            json.dump(processed_data, json_file, indent=4)
-        print(f"Processed content saved to /app/data/dynamic_events_1.json")
-
-        # Save the file to a gcp bucket
-        with open("/app/gcp_dynamic_data/dynamic_events_1.json", "w") as output_file:
-            json.dump(processed_data, output_file, indent=4)
-        print(f"Processed content saved to /app/gcp_dynamic_data/dynamic_events_1.json")
-
-        # Turn the data into correct format for database ingestion
-        big_string = ""
-        for event in processed_data:
-            for key, value in event.items():
-                if isinstance(
-                    value, dict
-                ):  # If the value is another dictionary, iterate through it
-                    big_string += f"{key}:\n"
-                    for sub_key, sub_value in value.items():
-                        big_string += f"    {sub_key}: {sub_value}\n"
-                else:
-                    big_string += f"{key}: {value}\n"
-            big_string += "\n"  # Add a newline between events for better readability
-
-        # Metadata for the new JSON
-        metadata = {
-            "last_modified": last_modified_iso,  # Use the actual modified time if available
-            "scraped_at": datetime.now(timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),  # Current time in UTC for when it was scraped
-            "word_count": len(big_string.split()),  # Count of words in big_string
-            "url": "https://events.seas.harvard.edu/calendar",  # Replace this with the actual URL if needed
+    # Create metadata
+    metadata = create_metadata(last_modified_iso, big_string)
+    output_json = {
+        URL: {
+            "text_content": big_string,
+            "metadata": metadata,
         }
+    }
 
-        # Structure the new JSON data
-        output_json = {
-            "https://events.seas.harvard.edu/calendar": {
-                "text_content": big_string,
-                "metadata": metadata,
-            },
-        }
+    # Save formatted data with metadata
+    save_json_data("/app/data/processed_dynamic_events_1.json", output_json)
+    save_json_data("/app/gcp_dynamic_data/processed_dynamic_events_1.json", output_json)
 
-        # Save the new structure to a JSON file
-        with open("/app/data/processed_dynamic_events_1.json", "w") as output_file:
-            json.dump(output_json, output_file, indent=4)
-        print(f"Processed content saved to /app/data/processed_dynamic_events_1.json")
 
-        with open(
-            "/app/gcp_dynamic_data/processed_dynamic_events_1.json", "w"
-        ) as output_file:
-            json.dump(output_json, output_file, indent=4)
-        print(
-            f"Processed content saved to /app/gcp_dynamic_data/processed_dynamic_events_1.json"
-        )
-
-    else:
-        print("The div with id 'event_results' was not found on the page.")
-else:
-    print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
+if __name__ == "__main__":
+    main()

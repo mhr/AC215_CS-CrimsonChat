@@ -54,6 +54,7 @@ RUN useradd -ms /bin/bash app -d /home/app -u 1000 -p "$(openssl passwd -1 Passw
     mkdir -p /app && \
     chown app:app /app
 
+ENV PYTHONPATH="/app:/app/test"    
 # Create mount point directories
 RUN mkdir -p /mnt/gcs_data /app/data && chown app:app /mnt/gcs_data /app/data
 

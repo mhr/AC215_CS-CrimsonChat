@@ -60,9 +60,10 @@ RUN mkdir -p /mnt/gcs_data /app/data && chown app:app /mnt/gcs_data /app/data
 # Set working directory to /app
 WORKDIR /app
 
+ENV PYTHONPATH="/app:/app/test"   
 # Copy Pipfile and Pipfile.lock and install dependencies
 ADD --chown=app:app Pipfile Pipfile.lock /app/
-RUN pipenv sync
+RUN pipenv sync 
 
 # Copy source code to the working directory
 ADD --chown=app:app . /app

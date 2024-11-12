@@ -4,6 +4,18 @@ from urllib.parse import urljoin
 
 
 class HarvardCrawlerSpider(scrapy.Spider):
+    """
+    A Scrapy spider for crawling the Harvard SEAS website, collecting links
+    by depth level up to a specified depth limit.
+
+    Attributes:
+        name (str): The name of the spider.
+        allowed_domains (list): The domains allowed for scraping.
+        start_urls (list): The initial URLs to start crawling from.
+        custom_settings (dict): Custom settings for the spider, including depth limit.
+        links_by_depth (dict): A dictionary to store URLs by their depth level.
+    """
+
     name = "harvardcrawler"
     allowed_domains = ["seas.harvard.edu"]
     start_urls = ["https://seas.harvard.edu"]
@@ -12,11 +24,25 @@ class HarvardCrawlerSpider(scrapy.Spider):
     }
 
     def __init__(self, *args, **kwargs):
+        """
+        Initializes the HarvardCrawlerSpider instance, setting up storage
+        for URLs by depth level.
+        """
         super(HarvardCrawlerSpider, self).__init__(*args, **kwargs)
         # Initialize to store URLs by depth
         self.links_by_depth = {}
 
     def parse(self, response):
+        """
+        Parses a response, extracting and storing links at the current depth level,
+        then follows internal links.
+
+        Args:
+            response (scrapy.http.Response): The HTTP response object from the Scrapy request.
+
+        Yields:
+            scrapy.Request: Requests to follow each internal link on the page.
+        """
         # Extract all links from the current page
         links = response.css("a::attr(href)").getall()
 
@@ -42,6 +68,13 @@ class HarvardCrawlerSpider(scrapy.Spider):
             yield scrapy.Request(url=link, callback=self.parse)
 
     def closed(self, reason):
+        """
+        Called when the spider closes. Logs the counts of URLs found at each depth
+        and saves them to JSON files in both /app/data and /app/gcp_static_data directories.
+
+        Args:
+            reason (str): The reason the spider was closed (e.g., "finished").
+        """
         # Log the counts
         for depth, urls in self.links_by_depth.items():
             self.logger.info(f"Depth {depth}: {len(urls)} URLs")

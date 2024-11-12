@@ -4,17 +4,19 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from datetime import datetime, timezone
 
-# Load your Google service account credentials from environment variables
+# Load environment variable for service account credentials
 SERVICE_ACCOUNT_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-
-# Define the Google Doc ID from the URL
 DOC_ID = "1qBfsiK-NNe_dMIsShMSiJe5_Qsc2tmYJMSVzbsMw0RI"
 
 
-# Authenticate and build the Google Docs and Drive API services using the service account
 def authenticate_gdocs_gdrive_api():
+    """
+    Authenticates with the Google Docs and Drive APIs using service account credentials.
+
+    Returns:
+        tuple: A tuple containing the authenticated Google Docs and Drive service objects.
+    """
     try:
-        # Load the service account credentials
         credentials = service_account.Credentials.from_service_account_file(
             SERVICE_ACCOUNT_CREDENTIALS,
             scopes=[
@@ -22,97 +24,118 @@ def authenticate_gdocs_gdrive_api():
                 "https://www.googleapis.com/auth/drive.readonly",
             ],
         )
-
         docs_service = build("docs", "v1", credentials=credentials)
         drive_service = build("drive", "v3", credentials=credentials)
-
         return docs_service, drive_service
     except Exception as e:
         print(f"Failed to authenticate: {e}")
         return None, None
 
 
-# Fetch the Google Doc content
 def fetch_google_doc_content(doc_id, service):
-    try:
-        # Request the Google Docs content
-        document = service.documents().get(documentId=doc_id).execute()
+    """
+    Fetches the content of a Google Doc.
 
-        # Extract the title and body content
+    Args:
+        doc_id (str): The Google Doc ID.
+        service: The Google Docs service object.
+
+    Returns:
+        tuple: A tuple containing the document title and the extracted text content.
+    """
+    try:
+        document = service.documents().get(documentId=doc_id).execute()
         title = document.get("title")
         content = document.get("body").get("content")
 
-        # Initialize an empty string to hold the content text
         doc_text = ""
-
-        # Loop through the elements in the content and extract text
         for element in content:
             if "paragraph" in element:
                 for run in element["paragraph"]["elements"]:
                     if "textRun" in run:
                         doc_text += run["textRun"]["content"]
-
-        # Return the title and text
         return title, doc_text
     except Exception as e:
         print(f"Error fetching document: {e}")
         return None, None
 
 
-# Fetch the last modified time of the Google Doc using Google Drive API
 def fetch_last_modified_time(doc_id, drive_service):
+    """
+    Fetches the last modified time of a Google Doc.
+
+    Args:
+        doc_id (str): The Google Doc ID.
+        drive_service: The Google Drive service object.
+
+    Returns:
+        str or None: The ISO 8601 formatted last modified time or None if unavailable.
+    """
     try:
         file_metadata = (
             drive_service.files().get(fileId=doc_id, fields="modifiedTime").execute()
         )
         modified_time = file_metadata.get("modifiedTime")
         if modified_time:
-            # Parse the ISO format from Google (which is in UTC)
             modified_datetime = datetime.fromisoformat(
                 modified_time.replace("Z", "+00:00")
             ).astimezone(timezone.utc)
-
-            # Format the timestamp to the desired format "YYYY-MM-DDTHH:MM:SSZ"
             return modified_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
-        else:
-            return None
-
+        return None
     except Exception as e:
         print(f"Error fetching last modified time: {e}")
         return None
 
 
-# Main function to process the Google Doc content and create the big string with metadata
+def save_json_data(file_path, data):
+    """
+    Saves data to a JSON file.
+
+    Args:
+        file_path (str): The path to the file.
+        data (dict): The data to save in JSON format.
+    """
+    with open(file_path, "w") as json_file:
+        json.dump(data, json_file, indent=4)
+    print(f"Processed content saved to {file_path}")
+
+
+def create_metadata(last_modified_time, content_text, doc_id):
+    """
+    Creates metadata for the scraped data.
+
+    Args:
+        last_modified_time (str): The last modified date in ISO 8601 format.
+        content_text (str): The full content text of the document.
+        doc_id (str): The Google Doc ID.
+
+    Returns:
+        dict: A dictionary containing metadata.
+    """
+    return {
+        "last_modified": last_modified_time,
+        "scraped_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "word_count": len(content_text.split()),
+        "url": f"https://docs.google.com/document/d/{doc_id}",
+    }
+
+
 def main():
-    # Authenticate the Google Docs and Drive API using the service account
+    """
+    Main function to authenticate, fetch, and process Google Doc content and metadata.
+    """
     docs_service, drive_service = authenticate_gdocs_gdrive_api()
     if docs_service is None or drive_service is None:
         return
 
-    # Fetch the Google Doc content
     title, content = fetch_google_doc_content(DOC_ID, docs_service)
-
-    # Fetch the last modified time from Google Drive API
     last_modified_time = fetch_last_modified_time(DOC_ID, drive_service)
 
     if title and content:
-        print(f"Title: {title}\n")
-        print(f"Content:\n{content}")
+        print(f"Title: {title}\nContent:\n{content}")
 
-        # Generate the big_string by concatenating title and content
         big_string = f"Title: {title}\n\nContent:\n{content}"
-
-        # Metadata for the new JSON
-        metadata = {
-            "last_modified": last_modified_time,  # Use the actual modified time if available
-            "scraped_at": datetime.now(timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),  # Current time in UTC formatted
-            "word_count": len(big_string.split()),  # Count of words in big_string
-            "url": f"https://docs.google.com/document/d/{DOC_ID}",  # Google Doc URL
-        }
-
-        # Structure the output JSON
+        metadata = create_metadata(last_modified_time, big_string, DOC_ID)
         output_json = {
             f"https://docs.google.com/document/d/{DOC_ID}": {
                 "text_content": big_string,
@@ -120,18 +143,9 @@ def main():
             },
         }
 
-        # Save the content and metadata to a JSON file
-        output_file = "/app/data/processed_google_doc_content.json"
-        with open(output_file, "w") as file:
-            json.dump(output_json, file, indent=4)
-        print(f"Processed content saved to /app/data/processed_google_doc_content.json")
-        # saved to dvc folder to upload to gcp
-        with open(
-            "/app/gcp_dynamic_data/processed_google_doc_content.json", "w"
-        ) as json_file:
-            json.dump(output_json, json_file, indent=4)
-        print(
-            f"Processed content saved to /app/gcp_dynamic_data/processed_google_doc_content.json"
+        save_json_data("/app/data/processed_google_doc_content.json", output_json)
+        save_json_data(
+            "/app/gcp_dynamic_data/processed_google_doc_content.json", output_json
         )
     else:
         print("Failed to fetch Google Doc content")
