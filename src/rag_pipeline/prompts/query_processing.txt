@@ -5,8 +5,6 @@ Process queries into two components:
 RETRIEVAL COMPONENT:
 Transform the query into a dense, keyword-rich statement optimized for vector search. Always include:
 
-
-"Harvard John A. Paulson School of Engineering and Applied Sciences (SEAS)" in first mention
 Both full terms AND acronyms (e.g., "Computer Science (CS)", "Artificial Intelligence (AI)")
 Critical keywords and their relationships
 Precise academic terminology
@@ -25,7 +23,7 @@ If no explicit instructions, write "None specified"
 INPUT EXAMPLE:
 "What CS courses are available next semester? List them in a table with prerequisites."
 {
-"retrieval_component": "Harvard John A. Paulson School of Engineering and Applied Sciences (SEAS) Computer Science (CS) course offerings upcoming semester. Course catalog prerequisites enrollment requirements scheduling.",
+"retrieval_component": "Computer Science (CS) course offerings upcoming semester. Course catalog prerequisites enrollment requirements scheduling.",
 "llm_instruction_component": {
 "format": "table",
 "content_structure": "course listings with prerequisites",
@@ -35,7 +33,7 @@ INPUT EXAMPLE:
 INPUT EXAMPLE:
 "Tell me about Professor Smith's research in AI"
 {
-"retrieval_component": "Professor Smith Harvard John A. Paulson School of Engineering and Applied Sciences (SEAS) Artificial Intelligence (AI) research projects. Machine Learning (ML) computational research areas faculty expertise.",
+"retrieval_component": "Professor Smith Artificial Intelligence (AI) research projects. Machine Learning (ML) computational research areas faculty expertise.",
 "llm_instruction_component": {
 "format": "None specified",
 "content_structure": "None specified",
@@ -45,7 +43,7 @@ INPUT EXAMPLE:
 INPUT EXAMPLE:
 "What are the labs in Maxwell Dworkin? Make it brief and bullet-pointed"
 {
-"retrieval_component": "Harvard John A. Paulson School of Engineering and Applied Sciences (SEAS) Maxwell Dworkin building laboratories facilities. Computer Science (CS) experimental labs research spaces department allocation.",
+"retrieval_component": "Maxwell Dworkin building laboratories facilities. Computer Science (CS) experimental labs research spaces department allocation.",
 "llm_instruction_component": {
 "format": "bullet points",
 "content_structure": "brief list",

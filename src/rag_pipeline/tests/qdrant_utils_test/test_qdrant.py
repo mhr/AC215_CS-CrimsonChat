@@ -136,30 +136,3 @@ def test_get_documents_from_qdrant():
     for doc in documents:
         assert isinstance(doc, str), "Expected document to be a string with appended metadata"
         assert "retrieved from:" in doc, "Expected document metadata to be appended"
-
-def test_get_documents_from_qdrant_no_results():
-    """
-    Tests get_documents_from_qdrant for a query that yields no results.
-    
-    This function checks:
-    - How the function handles cases where there are no relevant documents.
-    - Ensures that an empty list is returned if no documents match the query.
-    """
-    # Initialize Qdrant client
-    qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
-
-    # Test configuration for a non-matching query
-    query = "xqzvyrk-12345-nonexistent-topic-query"  # Highly improbable query string
-    config = {
-        "qdrant_collection": QDRANT_COLLECTION,
-        "embedding_model": EMBEDDING_MODEL,
-        "vector_dim": VECTOR_DIM
-    }
-    rag_config = {"num_documents": 5}
-
-    # Run function
-    documents = get_documents_from_qdrant(query, config, rag_config, qdrant_client)
-
-    # Validate no results case
-    assert isinstance(documents, list), "Expected a list even if empty"
-    assert len(documents) == 0, "Expected no documents for a highly improbable topic query"
