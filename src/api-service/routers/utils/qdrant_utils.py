@@ -30,7 +30,7 @@ from qdrant_client import QdrantClient, models
 from qdrant_client.models import Distance, VectorParams, Filter, FieldCondition, MatchValue
 from qdrant_client import http as qhttp
 from langchain.schema import Document
-from utils.embedding_utils import get_dense_embedding
+from routers.utils.embedding_utils import get_dense_embedding
 
 def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClient:
     """
