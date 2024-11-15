@@ -19,7 +19,7 @@
 .content-container {
     flex-grow: 1; /* Takes remaining space after sidebar */
     margin-top: 40px;
-    margin-left: 15%;
+    margin-left: 10%;
     margin-right: auto;
     max-width: 1200px;
     padding: 2rem;

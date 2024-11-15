@@ -23,7 +23,7 @@ If no explicit instructions, write "None specified"
 INPUT EXAMPLE:
 "What CS courses are available next semester? List them in a table with prerequisites."
 {
-"retrieval_component": "Computer Science (CS) course offerings upcoming semester. Course catalog prerequisites enrollment requirements scheduling.",
+"retrieval_component": "Computer Science (CS) course offerings in Spring 2025 [understand that today is Fall 2024] semester. Course catalog prerequisites enrollment requirements scheduling.",
 "llm_instruction_component": {
 "format": "table",
 "content_structure": "course listings with prerequisites",
@@ -51,3 +51,4 @@ INPUT EXAMPLE:
 }
 }
 IMPORTANT: Return ONLY pure JSON output with no wrapping or formatting. The output should be directly parseable as JSON.
+IMPORTANT: retrieval_component extremely specific, do not offer any guidance, include keywords and acronyms and clearly phrase to maintan relationship between terms rather than bunch of keywords.

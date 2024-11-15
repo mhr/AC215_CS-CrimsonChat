@@ -8,7 +8,7 @@ const colors = [
   '#f3f7fc', '#f0f4fc', '#faf9f7', '#fcf8f6'
 ];
 
-const getDeterministicColor = (key) => {
+const getDeterministicColor = (key, ref_list=colors) => {
   // Convert the key to a string if it's not already
   const keyString = String(key);
   // Generate a hash from the string
@@ -17,8 +17,8 @@ const getDeterministicColor = (key) => {
     hash = (hash * 31 + keyString.charCodeAt(i)) % 2147483647; // Large prime for better distribution
   }
   // Map the hash to a color index
-  const index = hash % colors.length;
-  return colors[index];
+  const index = hash % ref_list.length;
+  return ref_list[index];
 };
 const CardMeta = ({ datetime, chat_id, clickClassName }) => {
   const formatDate = (isoString) => {
@@ -37,6 +37,18 @@ const CardMeta = ({ datetime, chat_id, clickClassName }) => {
   );
 };
 
+const getDefaultImage = (key) => {
+  const keyString = String(key);
+  let hash = 0; 
+  // Generate a hash value
+  for (let i = 0; i < keyString.length; i++) {
+    hash = (hash * 31 + keyString.charCodeAt(i)) & 0xffffffff; // Ensure the hash stays within 32-bit
+  }
+  // Map the hash value to one of the 10 image indices (1-10)
+  const index = Math.abs(hash) % 10; // Ensure index is between 0 and 9
+  return `/assets/${index + 1}.png`; // Return image path (1.png to 10.png)
+};
+
 const LinkCard = ({ item, clickClassName, onCardClick }) => {
   const [linkData, setLinkData] = useState({
     title: '',
@@ -49,7 +61,7 @@ const LinkCard = ({ item, clickClassName, onCardClick }) => {
     getLinkPreview(`https://cors-anywhere.herokuapp.com/${item.url}`)
       .then(data => {
         setLinkData({
-          title: data.title || 'No Title Available',
+          title: data.title || new URL(item.url).hostname.replace('www.', ''),
           description: data.description || 'No description available.',
           images: data.images.length ? data.images : [],
           url: data.url || item.url,
@@ -60,31 +72,37 @@ const LinkCard = ({ item, clickClassName, onCardClick }) => {
           ...linkData,
           title: 'No Title Available',
           description: 'No description available.',
-          images: [],
+          images: [], // No images fetched
         });
       });
   }, [item.url]);
 
+  const imageSrc = linkData.images[0] || getDefaultImage(item.chat_id+linkData.title+item.datetime);
+
   return (
     <div
-      className={`${clickClassName} link-card`}
-      onClick={() => onCardClick(item.chat_id)}
+  className={`${clickClassName} link-card`}
+  onClick={() => onCardClick(item.chat_id)} // Card click behavior
+>
+    <img
+      src={imageSrc}
+      className="link-card-image"
+      alt={linkData.title || 'Link preview'}
+    />
+    <h3 className="link-card-title">{linkData.title}</h3>
+    <p className="link-card-description">{linkData.description}</p>
+    <a
+      href={linkData.url}
+      target="_blank"
+      className="link-card-url"
+      onClick={(e) => e.stopPropagation()} // Stop card click propagation
     >
-      <a href={linkData.url} target="_blank" rel="noopener noreferrer">
-        {linkData.images[0] && (
-          <img
-            src={linkData.images[0]}
-            alt={linkData.title}
-            className="link-card-image"
-          />
-        )}
-        <h3 className="link-card-title">{linkData.title}</h3>
-        <p className="link-card-description">{linkData.description}</p>
-        <small className="link-card-url">{item.url}</small>
-      </a>
-    </div>
+      {item.url}
+    </a>
+</div>
   );
 };
+
 
 const Card = ({ item, clickClassName, onCardClick, backgroundColor }) => {
   return (
