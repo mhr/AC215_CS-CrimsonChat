@@ -5,27 +5,143 @@ A minimalist support bot UI for Harvard students, inspired by the clean and mode
 
 ## 🛠️ API and Utilities
 
-**All API functions are located in** `src/api/api.js`. These are simulated for development purposes, with no backend service required.
+**All API functions are located in** `src/api/api.js`. Current functions are dummy placeholders (11/15/2024)  
 
-1. **validatePassword**  
-   - **Purpose**: Simulates password validation. On successful validation, stores a dummy authentication key in `localStorage`.
-   - **Usage**: Called during login to validate the user’s input.
+**Authentication Requirement:**  
+An `authKey` is required for all API functions after login. The `authKey` is stored in `localStorage` upon successful login and must be included in the headers of each subsequent API call.
 
-2. **logout**  
-   - **Purpose**: Clears the stored session key from `localStorage`, handling the user’s logout.
-   - **Usage**: Triggered when the user logs out from the sidebar settings.
+---
 
-3. **fetchCards**  
-   - **Purpose**: Simulates fetching card data, including both quotes and link previews.
-   - **Usage**: Used on the `ChatPage` to load card data initially and on refresh.
+#### `validatePassword`
+**Purpose:**  
+Simulates password validation. On successful validation, stores a dummy authentication key (`authKey`) in `localStorage`.
 
-4. **sendMessageToAI**  
-   - **Purpose**: Provides simulated AI responses to user queries.
-   - **Usage**: Called within the `ChatInterface` component to generate responses for user messages.
+**Usage:**  
+Called during login to validate the user’s input.
 
-5. **saveNotes**  
-   - **Purpose**: Simulates saving user notes based on chat interactions.
-   - **Usage**: Called within the `NotesSection` component to save and display notes.
+**Schema:**  
+- **Input:**  
+  ```json
+  {
+    "password": "string"
+  }
+  ```
+- **Output:**  
+  ```json
+  {
+    "success": "boolean",
+    "authKey": "string"
+  }
+  ```
+**Implementation Note:**  
+The `authKey` is automatically stored in `localStorage` on successful validation. Example key: `"dummy_auth_key_12345"`.
+
+---
+
+#### `fetchCards`
+**Purpose:**  
+Fetching ALL card data, including both quotes and link previews. (on Backend, store cards in JSON)
+
+**Usage:**  
+Used on the `ChatPage` to load card data initially and on refresh.
+
+**Schema:**  
+- **Input:**  
+  ```json
+  {
+    "authKey": "string"
+  }
+  ```
+- **Output:**  
+  ```json
+  [
+    {
+      "type": "quote | link",
+      "datetime": "string (ISO 8601 format)",
+      "chat_id": "string",
+      "content": "string (for type: 'quote')",
+      "url": "string (for type: 'link')"
+    }
+  ]
+  ```
+
+---
+
+#### `sendMessageToAI`
+**Purpose:**  
+Provides simulated AI responses to user queries.
+
+**Usage:**  
+Called within the `ChatInterface` component to generate responses for user messages.
+
+**Schema:**  
+- **Input:**  
+  ```json
+  {
+    "authKey": "string",
+    "userMessage": "string"
+  }
+  ```
+- **Output:**  
+  ```json
+  {
+    "response": "string"
+  }
+  ```
+
+---
+
+#### `saveNotes`
+**Purpose:**  
+Simulates saving user notes based on chat interactions. (on Backend, append cards to cards JSON file)
+
+**Usage:**  
+Called within the `NotesSection` component to save and display notes.
+
+**Schema:**  
+- **Input:**  
+  ```json
+  {
+    "authKey": "string",
+    "notes": [
+      {
+        "type": "quote | link",
+         "datetime": "string (ISO 8601 format)",
+         "chat_id": "string",
+         "content": "string (for type: 'quote')",
+         "url": "string (for type: 'link')"
+      }
+    ]
+  }
+  ```
+- **Output:**  
+  ```json
+  {
+    "message": "Notes saved successfully (dummy response)"
+  }
+  ```
+
+---
+
+
+#### `logout`
+**Purpose:**  
+Clears the stored `authKey` from `localStorage`. DOESN'T send anything to backend.
+
+**Usage:**  
+Triggered when the user logs out from the sidebar settings.
+
+**Schema:**  
+- **Input:**  
+  No input required.
+- **Output:**  
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+**Authentication:**  
+The `authKey` is not required for this API.
 
 ---
 
