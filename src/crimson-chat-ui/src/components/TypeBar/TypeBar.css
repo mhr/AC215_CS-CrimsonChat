@@ -1,0 +1,84 @@
+:root {
+    --line-color: #d0d7e2;
+    --placeholder-color: rgba(116, 130, 151, 0.6); /* Initial placeholder color */
+    --placeholder-hover-color: rgba(116, 130, 151, 0.3); /* Lighter color on hover */
+    --input-text-color: #000; /* Text color */
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 8px; /* Adjusts distance of underscore from the container */
+    border-bottom: 1px solid var(--line-color); /* Bottom border only */
+    position: relative;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.search-input {
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--input-text-color);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding-bottom: 2px; /* Reduces distance between text and underscore */
+    margin-bottom: 1px; /* Further reduces gap, if needed */
+    transition: color 0.3s ease-in-out; /* Apply transition to color changes */
+
+    /* Placeholder styling */
+    ::placeholder {
+      color: var(--placeholder-color);
+      transition: color 0.3s ease-in-out; /* Ensures smooth transition */
+    }
+
+    /* Lighter hover effect for placeholder */
+    &:hover::placeholder {
+      color: var(--placeholder-hover-color); /* Lower opacity on hover */
+    }
+}
+
+.chat-input {
+  width: 100%;
+  font-family: 'Louize', sans-serif;
+  font-weight: 400;
+  font-size: 3rem;
+  font-style: italic;
+  color: var(--input-text-color);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding-bottom: 2px; /* Reduces distance between text and underscore */
+  margin-bottom: 1px; /* Further reduces gap, if needed */
+  transition: color 0.3s ease-in-out; /* Apply transition to color changes */
+}
+
+.chat-ai {
+  width: 100%;
+  font-family: 'Louize', sans-serif;
+  font-weight: 400;
+  font-size: 1.7rem;
+  font-style: italic;
+  color: var(--input-text-color);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding-bottom: 2px; /* Reduces distance between text and underscore */
+  margin-bottom: 1px; /* Further reduces gap, if needed */
+  transition: color 0.3s ease-in-out; /* Apply transition to color changes */
+
+  /* Placeholder styling */
+  ::placeholder {
+    color: var(--placeholder-color);
+    transition: color 0.3s ease-in-out; /* Ensures smooth transition */
+  }
+
+  /* Lighter hover effect for placeholder */
+  &:hover::placeholder {
+    color: var(--placeholder-hover-color); /* Lower opacity on hover */
+  }
+}

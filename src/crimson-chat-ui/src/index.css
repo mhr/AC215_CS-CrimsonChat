@@ -1,0 +1,30 @@
+/* Import Nunito */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+/* Font Face for Louize */
+@font-face {
+  font-family: 'Louize';
+  src: url('../public/assets/Louize-Regular-205TF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fefefe;
+}
+
+/* Code Font */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Louize Font for Specific Elements */
+.louize-font {
+  font-family: 'Louize', serif;
+}

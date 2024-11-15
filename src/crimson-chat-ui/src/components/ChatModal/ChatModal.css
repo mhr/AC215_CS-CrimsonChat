@@ -1,0 +1,211 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.modal-backdrop.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+.modal-backdrop.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
+    background-color: rgba(0, 0, 0, 0.29);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.chat-modal {
+    width: 90vw;
+    height: 90vh;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-modal-content {
+    display: flex;
+    height: 100%;
+    gap: 5px;
+}
+
+.chat-interface {
+    flex: 2;
+    padding: 16px;
+    overflow-y: auto;
+    border-radius: 8px;
+}
+
+.notes-section {
+    flex: 1;
+    background: #f0f2f5; /* Distinct gray background */
+    padding: 16px;
+    overflow-y: auto;
+    border-radius: 12px;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px; /* Move slightly inward */
+    right: 15px; /* Move slightly inward */
+    background-color: rgba(0, 0, 0, 0.1); /* Subtle circular background */
+    border: none;
+    color: #e04b20;
+    font-size: 30px; /* Size of the + */
+    cursor: pointer;
+    border-radius: 50%; /* Circular shape */
+    width: 30px; /* Circular dimensions */
+    height: 30px; /* Circular dimensions */
+    display: flex; /* Center the + */
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s; /* Smooth hover effect */
+    transform: rotate(45deg); /* Rotates the + to look like a diagonal X */
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly darker on hover */
+}
+
+/* ChatInterface.css */
+
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 60px;
+}
+
+/* Style for user messages (top left, within a smaller width) */
+.user-message {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    max-width: 70%;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+/* Style for AI response */
+.ai-response {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 10%;
+    padding-right: 5%;
+    font-family: 'Louize', sans-serif;
+    font-weight: normal; /* Ensure font is not bold */
+    font-size: 1.15rem;
+    letter-spacing: -0.05em;
+    color: #333;
+    opacity: 0;
+    animation: fadeIn 0.1s forwards;
+}
+
+
+/* NOTES */
+.notes-section {
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    height: 100%; /* Adjust to parent's fixed height */
+    box-sizing: border-box; /* Include padding in the height calculation */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent overflow outside the section */
+}
+
+.notes-section h3 {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+    font-family: 'Louize', sans-serif;
+    font-weight: normal; /* Ensure font is not bold */
+}
+
+.helper-text {
+    font-size: 0.9em;
+    font-family: 'Nunito', sans-serif;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.notes-grid {
+    display: flex;
+    flex-direction: column; /* Arrange cards in a single column */
+    gap: 16px; /* Space between rows (cards) */
+    justify-content: flex-start; /* Align cards at the top */
+    align-items: center; /* Center cards horizontally */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    height: 100%; /* Ensure it fills the available space */
+    max-height: 100%; /* Optional: Remove this if it restricts height */
+    box-sizing: border-box; /* Include padding in dimensions */
+    padding: 10px 30px 10px 50px; /* Adjust padding */
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+}
+
+.notes-grid > * { /* Apply styles to child elements (e.g., cards) */
+    width: 100%; /* Ensure each card takes up the full width of the container */
+    max-width: 800px; /* Optional: Limit the maximum width for readability */
+    box-sizing: border-box; /* Include padding/margin in the width calculation */
+    word-wrap: break-word; /* Force breaking of long words or URLs */
+}
+
+.close-save-button {
+    width: 160px;
+    padding: 10px 20px;
+    background-color: #ff5924; /* Orange color */
+    color: #fff;
+    border: none;
+    border-radius: 20px; /* Rounded edges */
+    font-size: 1em;
+    font-family: 'Louize', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    margin-left: auto; /* Align to the right inside its container */
+    margin-right: 0; /* Ensure no extra margin on the right */
+    display: block; /* Ensure proper alignment */
+}
+
+.close-save-button:hover {
+    background-color: #e04b20; /* Darken the button on hover */
+}
+
+.close-save-button-container {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+    margin-top: 16px;
+}
+
+

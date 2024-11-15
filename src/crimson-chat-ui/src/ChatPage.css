@@ -1,0 +1,58 @@
+/* General Styling for the Chat Page */
+.chat-page {
+    position: relative;
+    background-color: #f0f2f5;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Sidebar styling with fade effect */
+.sidebar {
+    width: 250px; /* Adjust width as needed */
+    opacity: 1; /* Default visible */
+    transition: opacity 1s ease-in-out;
+}
+
+/* Content container styling with fade effect */
+.content-container {
+    flex-grow: 1; /* Takes remaining space after sidebar */
+    margin-top: 40px;
+    margin-left: 15%;
+    margin-right: auto;
+    max-width: 1200px;
+    padding: 2rem;
+    border-radius: 8px;
+    overflow-y: auto;
+    opacity: 1; /* Default visible */
+    transition: opacity 1s ease-in-out;
+}
+
+/* Fade-out effect for both sidebar and content container */
+.sidebar.fade-out, .content-container.fade-out {
+    opacity: 0; /* Hidden */
+}
+
+/* Fade-in effect for both sidebar and content container */
+.sidebar.fade-in, .content-container.fade-in {
+    opacity: 1; /* Visible */
+}
+
+/* Error message styling */
+.error-message {
+    font-weight: bold;
+    padding: 1rem;
+    text-align: left;
+    font-family: 'Louize', sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    margin-top: 9rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .content-container {
+        padding: 1rem; /* Reduce padding on small screens */
+    }
+}

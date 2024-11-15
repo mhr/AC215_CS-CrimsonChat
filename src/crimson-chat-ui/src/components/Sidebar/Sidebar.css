@@ -1,0 +1,127 @@
+/* Sidebar.css */
+
+/* Sidebar - Ensure it participates in fade-in/fade-out */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--gutter, 70px);
+    height: 100vh;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--bar-height, 60px);
+    pointer-events: auto;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 1s ease-in-out; /* Smooth fade transition */
+    z-index: 3; /* Ensure it displays above the video and other content */
+  }
+  
+  .app.fade-in .sidebar {
+    opacity: 1; /* Fade in the sidebar along with the other elements */
+  }
+  
+  .app.fade-out .sidebar {
+    opacity: 0; /* Fade out the sidebar along with other elements */
+  }
+  
+  /* Vertically rotated text for app name */
+  .sidebar .branding {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    writing-mode: vertical-rl;
+    transform: rotate(0deg);
+    font-family: 'Louize', sans-serif;
+    font-weight: normal; /* Ensure font is not bold */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color, #a4abb5); /* Accent color for the app name */
+    margin-bottom: 10px;
+  }
+  
+  /* Bottom Section */
+.sidebar .bottom {
+    margin-top: auto;
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Referrals Icon */
+  .referrals-link .referrals-icon {
+    width: 40px;
+    height: 40px;
+    background: url('https://img.icons8.com/?size=100&id=4Z2nCrz5iPY2&format=png&color=737373') no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  /* Settings Gear */
+  .settings-gear {
+    width: 25px;
+    height: 25px;
+    background: url('https://static.accelerator.net/134/0.47.0/icons/gear.svg') no-repeat center center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  /* Popover.css */
+
+  .popover-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 1000;
+  }
+  
+  .popover-content {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    min-width: 150px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px); /* Start slightly offset for smooth transition */
+  }
+  
+  .popover-content.fade-in {
+    opacity: 1;
+    transform: translateX(0); /* Transition into place */
+  }
+  
+  .popover-content.fade-out {
+    opacity: 0;
+    transform: translateX(-10px); /* Transition back to offset */
+  }
+  
+  .popover-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .popover-option {
+    padding: 10px;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: #6b737d;
+    transition: color 0.2s ease;
+  }
+  
+  .popover-option:hover {
+    color: #a4abb5;
+  }

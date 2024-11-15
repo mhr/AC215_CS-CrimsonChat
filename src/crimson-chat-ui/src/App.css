@@ -1,0 +1,102 @@
+/* Global resets */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  background-color: #fefefe; /* Static background color */
+}
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* App container with fade-in and fade-out effects */
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app > * {
+  opacity: 0; /* Initially hidden */
+  transition: opacity 1s ease-in-out; /* Smooth transition for fade-in and fade-out */
+}
+
+.app.fade-in > * {
+  opacity: 1; /* Fade in all children */
+}
+
+.app.fade-out > * {
+  opacity: 0; /* Fade out all children */
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video {
+  height: 100vh;
+  width: auto;
+  object-fit: cover;
+}
+
+.typebar-wrapper {
+  position: absolute;
+  top: calc(100vh * 6 / 8);
+  left: 10%;
+  width: max(30vw, 200px);
+  display: flex;
+  justify-content: flex-start;
+  z-index: 2;
+}
+
+.typebar-wrapper .typebar {
+  width: 100%;
+}
+
+.text-wrapper {
+  position: absolute;
+  top: calc(100vh * 1.7 / 7); /* Vertical position */
+  left: 10%; /* Start at 10% from the left */
+  width: 50%; /* End at approximately 50% of the screen width */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 2;
+  word-wrap: break-word; /* Ensure text wraps within container */
+  word-break: break-word; /* Prevent overflow */
+}
+
+.text-wrapper h1 {
+  font-family: 'Louize', sans-serif;
+  font-weight: normal; /* Ensure font is not bold */
+  font-size: 5.5rem;
+  letter-spacing: -0.05em;
+  margin: 0;
+  line-height: 1.2;
+  color: #000;
+}
+
+
