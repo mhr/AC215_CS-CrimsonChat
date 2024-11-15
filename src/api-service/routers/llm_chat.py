@@ -14,6 +14,10 @@ from vertexai.generative_models import GenerativeModel
 # Define Router
 router = APIRouter()
 
+@router.get("/chat")
+async def chat():
+    return {"message": "Welcome to AC215"}
+
 # # Load environment variables
 # load_dotenv('env.dev')
 
