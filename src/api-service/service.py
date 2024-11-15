@@ -20,5 +20,13 @@ app.add_middleware(
 async def get_index():
     return {"message": "Welcome to AC215"}
 
+@app.get("/llm")
+async def get_index():
+    return {"message": "...testing"}
+
+@app.get("/test")
+async def get_index():
+    return {"message": "also testing"}
+
 # Additional routers here
 app.include_router(llm_chat.router, prefix="/llm")
