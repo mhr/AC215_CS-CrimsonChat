@@ -1,30 +1,48 @@
-import React, { useState } from 'react';
-import './TypeBar.css';
+// TypeBar.js
 
-const TypeBar = ({ onEnter, helperText = "Enter your secret...", helperTextClass ="search-input", clearOnEnter=true  }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
+import React, { useCallback } from "react";
+import "./TypeBar.css";
+import useStore from "../../store"; // Adjust the path based on your project structure
+
+const TypeBar = ({
+  onEnter,
+  helperText = "Enter your secret...",
+  helperTextClass = "search-input",
+  clearOnEnter = true,
+}) => {
+  // Select state and setter from the store
+  const inputValue = useStore((state) => state.inputValue);
+  const setInputValue = useStore((state) => state.setInputValue);
+
+  // Local state for hover effect
+  const [isHovered, setIsHovered] = React.useState(false);
 
   // Handle input changes
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  const handleInputChange = useCallback(
+    (e) => {
+      setInputValue(e.target.value);
+    },
+    [setInputValue]
+  );
 
   // Handle Enter key press using onKeyDown
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
-      onEnter(inputValue.trim()); // Triggers login on Enter
-      if (clearOnEnter) {
-        setInputValue(''); // Clear input if clearOnEnter is true
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" && inputValue.trim()) {
+        onEnter(inputValue.trim()); // Triggers action on Enter
+        if (clearOnEnter) {
+          setInputValue(""); // Clear input if clearOnEnter is true
+        }
       }
-    }
-  };
+    },
+    [inputValue, onEnter, clearOnEnter, setInputValue]
+  );
 
   return (
     <div className="search-bar-container">
       <input
-        type={helperTextClass==="search-input" ? 'password' : ''}
-        className={`${helperTextClass} ${isHovered ? 'hovered' : ''}`}
+        type={helperTextClass === "search-input" ? "password" : ""}
+        className={`${helperTextClass} ${isHovered ? "hovered" : ""}`}
         placeholder={helperText}
         value={inputValue}
         onChange={handleInputChange}

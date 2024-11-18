@@ -1,17 +1,19 @@
 // Sidebar.js
-import React, { useState, useEffect, useRef } from 'react';
-import './Sidebar.css';
+
+import React, { useEffect, useRef, useCallback } from "react";
+import "./Sidebar.css";
+import useStore from "../../store";
 
 const Popover = ({ isOpen, onClose, options, style }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpen && !event.target.closest('.popover-content')) {
+      if (isOpen && !event.target.closest(".popover-content")) {
         onClose();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -39,8 +41,11 @@ const Popover = ({ isOpen, onClose, options, style }) => {
 };
 
 const Sidebar = ({ settingsOptions }) => {
-  const [isPopoverOpen, setPopoverOpen] = useState(false);
-  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
+  // Select state and setters from the store
+  const isPopoverOpen = useStore((state) => state.isPopoverOpen);
+  const setIsPopoverOpen = useStore((state) => state.setIsPopoverOpen);
+  const popoverPosition = useStore((state) => state.popoverPosition);
+  const setPopoverPosition = useStore((state) => state.setPopoverPosition);
   const settingsRef = useRef(null);
 
   const handleGearClick = () => {
@@ -49,8 +54,12 @@ const Sidebar = ({ settingsOptions }) => {
       top: rect.top - 20 + window.scrollY,
       left: rect.right + window.scrollX + 10, // Position to the right with 10px gap
     });
-    setPopoverOpen((prev) => !prev);
+    setIsPopoverOpen((prev) => !prev);
   };
+
+  const handlePopoverClose = useCallback(() => {
+    setIsPopoverOpen(false);
+  }, [setIsPopoverOpen]);
 
   return (
     <nav className="sidebar">
@@ -67,19 +76,25 @@ const Sidebar = ({ settingsOptions }) => {
           ></a>
         </div>
         {settingsOptions?.length > 0 && (
-          <button className="settings-gear" onClick={handleGearClick} ref={settingsRef}></button>
+          <button
+            className="settings-gear"
+            onClick={handleGearClick}
+            ref={settingsRef}
+          ></button>
         )}
       </div>
       <Popover
         isOpen={isPopoverOpen}
-        onClose={() => setPopoverOpen(false)}
+        onClose={handlePopoverClose}
         options={settingsOptions}
-        style={{ position: 'absolute', top: popoverPosition.top, left: popoverPosition.left }}
+        style={{
+          position: "absolute",
+          top: popoverPosition.top,
+          left: popoverPosition.left,
+        }}
       />
     </nav>
   );
 };
-
-
 
 export default Sidebar;

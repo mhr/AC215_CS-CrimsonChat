@@ -1,14 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
-import './ChatPage.css';
-import Sidebar from './components/Sidebar/Sidebar';
-import ChatPage from './ChatPage';
-import React, { useState, useEffect } from 'react';
-import TypeBar from './components/TypeBar/TypeBar';
-import { validatePassword, logout } from './api/api';
+import logo from "./logo.svg";
+import "./App.css";
+import "./ChatPage.css";
+import Sidebar from "./components/Sidebar/Sidebar";
+import ChatPage from "./ChatPage";
+import React, { useEffect } from "react";
+import TypeBar from "./components/TypeBar/TypeBar";
+import { validatePassword, logout } from "./api/api";
+import useStore from "./store";
 
 const FullScreenVideo = ({ src }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = useStore((state) => state.isLoaded);
+  const setIsLoaded = useStore((state) => state.setIsLoaded);
 
   const handleLoadedData = () => {
     setIsLoaded(true);
@@ -17,7 +19,7 @@ const FullScreenVideo = ({ src }) => {
   return (
     <div className="video-container">
       <video
-        className={`video ${isLoaded ? 'fade-in-video' : ''}`}
+        className={`video ${isLoaded ? "fade-in-video" : ""}`}
         src={src}
         autoPlay
         muted
@@ -28,51 +30,50 @@ const FullScreenVideo = ({ src }) => {
   );
 };
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const setCurrentPage = useStore((state) => state.setCurrentPage);
+
   useEffect(() => {
-    const appElement = document.querySelector('.app');
+    const appElement = document.querySelector(".app");
 
     // Fade-in on mount
     if (appElement) {
-      appElement.classList.add('fade-in');
+      appElement.classList.add("fade-in");
     }
 
     // Fade-out on unmount
     return () => {
       if (appElement) {
-        appElement.classList.remove('fade-in');
-        appElement.classList.add('fade-out');
+        appElement.classList.remove("fade-in");
+        appElement.classList.add("fade-out");
 
         // Delay unmount to allow fade-out to complete
         setTimeout(() => {
-          appElement.classList.remove('fade-out');
+          appElement.classList.remove("fade-out");
         }, 1000); // Match this duration with CSS transition
       }
     };
   }, []);
 
-
-  // API CALL HERE
   const handleLoginAttempt = async (password) => {
     try {
       const isValid = await validatePassword(password);
-  
+
       if (isValid) {
-        console.log('Login successful');
-        const appElement = document.querySelector('.app');
-        appElement.classList.add('fade-out');
-  
-        // Delay the onLogin call to allow fade-out animation
-        setTimeout(onLogin, 1000);
+        console.log("Login successful");
+        const appElement = document.querySelector(".app");
+        appElement.classList.add("fade-out");
+
+        // Delay the page transition to allow fade-out animation
+        setTimeout(() => setCurrentPage("ChatPage"), 1000);
       } else {
-        console.log('Invalid password');
+        console.log("Invalid password");
       }
     } catch (error) {
-      console.error('Failed to validate password:', error);
-      alert('There was an error validating your password. Please try again.');
+      console.error("Failed to validate password:", error);
+      alert("There was an error validating your password. Please try again.");
     }
   };
-
 
   return (
     <div className="app">
@@ -80,34 +81,35 @@ const Login = ({ onLogin }) => {
       <FullScreenVideo src="/assets/login.mp4" />
       <div className="text-wrapper">
         <h1>
-          Welcome to your new, best buddy <span style={{ color: "#748297" }}>Crimsonchat</span>
+          Welcome to your new, best buddy{" "}
+          <span style={{ color: "#748297" }}>Crimsonchat</span>
         </h1>
       </div>
       <div className="typebar-wrapper">
-      <TypeBar onEnter={handleLoginAttempt} />
+        <TypeBar onEnter={handleLoginAttempt} />
       </div>
     </div>
   );
 };
 
-
 function App() {
-  const [currentPage, setCurrentPage] = useState('Login'); // Start with the Login page
+  const currentPage = useStore((state) => state.currentPage);
+  const setCurrentPage = useStore((state) => state.setCurrentPage);
 
   const handleLogout = async () => {
     try {
-      await logout();  // Call the API to log out and remove the session key
-      setCurrentPage('Login'); // Return to the login page after logout
+      await logout(); // Call the API to log out and remove the session key
+      setCurrentPage("Login"); // Return to the login page after logout
     } catch (error) {
-      console.error('Error during logout:', error);
-      alert('Logout failed. Please try again.');
+      console.error("Error during logout:", error);
+      alert("Logout failed. Please try again.");
     }
   };
 
   return (
     <div>
-      {currentPage === 'Login' ? (
-        <Login onLogin={() => setCurrentPage('ChatPage')} />
+      {currentPage === "Login" ? (
+        <Login />
       ) : (
         <ChatPage handleLogout={handleLogout} />
       )}
