@@ -25,12 +25,13 @@ Date: 10/10/2024
 import uuid
 import logging
 import time
-from typing import List,  Optional, Dict, Any
+from typing import List, Optional, Dict, Any
 from qdrant_client import QdrantClient, models
 from qdrant_client.models import Distance, VectorParams, Filter, FieldCondition, MatchValue
 from qdrant_client import http as qhttp
 from langchain.schema import Document
 from routers.utils.embedding_utils import get_dense_embedding
+
 
 def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClient:
     """
@@ -109,4 +110,4 @@ def get_documents_from_qdrant(query, config, rag_config, qdrant_client):
         get_dense_embedding(query, config['embedding_model'], config['vector_dim']),
         rag_config['num_documents']  # Retrieve number of documents from RAG config
     )
-    return [result['payload']['text']+", retrieved from: "+result['payload']['url'] for result in search_results]
+    return [result['payload']['text'] + ", retrieved from: " + result['payload']['url'] for result in search_results]

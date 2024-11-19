@@ -8,8 +8,8 @@ def get_prompts():
     """
     prompts = {}
     prompt_files = {
-        'llm_output': './prompts/llm_output.txt',
-        'query_processing': './prompts/query_processing.txt'
+        'llm_output': 'rag_pipeline/prompts/llm_output.txt',
+        'query_processing': 'rag_pipeline/prompts/query_processing.txt'
     }
     
     for key, file_path in prompt_files.items():
