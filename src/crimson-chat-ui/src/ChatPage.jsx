@@ -1,3 +1,5 @@
+// ChatPage.js
+
 import "./App.css";
 import Sidebar from "./components/Sidebar/Sidebar";
 import React, { useEffect, useRef, useCallback } from "react";
@@ -90,7 +92,7 @@ const ChatPage = ({ handleLogout }) => {
 
   // Function to handle card selection
   const handleCardClick = (chatId) => {
-    setSelectedChatId((prevChatId) => (prevChatId === chatId ? null : chatId));
+    setSelectedChatId(selectedChatId === chatId ? null : chatId);
     console.log("selected id", chatId);
   };
 
@@ -101,7 +103,7 @@ const ChatPage = ({ handleLogout }) => {
         setSelectedChatId(null);
       }
     },
-    [setSelectedChatId]
+    [contentRef, setSelectedChatId]
   );
 
   useEffect(() => {
