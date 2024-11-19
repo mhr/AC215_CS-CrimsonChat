@@ -1,6 +1,7 @@
 import os  # To check file existence and read files
 import time
 
+
 def get_prompts():
     """
     Reads the prompts from files located in the ./prompts directory and returns them as strings.

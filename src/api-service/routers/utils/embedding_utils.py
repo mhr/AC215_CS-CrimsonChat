@@ -48,13 +48,16 @@ from google.cloud import aiplatform
 import logging
 from vertexai.language_models import TextEmbeddingModel
 
+
 def initialize_vertex_ai(project_id: str, location: str):
     """Initialize Vertex AI with the given project ID and location."""
     aiplatform.init(project=project_id, location=location)
 
+
 def get_dense_embedding(text: str, model: TextEmbeddingModel, vector_dim: int = None) -> List[float]:
     """Generate an embedding for the given text using the Vertex AI model."""
-    if type(model) != TextEmbeddingModel:
+    if not isinstance(model, TextEmbeddingModel):
+        # if type(model) != TextEmbeddingModel:
         model = TextEmbeddingModel.from_pretrained(model)
     try:
         # Create the input as a simple string or a list of strings
@@ -64,7 +67,7 @@ def get_dense_embedding(text: str, model: TextEmbeddingModel, vector_dim: int = 
         # Generate the embeddings
         embeddings = model.get_embeddings(inputs, **kwargs)
         # Return the first embedding vector
-        return embeddings[0].values  
+        return embeddings[0].values
 
     except Exception as e:
         logging.error(f"Error in embedding text: {e}")
