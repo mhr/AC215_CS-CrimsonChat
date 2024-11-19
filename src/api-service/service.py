@@ -16,11 +16,11 @@ app.add_middleware(
 
 
 # Routes
-@app.get("/")
+@app.get("/login")
 async def get_index():
     return {"message": "Welcome to AC215"}
 
-@app.get("/llm")
+@app.get("/llmm")
 async def get_index():
     return {"message": "...testing"}
 
