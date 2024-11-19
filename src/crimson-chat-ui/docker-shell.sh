@@ -3,9 +3,19 @@
 set -e
 
 export IMAGE_NAME="crimson-chat-ui"
+export IMAGE_TAG="latest"
 
-# Build the image based on the Dockerfile
-docker build -t crimson-chat-ui -f Dockerfile .
+# Set build-time arguments (update REACT_APP_API_URL as needed)
+REACT_APP_API_URL="http://localhost:8080"
 
-# Run the container
-docker run --rm --name $IMAGE_NAME -ti -v "$(pwd)/:/app/" -p 3000:3000 $IMAGE_NAME
+# Build the Docker image for amd64 architecture
+docker build --platform linux/amd64 \
+  --build-arg REACT_APP_API_URL=$REACT_APP_API_URL \
+  -t $IMAGE_NAME:$IMAGE_TAG -f Dockerfile .
+
+# Run the container locally
+docker run --rm \
+  --name $IMAGE_NAME \
+  -e PORT=3000 \
+  -p 3000:3000 \
+  $IMAGE_NAME:$IMAGE_TAG
