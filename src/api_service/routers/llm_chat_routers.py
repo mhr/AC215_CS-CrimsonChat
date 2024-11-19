@@ -36,6 +36,7 @@ rag_config = {
 VALID_AUTH_KEY = "parmesan"
 master_config = get_configuration("config.txt")
 
+
 # Dependency to validate the Authorization header
 async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
     """
@@ -61,13 +62,16 @@ async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
     # Return the token for potential use
     return auth_parts[1]
 
+
 class ChatRequest(BaseModel):
     query: str
     chat_history: Optional[List[str]] = []
 
+
 class ChatResponse(BaseModel):
     response: str
     updated_history: List[str]
+
 
 @router.post("/query", response_model=ChatResponse, summary="Query the chat endpoint", description="Handles chat queries by the user.")
 async def chat_query(
@@ -129,4 +133,3 @@ async def chat_query(
 #     Returns a welcome message.
 #     """
 #     return {"message": "Welcome to the Crimson Chat API"}
-
