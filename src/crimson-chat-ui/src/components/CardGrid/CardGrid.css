@@ -25,7 +25,7 @@
   background-color: #ffffff;
   border-radius: 8px;
   padding: 10px 30px 0px 30px;
-  font-family: 'Louize', serif;
+  font-family: "Louize", serif;
   font-size: 1.25rem;
   color: #333;
   text-align: left;
@@ -71,9 +71,8 @@
   text-align: left;
 }
 
-
 .link-card {
-  font-family: 'Nunito', serif;
+  font-family: "Nunito", serif;
   background-color: #ffffff;
   border-radius: 8px;
   padding: 1.5rem;
@@ -107,7 +106,8 @@
 }
 
 /* Elevated z-index and shadow for selected cards */
-.card.selected, .link-card.selected {
+.card.selected,
+.link-card.selected {
   box-shadow: 0px 4px 16px rgba(45, 44, 44, 0.3);
   z-index: 20; /* Bring selected items above the backdrop */
 }
@@ -124,7 +124,7 @@
 
 .link-card-title {
   font-size: 1.3rem;
-  font-family: 'Louize', serif;
+  font-family: "Louize", serif;
   font-weight: 600;
   margin: 0.5rem 0;
   color: #333;
@@ -154,7 +154,7 @@
 }
 
 .card-meta {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 400;
   font-size: 0.875rem;
   color: #748297;
@@ -168,7 +168,6 @@
   z-index: 21; /* Make sure it's higher than the backdrop */
   color: #748297; /* Apply a visible color to check */
 }
-
 
 /* Dark backdrop for selected state, allowing scrolling */
 .backdrop {

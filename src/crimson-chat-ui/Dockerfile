@@ -1,34 +1,49 @@
-# Build stage
-FROM node:18-alpine AS build
+# Stage 1: Build the React app
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Install dependencies
+# Copy and install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy source files
+# Copy the rest of the app's source code
 COPY . .
 
-# Add missing dependency explicitly
-RUN npm install @babel/plugin-proposal-private-property-in-object --save-dev
+# Build-time argument for API URL
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 # Build the React app
 RUN npm run build
 
-# Production stage
-FROM node:18-alpine AS production
+# Stage 2: Serve the React app with Nginx
+FROM nginx:alpine
 
-WORKDIR /app
+# Install envsubst for environment variable substitution
+RUN apk add --no-cache gettext
 
-# Copy built assets from the build stage
-COPY --from=build /app/package.json /app/package-lock.json /app/build /app/
+# Set environment variable for PORT
+ENV PORT=8080
 
-# Install only production dependencies
-RUN npm ci --only=production
+# Remove default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Expose the listening port
-EXPOSE 3000
+# Copy custom Nginx configuration template
+COPY nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 
-# Start the React app
-CMD ["npm", "start"]
+# Copy the docker-entrypoint.sh script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Copy the build output to Nginx's html directory
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose the port (Cloud Run uses the PORT environment variable)
+EXPOSE 8080
+
+# Set the entrypoint to the custom script
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

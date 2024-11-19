@@ -1,28 +1,38 @@
 #!/bin/bash
 
+# Default to port 8000 if not set
+PORT=${PORT:-8000}
+
 echo "Container is running!!!"
 
-# this will run the api/service.py file with the instantiated app FastAPI
+# Function to run the Uvicorn server in development mode
 uvicorn_server() {
-    uvicorn service:app --host 0.0.0.0 --port 9000 --log-level debug --reload --reload-dir / "$@"
+    uvicorn service:app --host 0.0.0.0 --port "$PORT" --log-level debug --reload --reload-dir ./ "$@"
 }
 
+# Function to run the Uvicorn server in production mode
 uvicorn_server_production() {
-    pipenv run uvicorn service:app --host 0.0.0.0 --port 9000 --lifespan on
+    pipenv run uvicorn service:app --host 0.0.0.0 --port "$PORT" --lifespan on "$@"
 }
 
+# Export functions for use in interactive shell (optional)
 export -f uvicorn_server
 export -f uvicorn_server_production
 
-echo -en "\033[92m
+echo -e "\033[92m
 The following commands are available:
     uvicorn_server
-        Run the Uvicorn Server
+        Run the Uvicorn Server (development mode)
+    uvicorn_server_production
+        Run the Uvicorn Server (production mode)
 \033[0m
 "
 
-if [ "${DEV}" = 1 ]; then
-  pipenv shell
+# Determine whether to run in development or production mode
+if [ "${DEV}" = "1" ]; then
+    echo "Starting in development mode..."
+    uvicorn_server
 else
-  uvicorn_server_production
+    echo "Starting in production mode..."
+    uvicorn_server_production
 fi

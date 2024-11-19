@@ -14,11 +14,26 @@ from vertexai.generative_models import GenerativeModel
 # Define Router
 router = APIRouter()
 
+
+# def get_configuration():
+#     return {
+#         "temperature": 0.75,
+#         "max_output_tokens": 2000,
+#         "top_p": 0.95,
+#         "num_documents": 20,
+#         "max_history_tokens": 8000,
+#         "qdrant_url": os.getenv("QDRANT_URL"),
+#         "qdrant_api_key": os.getenv("QDRANT_API_KEY"),
+#         "model_endpoint": os.getenv("MODEL_ENDPOINT"),
+#     }
+
+
+
 @router.get("/chat")
 async def chat():
     return {"message": "Welcome to AC215"}
 
-# # Load environment variables
+# Load environment variables
 # load_dotenv('env.dev')
 
 # # Set up project details
@@ -41,7 +56,50 @@ async def chat():
 # qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
 # prompts = get_prompts()
 
+# @router.post("/sendMessageToAI")
+# async def send_message_to_ai(request: Request):
+#     """
+#     Endpoint to process user queries via the RAG pipeline and LLM inference.
+#     """
+#     try:
+#         body = await request.json()
+#         auth_key = body.get("authKey")
+#         user_message = body.get("userMessage")
 
+#         # Validate authKey (mock validation for now)
+#         if auth_key != "dummy_auth_key_12345":
+#             raise HTTPException(status_code=403, detail="Invalid auth key")
+
+#         # Manage chat history
+#         chat_history = []  # Fetch chat history if stored elsewhere
+#         prompts = {}  # Load or define prompt templates
+#         should_end, end_reason = manage_chat_session(user_message, chat_history, config)
+
+#         if should_end:
+#             return {"response": f"Chat session ended: {end_reason}"}
+
+#         # Preprocess query and retrieve relevant documents
+#         instruction_dict = preprocess_user_query(user_message, generative_model, config, chat_history, {}, prompts)
+#         knowledge_documents = get_documents_from_qdrant(instruction_dict["retrieval_component"], config, config["rag_config"], qdrant_client)
+
+#         # Generate final response
+#         final_prompt = create_final_prompt(
+#             user_query=user_message,
+#             instruction_dict=instruction_dict["llm_instruction_component"],
+#             knowledge_documents=knowledge_documents,
+#             chat_history=chat_history,
+#             prompts=prompts
+#         )
+#         llm_response = generate_llm_response(final_prompt, generative_model, config["rag_config"])
+#         return {"response": llm_response}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+    
 # @router.post("/chat")
 # async def chat_with_llm(
 #     user_query: str = Body(..., embed=True),
