@@ -46,9 +46,13 @@ jobs:
           pipenv install --dev
           pipenv run flake8 .
 
-      # Run tests
+      # Run tests if the tests folder exists
       - name: Run Tests
         working-directory: src/${{ matrix.service }}
         run: |
-          pipenv install --dev
-          pipenv run pytest tests
+          if [ -d "tests" ] && [ "$(find tests -type f -name 'test_*.py')" ]; then
+            pipenv install --dev
+            pipenv run pytest tests
+          else
+            echo "No tests found. Skipping..."
+          fi
