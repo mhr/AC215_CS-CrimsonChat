@@ -13,7 +13,6 @@ python your_script.py --config config.txt --chunking_method semantic --breakpoin
 python your_script.py --testing_json /path/to/test.json --embedding_model textembedding-gecko@001 --chunking_method simple --qdrant_collection milestone_2 --chunk_size 1000 --chunk_overlap 200
 """
 
-
 def validate_json(file_path: str) -> List[Dict[str, Union[int, str]]]:
     try:
         # Load the JSON data from the file
@@ -44,7 +43,6 @@ def validate_json(file_path: str) -> List[Dict[str, Union[int, str]]]:
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
 
-
 def load_config(config_file: str) -> Dict[str, Any]:
     """Load configuration from a text file."""
     config = {}
@@ -55,7 +53,6 @@ def load_config(config_file: str) -> Dict[str, Any]:
                 key, value = line.split('=', 1)
                 config[key.strip()] = value.strip()
     return config
-
 
 def parse_arguments() -> argparse.Namespace:
     """Parse command-line arguments."""
@@ -77,7 +74,6 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--chunk_overlap", type=int, help="Chunk overlap for simple chunking")
 
     return parser.parse_args()
-
 
 def get_configuration(path):
     """Hard coding config.txt"""
@@ -103,7 +99,7 @@ def get_configuration(path):
             return int(value)
         elif key in ["breakpoint_threshold_amount"]:
             return float(value)
-        elif key in ["query", "embedding_model", "chunking_method",
+        elif key in ["query", "embedding_model", "chunking_method", 
                      "qdrant_collection", "breakpoint_threshold_type"]:
             return value  # Keep as string
         else:
@@ -122,7 +118,7 @@ def get_configuration(path):
 def print_config(config):
     if config['testing_json']:
         try:
-            # data = validate_json(config['testing_json'])
+            data = validate_json(config['testing_json'])
             print(f"Valid JSON file loaded: {config['testing_json']}")
             # Process the data here
         except (ValueError, FileNotFoundError) as e:

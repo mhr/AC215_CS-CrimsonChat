@@ -1,5 +1,5 @@
 import json
-from ..utils.llm_utils import get_llm_response
+from utils.llm_utils import get_llm_response
 
 
 
