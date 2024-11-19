@@ -10,9 +10,11 @@ import useStore from "../../store";
 const ChatModal = ({ onClose, userQuery }) => {
   const isFadingOut = useStore((state) => state.isFadingOut);
   const setIsFadingOut = useStore((state) => state.setIsFadingOut);
+  const clearAllMessages = useStore((state) => state.clearAllMessages)
 
   const handleClose = () => {
     setIsFadingOut(true);
+    clearAllMessages()
     setTimeout(() => {
       onClose();
     }, 500);

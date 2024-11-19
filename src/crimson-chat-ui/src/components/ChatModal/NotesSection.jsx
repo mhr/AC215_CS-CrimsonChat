@@ -83,11 +83,12 @@ const NotesSection = ({ closeModal }) => {
     if (draggedText) {
       const isUrl = draggedText.startsWith("http"); // Simple URL check
       const newNote = isUrl
-        ? { type: "link", url: draggedText, datetime: new Date().toISOString() }
+        ? { type: "link", url: draggedText, datetime: new Date().toISOString(), chat_id: new Date().toISOString() }
         : {
             type: "quote",
             content: draggedText,
             datetime: new Date().toISOString(),
+            chat_id: new Date().toISOString()
           };
 
       addNote(newNote);

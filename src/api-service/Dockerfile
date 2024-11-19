@@ -49,3 +49,4 @@ ADD --chown=app:app . /app
 
 # Entry point
 ENTRYPOINT ["/bin/bash","./docker-entrypoint.sh"]
+# ENTRYPOINT ["/bin/bash"]

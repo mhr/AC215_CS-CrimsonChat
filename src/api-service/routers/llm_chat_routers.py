@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Header, APIRouter
 from pydantic import BaseModel
 from typing import List, Optional
 from routers.utils.qdrant_utils import get_documents_from_qdrant, initialize_qdrant_client
@@ -18,9 +18,10 @@ QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
 
+
 # Initialize global dependencies
-generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
 qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
+generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
 prompts = get_prompts()
 rag_config = {
     "temperature": 0.75,
@@ -31,20 +32,57 @@ rag_config = {
 }
 
 
+# Predefined auth key for demonstration purposes
+VALID_AUTH_KEY = "parmesan"
+master_config = get_configuration("config.txt")
+
+# Dependency to validate the Authorization header
+async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
+    """
+    Verifies the Authorization header for Bearer token authentication.
+
+    Args:
+        authorization: The Authorization header from the request.
+
+    Returns:
+        The verified token string.
+
+    Raises:
+        HTTPException: If the Authorization header is missing or invalid.
+    """
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authorization header missing")
+
+    # Expect "Bearer <token>" format
+    auth_parts = authorization.split()
+    if len(auth_parts) != 2 or auth_parts[0].lower() != "bearer" or auth_parts[1] != VALID_AUTH_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing auth key")
+
+    # Return the token for potential use
+    return auth_parts[1]
+
 class ChatRequest(BaseModel):
     query: str
     chat_history: Optional[List[str]] = []
-
 
 class ChatResponse(BaseModel):
     response: str
     updated_history: List[str]
 
-
-@router.post("/query", response_model=ChatResponse)
-async def chat_query(request: ChatRequest):
+@router.post("/query", response_model=ChatResponse, summary="Query the chat endpoint", description="Handles chat queries by the user.")
+async def chat_query(
+    request: ChatRequest,
+    _: str = Depends(verify_auth_key),
+):
     """
     Handles chat queries by the user.
+
+    Args:
+        request: The chat request containing the query and chat history.
+        token: The validated token from the Authorization header.
+
+    Returns:
+        A ChatResponse object with the response and updated history.
     """
     user_query = request.query.strip()
     chat_history = request.chat_history or []
@@ -56,12 +94,12 @@ async def chat_query(request: ChatRequest):
 
     # Preprocess user query
     instruction_dict = preprocess_user_query(
-        user_query, generative_model, get_configuration(), chat_history, {}, prompts
+        user_query, generative_model, master_config, chat_history, {}, prompts
     )
 
     # Perform Qdrant search
     knowledge_documents = get_documents_from_qdrant(
-        instruction_dict["retrieval_component"], get_configuration(), rag_config, qdrant_client
+        instruction_dict["retrieval_component"], master_config, rag_config, qdrant_client
     )
 
     # Create final structured prompt
@@ -85,9 +123,10 @@ async def chat_query(request: ChatRequest):
     return ChatResponse(response=llm_response, updated_history=chat_history)
 
 
-@router.get("/")
-async def welcome():
-    """
-    Returns a welcome message.
-    """
-    return {"message": "Welcome to the Crimson Chat API"}
+# @router.get("/")
+# async def welcome():
+#     """
+#     Returns a welcome message.
+#     """
+#     return {"message": "Welcome to the Crimson Chat API"}
+

@@ -1,4 +1,5 @@
-import logo from "./logo.svg";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import "./ChatPage.css";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -113,6 +114,7 @@ function App() {
       ) : (
         <ChatPage handleLogout={handleLogout} />
       )}
+      <ToastContainer />
     </div>
   );
 }

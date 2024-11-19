@@ -40,6 +40,7 @@ const useStore = create((set) => ({
   setMessages: (messages) => set({ messages }),
   appendMessage: (message) =>
     set((state) => ({ messages: [...state.messages, message] })),
+  clearAllMessages: () => set({ messages: [] }),
   setDisplayedResponse: (displayedResponse) => set({ displayedResponse }),
   updateDisplayedResponse: (updater) =>
     set((state) => ({

@@ -75,9 +75,8 @@ def parse_arguments() -> argparse.Namespace:
 
     return parser.parse_args()
 
-def get_configuration() -> Dict[str, Any]:
-    """Get the final configuration by combining defaults, config file, and command-line arguments."""
-    args = parse_arguments()
+def get_configuration(path):
+    """Hard coding config.txt"""
 
     # Default values with correct types
     config = {
@@ -107,16 +106,11 @@ def get_configuration() -> Dict[str, Any]:
             return value
 
     # Load config file if specified
-    if args.config:
-        file_config = load_config(args.config)
-        for key, value in file_config.items():
-            if key in config:
-                config[key] = convert_type(key, value)
+    file_config = load_config(path)
+    for key, value in file_config.items():
+        if key in config:
+            config[key] = convert_type(key, value)
 
-    # Update config with command-line arguments
-    for arg, value in vars(args).items():
-        if value is not None:
-            config[arg] = convert_type(arg, str(value))
 
     return config
 

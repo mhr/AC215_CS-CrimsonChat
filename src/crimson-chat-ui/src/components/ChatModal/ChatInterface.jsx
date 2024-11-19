@@ -63,28 +63,46 @@ const ChatInterface = ({ sendMessageToAI, initialQuery }) => {
 
   const handleNewMessage = useCallback(
     async (text) => {
-      appendMessage({ text, sender: "me" });
-      const response = await sendMessageToAI(text);
-      setDisplayedResponse("");
-      const words = response.split(" ");
-      let index = 0;
-      const interval = setInterval(() => {
-        updateDisplayedResponse((prev) => `${prev} ${words[index]}`);
-        index++;
-        if (index >= words.length) {
-          clearInterval(interval);
-          appendMessage({ text: response, sender: "ai" });
-          setDisplayedResponse("");
+        appendMessage({ text, sender: "me" });
+
+        // Set up the loading dots animation
+        let dots = 0;
+        const loadingDotsInterval = setInterval(() => {
+            setDisplayedResponse(`CrimsonChat is thinking${".".repeat(dots + 1)}`);
+            dots = (dots + 1) % 3; // Cycle through 0, 1, 2
+        }, 500);
+
+        try {
+            const { response, _ } = await sendMessageToAI(text, messages); // messages = history array
+            clearInterval(loadingDotsInterval); // Stop the dots animation
+            setDisplayedResponse("");
+
+            // Animate the AI response
+            const words = response.split(" ");
+            let index = 0;
+            const typingInterval = setInterval(() => {
+                updateDisplayedResponse((prev) => `${prev} ${words[index]}`);
+                index++;
+                if (index >= words.length) {
+                    clearInterval(typingInterval);
+                    appendMessage({ text: response, sender: "ai" });
+                    setDisplayedResponse("");
+                }
+            }, 100);
+        } catch (error) {
+            clearInterval(loadingDotsInterval); // Stop the dots animation on error
+            setDisplayedResponse("");
+            console.error("Error sending message:", error);
         }
-      }, 100);
     },
     [
-      appendMessage,
-      setDisplayedResponse,
-      updateDisplayedResponse,
-      sendMessageToAI,
+        appendMessage,
+        setDisplayedResponse,
+        updateDisplayedResponse,
+        sendMessageToAI,
+        messages,
     ]
-  );
+);
 
   useEffect(() => {
     if (initialQuery && !hasProcessedInitialQuery.current) {
