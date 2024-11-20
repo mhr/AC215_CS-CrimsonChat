@@ -1,6 +1,6 @@
 import json
 import pytest
-from pathlib import Path
+# from pathlib import Path
 from filter_links import (
     load_links_by_depth,
     get_unique_links,
