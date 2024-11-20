@@ -3,8 +3,6 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
 user-agent = "*"
 requests = "*"
@@ -19,6 +17,10 @@ pandas = "*"
 scikit-learn = "*"
 qdrant-client = "*"
 numpy = "*"
+
+[dev-packages]
+flake8 = "*"
+black = "*"
 
 [requires]
 python_version = "3.11"
