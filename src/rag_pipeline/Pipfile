@@ -3,8 +3,6 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
 pytest = "*"
 fastapi = "*"
@@ -23,6 +21,11 @@ python-dotenv = "*"
 qdrant-client = "*"
 numpy = "*"
 streamlit = "*"
+
+[dev-packages]
+flake8 = "*"
+black = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.11"

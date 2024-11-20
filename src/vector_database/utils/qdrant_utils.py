@@ -26,8 +26,9 @@ import logging
 import time
 from typing import List
 from qdrant_client import QdrantClient, models
-from qdrant_client import http as qhttp
+# from qdrant_client import http as qhttp
 from langchain.schema import Document
+
 
 def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClient:
     """
@@ -37,6 +38,7 @@ def initialize_qdrant_client(qdrant_url: str, qdrant_api_key: str) -> QdrantClie
         url=qdrant_url,
         api_key=qdrant_api_key,
     )
+
 
 def ensure_collection_exists(qdrant_client: QdrantClient, collection_name: str, vector_size: int) -> None:
     """
@@ -51,6 +53,7 @@ def ensure_collection_exists(qdrant_client: QdrantClient, collection_name: str, 
         logging.info(f"Created new collection: {collection_name}")
     else:
         logging.info(f"Collection {collection_name} already exists")
+
 
 def qdrant_transform_and_upsert(qdrant_url: str, qdrant_api_key: str, documents: List[Document], collection_name: str) -> None:
     print("qdrant_transform_and_upsert")
@@ -110,7 +113,3 @@ def qdrant_transform_and_upsert(qdrant_url: str, qdrant_api_key: str, documents:
             time.sleep(retry_delay)
         else:
             logging.error("Max retries reached. Qdrant upsert failed.")
-
-
-
-            

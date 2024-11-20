@@ -11,7 +11,7 @@ def get_prompts():
         'llm_output': './prompts/llm_output.txt',
         'query_processing': './prompts/query_processing.txt'
     }
-    
+
     for key, file_path in prompt_files.items():
         if os.path.exists(file_path):
             with open(file_path, 'r', encoding='utf-8') as file:
@@ -36,18 +36,18 @@ def create_final_prompt(user_query, instruction_dict, knowledge_documents, chat_
     """
     # Format documents into a single string
     docs_text = "\n\n".join(str(doc) for doc in knowledge_documents)
-    
+
     # Format chat history if it exists
     history_text = ""
     if chat_history:
         history_text = "Previous conversation:\n" + "\n".join(chat_history) + "\n\n"
-    
+
     # Simply convert instruction dictionary to string
     instruction_text = str(instruction_dict)
-    
+
     # Get response prompt template
     llm_prompt = prompts['llm_output']
-    
+
     # Combine all components into final prompt
     final_prompt = (
         f"{llm_prompt}\n\n"
@@ -62,13 +62,13 @@ def create_final_prompt(user_query, instruction_dict, knowledge_documents, chat_
 def get_llm_response(prompt, generative_model, rag_config):
     """
     Get response from LLM using prompt and config.
-    
+
     Args:
         query (str): The input query to be processed
         prompt (str): Prompt text to guide the model's response
         generative_model: The LLM model instance
         rag_config (dict): Configuration parameters for generation
-        
+
     Returns:
         str: Generated response from the LLM
     """
@@ -92,7 +92,7 @@ def get_llm_response(prompt, generative_model, rag_config):
     except Exception as e:
         print(f"Error generating response: {e}")
         return "I apologize, but I encountered an error generating a response. Please try again."
-    
+
 
 def generate_llm_response(final_prompt, generative_model, rag_config):
     """
@@ -105,7 +105,7 @@ def generate_llm_response(final_prompt, generative_model, rag_config):
         str: Formatted LLM response
     """
     # Get LLM response
-    
+
     response = get_llm_response(
         prompt=final_prompt,
         generative_model=generative_model,

@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-from urllib.parse import urljoin
+# from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 import json
-import os
+# import os
 
 # URL to scrape
 URL = "https://events.seas.harvard.edu/calendar"

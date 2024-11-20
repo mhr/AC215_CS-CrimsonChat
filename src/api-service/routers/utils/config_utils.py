@@ -18,26 +18,26 @@ def validate_json(file_path: str) -> List[Dict[str, Union[int, str]]]:
         # Load the JSON data from the file
         with open(file_path, 'r') as file:
             data = json.load(file)
-        
+
         # Check if the JSON has a top-level "texts" key
         if not isinstance(data, dict) or "texts" not in data:
             raise ValueError("JSON must contain a top-level 'texts' key with a list of objects")
-        
+
         # Extract the list of objects from the "texts" key
         items = data["texts"]
-        
+
         # Ensure that the "texts" key contains a list
         if not isinstance(items, list):
             raise ValueError("'texts' must be a list of objects")
-        
+
         # Validate that each item in the list has the required fields
         for item in items:
             if not all(key in item for key in ["id", "text", "url", "timestamp"]):
                 raise ValueError("Each item must have 'id', 'text', 'url', and 'timestamp' fields")
-        
+
         # Return the validated list of items
         return items
-    
+
     except json.JSONDecodeError:
         raise ValueError("Invalid JSON format")
     except FileNotFoundError:
@@ -111,7 +111,6 @@ def get_configuration(path):
         if key in config:
             config[key] = convert_type(key, value)
 
-
     return config
 
 
@@ -124,11 +123,10 @@ def print_config(config):
         except (ValueError, FileNotFoundError) as e:
             print(f"Error: {str(e)}")
 
-
     print(f"Embedding model: {config['embedding_model']}")
     print(f"Chunking method: {config['chunking_method']}")
     print(f"Qdrant collection: {config['qdrant_collection']}")
-    
+
     if config['chunking_method'] == "semantic":
         for key in ['breakpoint_threshold_type', 'buffer_size', 'breakpoint_threshold_amount']:
             if config.get(key):

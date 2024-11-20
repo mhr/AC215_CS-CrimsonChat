@@ -1,9 +1,16 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, Header, APIRouter
+from fastapi import Depends, HTTPException, Header, APIRouter
 from pydantic import BaseModel
 from typing import List, Optional
-from routers.utils.qdrant_utils import get_documents_from_qdrant, initialize_qdrant_client
-from routers.utils.llm_utils import get_prompts, generate_llm_response, create_final_prompt
+from routers.utils.qdrant_utils import (
+    get_documents_from_qdrant,
+    initialize_qdrant_client,
+)
+from routers.utils.llm_utils import (
+    get_prompts,
+    generate_llm_response,
+    create_final_prompt,
+)
 from routers.utils.config_utils import get_configuration
 from routers.utils.chat_utils import manage_chat_session, preprocess_user_query
 from vertexai.generative_models import GenerativeModel
@@ -21,7 +28,9 @@ MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
 
 # Initialize global dependencies
 qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
-generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+generative_model = GenerativeModel(
+    f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}"
+)
 prompts = get_prompts()
 rag_config = {
     "temperature": 0.75,
@@ -35,6 +44,7 @@ rag_config = {
 # Predefined auth key for demonstration purposes
 VALID_AUTH_KEY = "parmesan"
 master_config = get_configuration("config.txt")
+
 
 # Dependency to validate the Authorization header
 async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
@@ -55,21 +65,33 @@ async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
 
     # Expect "Bearer <token>" format
     auth_parts = authorization.split()
-    if len(auth_parts) != 2 or auth_parts[0].lower() != "bearer" or auth_parts[1] != VALID_AUTH_KEY:
+    if (
+        len(auth_parts) != 2
+        or auth_parts[0].lower() != "bearer"
+        or auth_parts[1] != VALID_AUTH_KEY
+    ):
         raise HTTPException(status_code=401, detail="Invalid or missing auth key")
 
     # Return the token for potential use
     return auth_parts[1]
 
+
 class ChatRequest(BaseModel):
     query: str
     chat_history: Optional[List[str]] = []
+
 
 class ChatResponse(BaseModel):
     response: str
     updated_history: List[str]
 
-@router.post("/query", response_model=ChatResponse, summary="Query the chat endpoint", description="Handles chat queries by the user.")
+
+@router.post(
+    "/query",
+    response_model=ChatResponse,
+    summary="Query the chat endpoint",
+    description="Handles chat queries by the user.",
+)
 async def chat_query(
     request: ChatRequest,
     _: str = Depends(verify_auth_key),
@@ -99,7 +121,10 @@ async def chat_query(
 
     # Perform Qdrant search
     knowledge_documents = get_documents_from_qdrant(
-        instruction_dict["retrieval_component"], master_config, rag_config, qdrant_client
+        instruction_dict["retrieval_component"],
+        master_config,
+        rag_config,
+        qdrant_client,
     )
 
     # Create final structured prompt
@@ -113,7 +138,9 @@ async def chat_query(
 
     # Generate response
     llm_response = generate_llm_response(
-        final_prompt=final_prompt, generative_model=generative_model, rag_config=rag_config
+        final_prompt=final_prompt,
+        generative_model=generative_model,
+        rag_config=rag_config,
     )
 
     # Update chat history
@@ -121,12 +148,3 @@ async def chat_query(
     chat_history.append(f"Response: {llm_response}")
 
     return ChatResponse(response=llm_response, updated_history=chat_history)
-
-
-# @router.get("/")
-# async def welcome():
-#     """
-#     Returns a welcome message.
-#     """
-#     return {"message": "Welcome to the Crimson Chat API"}
-
