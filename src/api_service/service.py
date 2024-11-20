@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from pathlib import Path
 from typing import List
 from starlette.middleware.cors import CORSMiddleware
-from routers import llm_chat, llm_chat_routers
+from routers import llm_chat_routers
 from pydantic import BaseModel
 from routers.llm_chat_routers import verify_auth_key
 
@@ -39,12 +39,12 @@ async def save_notes(
     """
     Saves notes received from the frontend to a JSON file, appending only non-duplicate notes.
 
-    
+
     Args:
         notes: List of notes received from the frontend.
         _: Authorization token (validated by verify_auth_key).
 
-        
+
     Returns:
         A success message or raises an HTTPException for errors.
     """
@@ -91,13 +91,13 @@ async def get_notes():
     """
     if not DATA_PATH.exists():
         raise HTTPException(status_code=404, detail="Notes file not found.")
-    
+
     try:
         with open(DATA_PATH, "r", encoding="utf-8") as f:
             notes = json.load(f)
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Corrupted notes file.")
-    
+
     return {"notes": notes}
 
 
@@ -133,5 +133,4 @@ async def get_index():
     return {"message": "also testing"}
 
 # Additional routers here
-# app.include_router(llm_chat.router, prefix="/test", tags=["LLM Chat Test"])
 app.include_router(llm_chat_routers.router, prefix="/llm", tags=["LLM Chat"])

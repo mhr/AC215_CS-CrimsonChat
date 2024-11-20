@@ -39,7 +39,8 @@ BUCKET_NAME = os.environ["BUCKET_NAME"]
 # Initialize Qdrant client
 QDRANT_URL = os.environ.get("QDRANT_URL")
 QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
-GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") # not really used, Vertex AI library looks for global env automatically
+GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")  # not really used, Vertex AI library looks for global env automatically
+
 
 def process_batch(batch: List[Dict[str, Any]], config: Dict[str, Any], gcp_project: str, location: str, qdrant_url: str, qdrant_api_key: str):
     # Chunk the documents
@@ -50,7 +51,8 @@ def process_batch(batch: List[Dict[str, Any]], config: Dict[str, Any], gcp_proje
     print(f"Batch embedded: {len(embedded_batch)} embeddings")
     # Upsert the data to Qdrant Cloud
     qdrant_transform_and_upsert(qdrant_url, qdrant_api_key, embedded_batch, config['qdrant_collection'])
-    print(f"Batch upserted to Qdrant")
+    print("Batch upserted to Qdrant")
+
 
 def batch_process_documents(documents: List[Dict[str, Any]], config: Dict[str, Any], gcp_project: str, location: str, qdrant_url: str, qdrant_api_key: str, batch_size: int = 10):
     # process documents in batches: chunk, embed, upsert
@@ -60,10 +62,11 @@ def batch_process_documents(documents: List[Dict[str, Any]], config: Dict[str, A
     print(f"Processing in {num_batches} batches of {batch_size} documents each")
 
     for i in range(0, total_documents, batch_size):
-        batch = documents[i:i+batch_size]
+        batch = documents[i:i + batch_size]
         print(f"\nProcessing batch {i//batch_size + 1}/{num_batches}")
         process_batch(batch, config, gcp_project, location, qdrant_url, qdrant_api_key)
     print("RAG TESTING COMPLETED, V2, 10/16/2024")
+
 
 def main():
     # Get the configuration, combining defaults, config file (if specified), and command-line arguments
@@ -76,6 +79,7 @@ def main():
     print(f"Documents loaded: {len(documents)}")
 
     batch_process_documents(documents, config, GCP_PROJECT, LOCATION, QDRANT_URL, QDRANT_API_KEY)
+
 
 if __name__ == "__main__":
     main()

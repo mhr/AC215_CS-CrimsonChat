@@ -18,9 +18,9 @@ jobs:
         service:
           - api-service
           # - crimson-chat-ui
-          # - data-pipeline
-          # - data-pipeline-dynamic
-          # - model_training
+          - data-pipeline
+          - data-pipeline-dynamic
+          - model_training
           # - rag_pipeline
           # - vector_database
 

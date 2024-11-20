@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, Header, APIRouter
+from fastapi import Depends, HTTPException, Header, APIRouter
 from pydantic import BaseModel
 from typing import List, Optional
 from routers.utils.qdrant_utils import get_documents_from_qdrant, initialize_qdrant_client

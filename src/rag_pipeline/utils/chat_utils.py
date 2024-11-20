@@ -1,5 +1,5 @@
 import json
-from ..utils.llm_utils import get_llm_response
+from rag_pipeline.utils.llm_utils import get_llm_response
 
 
 
@@ -38,14 +38,14 @@ def history_estimate_tokens_from_words(text):
 def preprocess_user_query(query, generative_model, config, chat_history, last_instruction_dict, prompts):
     """
     Preprocess the user query to extract retrieval and LLM instruction components.
-    
+
     Args:
         query (str): The user's original query
         generative_model: The LLM model instance
         config (dict): Configuration parameters for generation
         chat_history (list): List of chat history
         last_instruction_dict (dict): Past instructions
-        
+
     Returns:
         dict: Dictionary containing structured components:
             - retrieval_component (str): Extracted context-specific information for retrieval
@@ -60,7 +60,7 @@ def preprocess_user_query(query, generative_model, config, chat_history, last_in
     # First attempt to get a response
     response = get_llm_preprocess_user_prompt(query, instruction_prompt, generative_model, config)
     result = parse_and_validate_llm_response(response)
-    
+
     # Debug only if the first response parsing fails
     if not result:
         print("Debug: First response parsing failed. Response:", response)
@@ -75,7 +75,7 @@ def add_context_to_query(query, chat_history, last_instruction_dict):
     if chat_history and len(chat_history) % 2 == 0:
         last_message = chat_history[-1]
         query = f"Context: {last_message}\nUser Query: {query}"
-    
+
     if last_instruction_dict and last_instruction_dict.get("llm_instruction_component"):
         query += f", prior instructions to keep consistency: {str(last_instruction_dict['llm_instruction_component'])}"
     return query
@@ -107,7 +107,7 @@ def get_llm_preprocess_user_prompt(query, prompt, generative_model, config):
 def parse_and_validate_llm_response(response):
     """
     Attempt to parse the LLM response as JSON and validate it for required fields.
-    
+
     Ensures that the response includes:
         - A 'retrieval_component' key for context-specific information.
         - An 'llm_instruction_component' with specific formatting instructions.
@@ -117,18 +117,18 @@ def parse_and_validate_llm_response(response):
         if "retrieval_component" not in parsed:
             print("Missing or invalid 'retrieval_component'")
             return None
-        
+
         llm_component = parsed.get("llm_instruction_component", {})
         expected_structure = {
             "format": "None specified",
             "content_structure": "None specified",
             "additional_instructions": "None specified"
         }
-        
+
         for key, default_value in expected_structure.items():
             if key not in llm_component:
                 llm_component[key] = default_value
-        
+
         if all(key in llm_component for key in expected_structure):
             parsed["llm_instruction_component"] = llm_component
             return parsed

@@ -22,14 +22,14 @@ Author: Artem Dinh
 Date: 10/10/2024
 """
 
-import uuid
-import logging
-import time
+# import uuid
+# import logging
+# import time
 from typing import List, Optional, Dict, Any
-from qdrant_client import QdrantClient, models
-from qdrant_client.models import Distance, VectorParams, Filter, FieldCondition, MatchValue
-from qdrant_client import http as qhttp
-from langchain.schema import Document
+from qdrant_client import QdrantClient  # , models
+from qdrant_client.models import Filter, FieldCondition, MatchValue  # , Distance, VectorParams,
+# from qdrant_client import http as qhttp
+# from langchain.schema import Document
 from routers.utils.embedding_utils import get_dense_embedding
 
 

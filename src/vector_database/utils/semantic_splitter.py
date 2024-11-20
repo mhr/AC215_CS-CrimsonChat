@@ -13,22 +13,22 @@ sentence embeddings to determine split points.
 
 How it works:
 1. Initial Sentence Splitting:
-   The text is first split into individual sentences using a regular expression 
+   The text is first split into individual sentences using a regular expression
    (by default, splitting on '.', '?', and '!').
 2. Sentence Combination:
-   Each sentence is combined with its neighboring sentences based on a "buffer size". 
+   Each sentence is combined with its neighboring sentences based on a "buffer size".
    This creates "combined sentences" that include context from surrounding sentences.
 3. Embedding:
-   These combined sentences are then embedded. This is where the embedding happens, 
+   These combined sentences are then embedded. This is where the embedding happens,
    and it occurs before the final chunking.
 4. Distance Calculation:
-   The cosine distance is calculated between the embeddings of adjacent combined sentences. 
+   The cosine distance is calculated between the embeddings of adjacent combined sentences.
    This is how the "distance" is measured in this algorithm.
 5. Threshold Determination:
-   Based on these distances, a threshold is determined using one of the methods 
+   Based on these distances, a threshold is determined using one of the methods
    we discussed earlier (percentile, standard deviation, etc.).
 6. Final Chunking:
-   The text is then split into chunks at points where the distance between 
+   The text is then split into chunks at points where the distance between
    adjacent combined sentences exceeds this threshold.
 
 Key Features:
@@ -176,7 +176,7 @@ class SemanticChunker(BaseDocumentTransformer):
         breakpoint_threshold_amount: Optional[float] = None,
         number_of_chunks: Optional[int] = None,
         sentence_split_regex: str = r"(?<=[.?!])\s+",
-        embedding_function = None,
+        embedding_function=None,
     ):
         self._add_start_index = add_start_index
         self.buffer_size = buffer_size
@@ -202,8 +202,7 @@ class SemanticChunker(BaseDocumentTransformer):
         elif self.breakpoint_threshold_type == "standard_deviation":
             return cast(
                 float,
-                np.mean(distances)
-                + self.breakpoint_threshold_amount * np.std(distances),
+                np.mean(distances) + self.breakpoint_threshold_amount * np.std(distances),
             ), distances
         elif self.breakpoint_threshold_type == "interquartile":
             q1, q3 = np.percentile(distances, [25, 75])
@@ -248,7 +247,6 @@ class SemanticChunker(BaseDocumentTransformer):
         y = min(max(y, 0), 100)
 
         return cast(float, np.percentile(distances, y))
-    
 
     def _calculate_sentence_distances(
         self, single_sentences_list: List[str]
@@ -259,11 +257,11 @@ class SemanticChunker(BaseDocumentTransformer):
             {"sentence": x, "index": i} for i, x in enumerate(single_sentences_list)
         ]
         sentences = combine_sentences(_sentences, self.buffer_size)
-        #print(sentences)
+        # print(sentences)
         # embeddings = self.embeddings.embed_documents(
         #     [x["combined_sentence"] for x in sentences]
         # )
-        embeddings = self.embedding_function([x["combined_sentence"] for x in sentences],batch_size=50)
+        embeddings = self.embedding_function([x["combined_sentence"] for x in sentences], batch_size=50)
         for i, sentence in enumerate(sentences):
             sentence["combined_sentence_embedding"] = embeddings[i]
 
@@ -282,8 +280,7 @@ class SemanticChunker(BaseDocumentTransformer):
             return single_sentences_list
         # similarly, the following np.gradient would fail
         if (
-            self.breakpoint_threshold_type == "gradient"
-            and len(single_sentences_list) == 2
+            self.breakpoint_threshold_type == "gradient" and len(single_sentences_list) == 2
         ):
             return single_sentences_list
         distances, sentences = self._calculate_sentence_distances(single_sentences_list)
@@ -311,7 +308,7 @@ class SemanticChunker(BaseDocumentTransformer):
             end_index = index
 
             # Slice the sentence_dicts from the current start index to the end index
-            group = sentences[start_index : end_index + 1]
+            group = sentences[start_index:end_index + 1]
             combined_text = " ".join([d["sentence"] for d in group])
             chunks.append(combined_text)
 
@@ -353,7 +350,7 @@ class SemanticChunker(BaseDocumentTransformer):
     ) -> Sequence[Document]:
         """Transform sequence of documents by splitting them."""
         return self.split_documents(list(documents))
-    
+
 
 # Example usage
 if __name__ == "__main__":
@@ -374,7 +371,7 @@ if __name__ == "__main__":
                      "embedding function for demonstration purposes.",
         metadata={"source": "example.txt"}
     )
-    
+
     result = chunker.transform_documents([sample_doc])
 
     print(f"Original document:\n{sample_doc.page_content}")

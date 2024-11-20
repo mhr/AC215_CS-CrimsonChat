@@ -26,9 +26,9 @@ def get_rag_config():
     Returns the default configuration dictionary for the Retrieval-Augmented Generation (RAG) settings.
     """
     return {
-        "temperature": 0.75, # vertexai
-        "max_output_tokens": 2000, # vertexai
-        "top_p": 0.95, # vertexai
+        "temperature": 0.75,  # vertexai
+        "max_output_tokens": 2000,  # vertexai
+        "top_p": 0.95,  # vertexai
         "num_documents": 20,  # Number of documents to retrieve
         "max_history_tokens": 8000  # Maximum number of tokens for chat history
     }
@@ -85,14 +85,14 @@ def main():
         if should_end:
             print(f"Ending chat session. {end_reason}")
             break  # Use break instead of return None to exit the loop
-        
+
         # get LLM to preprocess user query
         instruction_dict = preprocess_user_query(user_query, generative_model, config, chat_history, last_instruction_dict, prompts)
-        
+
         print("\n Debug: intruction_dict, ", instruction_dict, "\n\n")
         # perform Qdrant search
         knowledge_documents = get_documents_from_qdrant(instruction_dict["retrieval_component"], config, rag_config, qdrant_client)
-        
+
         # create final structure LLM prompt with user query, user instruction, knowledge text, and generative instructions
         final_prompt = create_final_prompt(
             user_query=user_query,
@@ -108,19 +108,19 @@ def main():
             generative_model=generative_model,
             rag_config=rag_config
         )
-        
+
         # Update chat history
         chat_history.append(f"User: {user_query}")
         chat_history.append(f"Response: {llm_response}")
         last_instruction_dict = instruction_dict
-        
+
         # Print the response
         print(f"Response: {llm_response}")
-    
+
     # Ensure any buffered output is written
     sys.stdout.flush()
+
 
 if __name__ == "__main__":
     main()
     sys.stdout.flush()
-

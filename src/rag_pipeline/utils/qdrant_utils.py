@@ -109,4 +109,4 @@ def get_documents_from_qdrant(query, config, rag_config, qdrant_client):
         get_dense_embedding(query, config['embedding_model'], config['vector_dim']),
         rag_config['num_documents']  # Retrieve number of documents from RAG config
     )
-    return [result['payload']['text']+", retrieved from: "+result['payload']['url'] for result in search_results]
+    return [result['payload']['text'] + ", retrieved from: " + result['payload']['url'] for result in search_results]

@@ -1,12 +1,12 @@
-from typing import List, Iterable, Dict
 from langchain.schema import Document
 from vector_database.utils.semantic_splitter import SemanticChunker
 from vector_database.utils.simple_text_splitter import SimpleChunker
 from typing import List, Iterable, Dict, Callable, Optional
 
+
 def run_chunking(
-    documents: Iterable[Document], 
-    config: Dict, 
+    documents: Iterable[Document],
+    config: Dict,
     embedding_function: Optional[Callable] = None
 ) -> List[Document]:
     """
