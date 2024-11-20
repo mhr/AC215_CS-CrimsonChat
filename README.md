@@ -1,7 +1,9 @@
-# Milestone 4: CS-CrimsonChat
+# 🌟 Milestone 4: CS-CrimsonChat
 
 ## 📂 Project Milestone 4 Organization
+---
 
+This structure ensures a logical and easy-to-follow format, guiding readers through the project's details while allowing for efficient navigation.
 ```
 simplified projet tree
 📦AC215_CS-CrimsonChat
@@ -157,8 +159,6 @@ simplified projet tree
  ┣ 📜pytest.ini
  ┣ 📜README.md
 ```
-
-## 🌟 AC215 - Milestone3 - Cheesy App
 
 ---
 
