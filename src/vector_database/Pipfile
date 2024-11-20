@@ -21,6 +21,7 @@ numpy = "*"
 [dev-packages]
 flake8 = "*"
 black = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.11"
