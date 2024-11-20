@@ -126,10 +126,3 @@ async def chat_query(
 
     return ChatResponse(response=llm_response, updated_history=chat_history)
 
-
-# @router.get("/")
-# async def welcome():
-#     """
-#     Returns a welcome message.
-#     """
-#     return {"message": "Welcome to the Crimson Chat API"}

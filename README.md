@@ -1,12 +1,4 @@
-## Milestone 4: CS-CrimsonChat
-
-[template from course repo MS4]
-I'll rewrite this in proper Markdown format:
-
-# Milestone 4 Template
-
-> The files are empty placeholders only. You may adjust this template as appropriate for your project.
-> Never commit large data files, trained models, personal API Keys/secrets to GitHub
+# Milestone 4: CS-CrimsonChat
 
 ## Project Milestone 4 Organization
 
@@ -48,27 +40,38 @@ I'll rewrite this in proper Markdown format:
 - Pavlos Gouda-papas
 
 ## Group Name
-The Grate Cheese Group
+The CrimsonChat Group
 
 ## Project
-In this project, we aim to develop an AI-powered cheese application. The app will feature visual recognition technology to identify various types of cheese and include a chatbot for answering all kinds of cheese-related questions. Users can simply take a photo of the cheese, and the app will identify it, providing detailed information. Additionally, the chatbot will allow users to ask cheese-related questions. It will be powered by a RAG model and fine-tuned models, making it a specialist in cheese expertise.
+This project aims to develop an AI chatbot for Harvard CS students, designed to answer questions about academic and extracurricular activities using data from Harvard websites. The system will employ a RAG+LLM architecture with a vector database, featuring a continuous data pipeline from Harvard CS sources, cloud-based storage and processing, and a user-friendly interface with authentication. The chatbot will provide information on courses, events, degree requirements, and faculty.
 
 ## Milestone4
-In this milestone, we have the components for frontend, API service, also components from previous milestones for data management, including versioning, as well as the computer vision and language models.
+In this milestone, we have the components for frontend, API service, also components from previous milestones for data scraping, embedding and storing in Qdrant Cloud vector database with versioning, and fine-tuning of VertexAI LLM model.
 
-After completions of building a robust ML Pipeline in our previous milestone we have built a backend api service and frontend app. This will be our user-facing application that ties together the various components built in previous milestones.
+We integrated LLM and RAG pipeline to answer user queries from Frontend with conversation memory for continous and natural conversation. Frontend also integrated notes feature, which enables users to highlight text or reference urls and store them as notes.
 
 ## Application Design
 Before we start implementing the app we built a detailed design document outlining the application's architecture. We built a Solution Architecture and Technical Architecture to ensure all our components work together.
 
 ### Solution Architecture:
-[Solution Architecture diagram would go here]
+![This solution architecture diagram illustrates the end-to-end workflow of CrimsonChat, encompassing AI/ML tasks, embedding pipelines, and interaction through a frontend application](images/sol_arch.png)
 
 ### Technical Architecture:
-[Technical Architecture diagram would go here]
+![The technical architecture diagram outlines the deployment and operational setup of CrimsonChat, leveraging GCP services, containerized components, and Vertex AI for data processing, model training, and deployment](images/tech_arch.png)
 
 ## Backend API
-We built backend api service using fast API to expose model functionality to the frontend. We also added apis that will help the frontend display some key information about the model and data.
+This backend serves as an API framework for a chatbot and note-management system, leveraging FastAPI. It integrates with a generative AI model for chat responses, a Qdrant vector database for document retrieval, and a JSON-based storage for notes. The chatbot endpoint processes user queries independent of user session (session management is handled by frontend), retrieves relevant documents, and generates responses with fine-tuned LLM model using structured prompts with user query, history context, retrieved documents.
+
+### Logic for Key Backend Features:
+
+1. **Conversation History**:
+   - Handles list of user queries and responses per session passed by Frontend.
+   - Updates the history with each interaction, appending both user input and AI-generated responses.
+
+2. **Separation of Query and Context Enrichment**:
+   - An LLM call is used to separate user query into retrieval and instruction component with context from history.
+   - **Retrieval Component**: Extracts key details from the query to identify relevant documents using Qdrant, enriched with context from conversation chain.
+   - **LLM Instruction Component**: Structures the query for the AI model, focusing on intent, context, and additional instructions for nuanced response generation. Retains memory of prior formatting request within chat session.
 
 ## Frontend
 A user friendly React app was built to identify various species of mushrooms in the wild using computer vision models from the backend. Using the app a user can take a picture of a mushroom and upload it. The app will send the image to the backend api to get prediction results on weather the mushroom is poisonous or not.
