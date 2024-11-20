@@ -1,6 +1,6 @@
 import json
 from fastapi import FastAPI, Depends, HTTPException
-from pydantic import BaseModel
+# from pydantic import BaseModel
 from pathlib import Path
 from typing import List
 from starlette.middleware.cors import CORSMiddleware
@@ -23,11 +23,13 @@ app.add_middleware(
 
 DATA_PATH = Path("data/notes.json")
 
+
 class Note(BaseModel):
     type: str
     datetime: str
     chat_id: str
     content: str
+
 
 @app.post("/save-notes", summary="Save notes", description="Saves a list of notes to the server.")
 async def save_notes(
@@ -37,18 +39,12 @@ async def save_notes(
     """
     Saves notes received from the frontend to a JSON file, appending only non-duplicate notes.
 
-<<<<<<< HEAD:src/api-service/service.py
-=======
 
->>>>>>> e547b8d919e196352063181e9b516ac65e39f639:src/api_service/service.py
     Args:
         notes: List of notes received from the frontend.
         _: Authorization token (validated by verify_auth_key).
 
-<<<<<<< HEAD:src/api-service/service.py
-=======
 
->>>>>>> e547b8d919e196352063181e9b516ac65e39f639:src/api_service/service.py
     Returns:
         A success message or raises an HTTPException for errors.
     """
@@ -84,6 +80,7 @@ async def save_notes(
 
 DATA_PATH = Path("data/notes.json")
 
+
 @app.get("/get-notes", summary="Retrieve all notes", description="Fetches all notes stored in the JSON file.")
 async def get_notes():
     """
@@ -103,15 +100,19 @@ async def get_notes():
 
     return {"notes": notes}
 
+
 class authRequest(BaseModel):
     password: str
+
 
 class authKey(BaseModel):
     key: str
 
+
 # Mock password validation function
 def validate_password(password):
     return password == "cheese"
+
 
 @app.post("/login", response_model=authKey)
 async def chat_query(request: authRequest):
@@ -126,14 +127,10 @@ async def chat_query(request: authRequest):
     # Return an auth key for successful login
     return {"key": "parmesan"}
 
+
 @app.get("/test")
 async def get_index():
     return {"message": "also testing"}
 
 # Additional routers here
-<<<<<<< HEAD:src/api-service/service.py
-# app.include_router(llm_chat.router, prefix="/test", tags=["LLM Chat Test"])
 app.include_router(llm_chat_routers.router, prefix="/llm", tags=["LLM Chat"])
-=======
-app.include_router(llm_chat_routers.router, prefix="/llm", tags=["LLM Chat"])
->>>>>>> e547b8d919e196352063181e9b516ac65e39f639:src/api_service/service.py

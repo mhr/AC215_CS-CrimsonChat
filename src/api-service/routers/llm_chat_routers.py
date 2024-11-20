@@ -66,9 +66,7 @@ async def verify_auth_key(authorization: Optional[str] = Header(None)) -> str:
     # Expect "Bearer <token>" format
     auth_parts = authorization.split()
     if (
-        len(auth_parts) != 2
-        or auth_parts[0].lower() != "bearer"
-        or auth_parts[1] != VALID_AUTH_KEY
+        len(auth_parts) != 2 or auth_parts[0].lower() != "bearer" or auth_parts[1] != VALID_AUTH_KEY
     ):
         raise HTTPException(status_code=401, detail="Invalid or missing auth key")
 

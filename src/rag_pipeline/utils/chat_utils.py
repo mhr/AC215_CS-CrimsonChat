@@ -1,10 +1,5 @@
 import json
-<<<<<<< HEAD
-from utils.llm_utils import get_llm_response
-
-=======
 from rag_pipeline.utils.llm_utils import get_llm_response
->>>>>>> e547b8d919e196352063181e9b516ac65e39f639
 
 
 def manage_chat_session(query, chat_history, rag_config):

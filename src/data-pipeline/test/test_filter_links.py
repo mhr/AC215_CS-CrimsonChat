@@ -1,12 +1,7 @@
 import json
 import pytest
-<<<<<<< HEAD:src/data-pipeline/test/test_filter_links.py
-from pathlib import Path
-from filter_links import (
-=======
 # from pathlib import Path
 from data_pipeline.filter_links import (
->>>>>>> e547b8d919e196352063181e9b516ac65e39f639:src/data_pipeline/test/test_filter_links.py
     load_links_by_depth,
     get_unique_links,
     normalize_urls,

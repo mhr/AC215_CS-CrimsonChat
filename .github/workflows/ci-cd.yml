@@ -16,10 +16,9 @@ jobs:
     strategy:
       matrix:
         service:
-          - api_service
-          # - crimson_chat_ui
-          - data_pipeline
-          - data_pipeline_dynamic
+          - api-service
+          - data-pipeline
+          - data-pipeline-dynamic
           - model_training
           - rag_pipeline
           - vector_database

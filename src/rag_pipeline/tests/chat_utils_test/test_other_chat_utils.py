@@ -43,7 +43,7 @@ Note:
 """
 
 import json
-from utils.chat_utils import (
+from rag_pipeline.utils.chat_utils import (
     manage_chat_session,
     history_estimate_tokens_from_words,
     add_context_to_query,
