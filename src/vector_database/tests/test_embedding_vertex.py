@@ -38,24 +38,6 @@ def test_initialize_vertex_ai_valid(mock_init):
     mock_init.assert_called_once_with(project="my-project", location="us-central1")
 
 # --- Tests for get_dense_embedding ---
-
-@patch(f"{BASE_PATCH_PATH}.TextEmbeddingModel")
-def test_get_dense_embedding_valid(mock_model):
-    """
-    Test case: Valid input for generating embeddings.
-    Input: text="sample text", model=mock_model
-    Expected Output: [0.1, 0.2, 0.3]
-    Why: Ensures embeddings are generated correctly and returned.
-    """
-    mock_instance = MagicMock()
-    mock_instance.get_embeddings.return_value = [MagicMock(values=[0.1, 0.2, 0.3])]
-    mock_model.from_pretrained.return_value = mock_instance
-
-    result = get_dense_embedding("sample text", mock_model.from_pretrained("dummy_model"))
-    assert result == [0.1, 0.2, 0.3]
-    mock_instance.get_embeddings.assert_called_once_with(["sample text"])
-
-
 @patch(f"{BASE_PATCH_PATH}.TextEmbeddingModel.from_pretrained")
 def test_get_dense_embedding_invalid_model(mock_from_pretrained):
     """

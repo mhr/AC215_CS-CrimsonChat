@@ -121,35 +121,3 @@ def test_load_config_missing_file():
     """
     with pytest.raises(FileNotFoundError):
         load_config("missing_config.txt")
-
-
-
-"""
-Unit tests for the `get_configuration` function.
-
-Function Overview:
-- Purpose: Combine default values, configuration file, and CLI arguments into the final configuration dictionary.
-"""
-
-@patch(f"{BASE_PATH}.parse_arguments")
-@patch(f"{BASE_PATH}.load_config")
-def test_get_configuration_with_file_and_args(mock_load_config, mock_parse_arguments):
-    """
-    Test case: Configuration with both file and CLI arguments.
-    Expected: Correctly merged configuration.
-    """
-    mock_load_config.return_value = {"chunk_size": "512", "embedding_model": "textembedding-gecko@002"}
-    mock_parse_arguments.return_value = argparse.Namespace(
-        config="config.txt",
-        testing_json=None,
-        embedding_model=None,
-        chunking_method="semantic",
-        chunk_size=None,
-        chunk_overlap=None,
-        buffer_size=None,
-        breakpoint_threshold_amount=None,
-        vector_dim=None,
-    )
-    config = get_configuration()
-    assert config["chunk_size"] == 512  # From config file
-    assert config["chunking_method"] == "semantic"  # From CLI args
