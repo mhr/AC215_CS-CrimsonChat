@@ -1,6 +1,8 @@
 # 🌟 Milestone 4: CS-CrimsonChat
 
 ## 📂 Project Milestone 4 Organization
+
+### Test app here: **https://crimson-chat-ui-692586115434.us-central1.run.app/** (password: cheese)
 ---
 
 This structure ensures a logical and easy-to-follow format, guiding readers through the project's details while allowing for efficient navigation.
