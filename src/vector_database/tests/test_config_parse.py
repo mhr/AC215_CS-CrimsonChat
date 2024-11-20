@@ -25,6 +25,7 @@ Functions Overview:
 
 # Tests for `load_config`
 
+
 def test_load_config_valid_file():
     """
     Test case: Valid configuration file with multiple key-value pairs.
@@ -37,6 +38,7 @@ def test_load_config_valid_file():
         result = load_config("dummy_path")
     assert result == {"key1": "value1", "key2": "value2"}
 
+
 def test_load_config_empty_file():
     """
     Test case: Empty configuration file.
@@ -47,6 +49,7 @@ def test_load_config_empty_file():
     with patch("builtins.open", mock_open(read_data="")):
         result = load_config("dummy_path")
     assert result == {}
+
 
 def test_load_config_malformed_line():
     """
@@ -59,6 +62,7 @@ def test_load_config_malformed_line():
     with patch("builtins.open", mock_open(read_data=config_content)):
         with pytest.raises(ValueError):
             load_config("dummy_path")
+
 
 def test_load_config_file_not_found():
     """
@@ -112,6 +116,7 @@ def test_get_configuration_with_file_and_args(mock_load_config, mock_parse_argum
         'config': 'dummy_config',
     }
     assert result == expected
+
 
 @patch(f"{BASE_PATCH_PATH}.parse_arguments")
 def test_get_configuration_defaults_only(mock_parse_arguments):

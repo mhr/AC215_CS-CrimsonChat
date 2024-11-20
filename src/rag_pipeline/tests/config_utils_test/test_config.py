@@ -1,8 +1,6 @@
 import pytest
-import argparse
 import json
-from rag_pipeline.utils.config_utils import validate_json, load_config, get_configuration
-from unittest.mock import patch
+from rag_pipeline.utils.config_utils import validate_json, load_config
 
 BASE_PATH = "rag_pipeline.utils.config_utils"
 """
@@ -23,6 +21,7 @@ Function Overview:
     - File does not exist.
 """
 
+
 @pytest.fixture
 def valid_json(tmp_path):
     """Fixture to create a valid JSON file for testing."""
@@ -31,12 +30,14 @@ def valid_json(tmp_path):
     file.write_text(json.dumps(content))
     return str(file)
 
+
 @pytest.fixture
 def invalid_json(tmp_path):
     """Fixture to create an invalid JSON file."""
     file = tmp_path / "invalid.json"
     file.write_text("{invalid_json}")
     return str(file)
+
 
 def test_validate_json_valid(valid_json):
     """
@@ -46,6 +47,7 @@ def test_validate_json_valid(valid_json):
     result = validate_json(valid_json)
     assert result == [{"id": 1, "text": "sample", "url": "http://example.com", "timestamp": "2024-01-01"}]
 
+
 def test_validate_json_invalid_format(invalid_json):
     """
     Test case: Invalid JSON format.
@@ -54,6 +56,7 @@ def test_validate_json_invalid_format(invalid_json):
     with pytest.raises(ValueError, match="Invalid JSON format"):
         validate_json(invalid_json)
 
+
 def test_validate_json_missing_file():
     """
     Test case: Missing JSON file.
@@ -61,6 +64,7 @@ def test_validate_json_missing_file():
     """
     with pytest.raises(FileNotFoundError):
         validate_json("missing_file.json")
+
 
 def test_validate_json_missing_texts_key(tmp_path):
     """
@@ -72,6 +76,7 @@ def test_validate_json_missing_texts_key(tmp_path):
     file.write_text(json.dumps(content))
     with pytest.raises(ValueError, match="JSON must contain a top-level 'texts' key"):
         validate_json(str(file))
+
 
 def test_validate_json_invalid_text_structure(tmp_path):
     """
@@ -98,6 +103,7 @@ Function Overview:
   - Raises FileNotFoundError if file is missing.
 """
 
+
 @pytest.fixture
 def valid_config_file(tmp_path):
     """Fixture to create a valid configuration file."""
@@ -106,6 +112,7 @@ def valid_config_file(tmp_path):
     file.write_text(content)
     return str(file)
 
+
 def test_load_config_valid(valid_config_file):
     """
     Test case: Valid configuration file.
@@ -113,6 +120,7 @@ def test_load_config_valid(valid_config_file):
     """
     expected = {"key1": "value1", "key2": "value2", "key3": "value3"}
     assert load_config(valid_config_file) == expected
+
 
 def test_load_config_missing_file():
     """

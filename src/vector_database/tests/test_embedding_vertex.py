@@ -26,6 +26,7 @@ Function Overview:
 
 # --- Tests for initialize_vertex_ai ---
 
+
 @patch(f"{BASE_PATCH_PATH}.aiplatform.init")
 def test_initialize_vertex_ai_valid(mock_init):
     """
@@ -36,6 +37,7 @@ def test_initialize_vertex_ai_valid(mock_init):
     """
     initialize_vertex_ai("my-project", "us-central1")
     mock_init.assert_called_once_with(project="my-project", location="us-central1")
+
 
 # --- Tests for get_dense_embedding ---
 @patch(f"{BASE_PATCH_PATH}.TextEmbeddingModel.from_pretrained")
@@ -56,8 +58,8 @@ def test_get_dense_embedding_invalid_model(mock_from_pretrained):
     mock_from_pretrained.assert_called_once_with("invalid_model")
 
 
-
 # --- Tests for process_and_embed_documents ---
+
 
 @patch(f"{BASE_PATCH_PATH}.get_dense_embedding", return_value=[0.1, 0.2, 0.3])
 @patch(f"{BASE_PATCH_PATH}.initialize_vertex_ai")
@@ -65,7 +67,7 @@ def test_get_dense_embedding_invalid_model(mock_from_pretrained):
 def test_process_and_embed_documents_valid(mock_model, mock_init, mock_embed):
     """
     Test case: Valid documents for embedding.
-    Input: 
+    Input:
         project_id="my-project", location="us-central1",
         documents=[Document(page_content="sample", metadata={"id": "1"})]
     Expected Output: List of documents with embeddings added to metadata.
@@ -81,13 +83,14 @@ def test_process_and_embed_documents_valid(mock_model, mock_init, mock_embed):
     mock_init.assert_called_once_with("my-project", "us-central1")
     mock_embed.assert_called_once_with("sample", mock_instance, None)
 
+
 @patch(f"{BASE_PATCH_PATH}.get_dense_embedding", return_value=[])
 @patch(f"{BASE_PATCH_PATH}.initialize_vertex_ai")
 @patch(f"{BASE_PATCH_PATH}.TextEmbeddingModel")
 def test_process_and_embed_documents_empty_embedding(mock_model, mock_init, mock_embed):
     """
     Test case: Document embedding fails.
-    Input: 
+    Input:
         project_id="my-project", location="us-central1",
         documents=[Document(page_content="sample", metadata={"id": "1"})]
     Expected Output: Empty list (embedding failure logged).

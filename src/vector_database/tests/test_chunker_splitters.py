@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock
+# from unittest.mock import Mock
 from langchain.schema import Document
 from vector_database.utils.chunker_utils import run_chunking
 from langchain_core.documents import Document
@@ -26,9 +26,11 @@ Function Overview:
     - Missing embedding_function for semantic chunking.
 """
 
+
 @pytest.fixture
 def sample_documents():
     return [Document(page_content="This is a test document.", metadata={"source": "test.txt"})]
+
 
 def test_run_chunking_simple_method(sample_documents):
     """
@@ -43,6 +45,7 @@ def test_run_chunking_simple_method(sample_documents):
     assert all(isinstance(doc, Document) for doc in output)
     assert all("chunk_id" in doc.metadata for doc in output)
 
+
 def test_run_chunking_semantic_method_missing_embedding(sample_documents):
     """
     Test case: Semantic chunking without embedding function.
@@ -53,6 +56,7 @@ def test_run_chunking_semantic_method_missing_embedding(sample_documents):
     config = {"chunking_method": "semantic"}
     with pytest.raises(ValueError, match="Semantic chunking requires an embedding function"):
         run_chunking(sample_documents, config)
+
 
 def test_run_chunking_invalid_method(sample_documents):
     """
@@ -77,9 +81,11 @@ Class Overview:
   - List of LangChain Document objects with chunks and updated metadata.
 """
 
+
 @pytest.fixture
 def simple_chunker():
     return SimpleChunker(chunk_size=10, chunk_overlap=5)
+
 
 @pytest.fixture
 def sample_document():
@@ -87,6 +93,7 @@ def sample_document():
         page_content="This is a sample document to test SimpleChunker functionality.",
         metadata={"source": "example.txt"}
     )
+
 
 def test_simple_chunker_valid_input(simple_chunker, sample_document):
     """
@@ -100,6 +107,7 @@ def test_simple_chunker_valid_input(simple_chunker, sample_document):
     assert all(isinstance(doc, Document) for doc in result)
     assert all("chunk_id" in doc.metadata for doc in result)
 
+
 def test_simple_chunker_empty_input(simple_chunker):
     """
     Test case: Empty input document list.
@@ -109,6 +117,7 @@ def test_simple_chunker_empty_input(simple_chunker):
     """
     result = simple_chunker.transform_documents([])
     assert result == []
+
 
 def test_simple_chunker_large_chunk_size_with_overlap():
     """
@@ -152,7 +161,6 @@ def test_simple_chunker_large_chunk_size_with_overlap():
         assert reconstructed_content == sample_document.page_content, (
             "Reconstructed content does not match original document."
         )
-
 
 
 def test_simple_chunker_many_chunks():
@@ -208,8 +216,6 @@ def test_simple_chunker_many_chunks():
     )
 
 
-
-
 """
 Unit tests for functions in semantic_splitter.py.
 
@@ -217,6 +223,7 @@ Function Overview:
 - combine_sentences: Combines sentences with a specified buffer size for context.
 - calculate_cosine_distances: Calculates cosine distances between embeddings of sentences.
 """
+
 
 @pytest.fixture
 def sample_sentences():
@@ -229,6 +236,7 @@ def sample_sentences():
         {"sentence": "This is the third sentence."},
     ]
 
+
 @pytest.fixture
 def sample_embeddings():
     """
@@ -239,6 +247,7 @@ def sample_embeddings():
         {"combined_sentence_embedding": [0.5, 0.5, 0]},
         {"combined_sentence_embedding": [0, 1, 0]},
     ]
+
 
 # Test for combine_sentences
 def test_combine_sentences_no_buffer(sample_sentences):
@@ -252,6 +261,7 @@ def test_combine_sentences_no_buffer(sample_sentences):
     assert len(combined) == len(sample_sentences)
     for i, sentence in enumerate(sample_sentences):
         assert combined[i]["combined_sentence"] == sentence["sentence"]
+
 
 def test_combine_sentences_with_buffer(sample_sentences):
     """
@@ -271,6 +281,7 @@ def test_combine_sentences_with_buffer(sample_sentences):
     assert combined[2]["combined_sentence"] == (
         "This is the second sentence. This is the third sentence."
     )
+
 
 def test_combine_sentences_large_buffer(sample_sentences):
     """
@@ -297,6 +308,7 @@ def test_calculate_cosine_distances_empty():
     assert distances == []
     assert sentences == []
 
+
 def test_calculate_cosine_distances_single_sentence():
     """
     Test case: Single sentence with no pair for comparison.
@@ -308,6 +320,7 @@ def test_calculate_cosine_distances_single_sentence():
     assert distances == []
     assert len(sentences) == 1
     assert "distance_to_next" not in sentences[0]
+
 
 # Placeholder for the SemanticChunker class tests
 @pytest.mark.skip(reason="SemanticChunker requires external embedding function.")

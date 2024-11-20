@@ -1,4 +1,4 @@
-import pytest
+# import pytest
 from unittest.mock import MagicMock, patch
 from qdrant_client import models
 from langchain.schema import Document
@@ -67,7 +67,6 @@ def test_ensure_collection_exists_collection_does_not_exist(mock_qdrant_client, 
         collection_name="test_collection",
         vectors_config=mock_vector_params()
     )
-
 
 
 @patch('qdrant_client.QdrantClient')  # Mock the Qdrant client
