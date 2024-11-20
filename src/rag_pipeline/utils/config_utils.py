@@ -13,35 +13,37 @@ python your_script.py --config config.txt --chunking_method semantic --breakpoin
 python your_script.py --testing_json /path/to/test.json --embedding_model textembedding-gecko@001 --chunking_method simple --qdrant_collection milestone_2 --chunk_size 1000 --chunk_overlap 200
 """
 
+
 def validate_json(file_path: str) -> List[Dict[str, Union[int, str]]]:
     try:
         # Load the JSON data from the file
         with open(file_path, 'r') as file:
             data = json.load(file)
-        
+
         # Check if the JSON has a top-level "texts" key
         if not isinstance(data, dict) or "texts" not in data:
             raise ValueError("JSON must contain a top-level 'texts' key with a list of objects")
-        
+
         # Extract the list of objects from the "texts" key
         items = data["texts"]
-        
+
         # Ensure that the "texts" key contains a list
         if not isinstance(items, list):
             raise ValueError("'texts' must be a list of objects")
-        
+
         # Validate that each item in the list has the required fields
         for item in items:
             if not all(key in item for key in ["id", "text", "url", "timestamp"]):
                 raise ValueError("Each item must have 'id', 'text', 'url', and 'timestamp' fields")
-        
+
         # Return the validated list of items
         return items
-    
+
     except json.JSONDecodeError:
         raise ValueError("Invalid JSON format")
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
+
 
 def load_config(config_file: str) -> Dict[str, Any]:
     """Load configuration from a text file."""
@@ -53,6 +55,7 @@ def load_config(config_file: str) -> Dict[str, Any]:
                 key, value = line.split('=', 1)
                 config[key.strip()] = value.strip()
     return config
+
 
 def parse_arguments() -> argparse.Namespace:
     """Parse command-line arguments."""
@@ -75,9 +78,9 @@ def parse_arguments() -> argparse.Namespace:
 
     return parser.parse_args()
 
-def get_configuration() -> Dict[str, Any]:
-    """Get the final configuration by combining defaults, config file, and command-line arguments."""
-    args = parse_arguments()
+
+def get_configuration(path):
+    """Hard coding config.txt"""
 
     # Default values with correct types
     config = {
@@ -100,23 +103,17 @@ def get_configuration() -> Dict[str, Any]:
             return int(value)
         elif key in ["breakpoint_threshold_amount"]:
             return float(value)
-        elif key in ["query", "embedding_model", "chunking_method", 
+        elif key in ["query", "embedding_model", "chunking_method",
                      "qdrant_collection", "breakpoint_threshold_type"]:
             return value  # Keep as string
         else:
             return value
 
     # Load config file if specified
-    if args.config:
-        file_config = load_config(args.config)
-        for key, value in file_config.items():
-            if key in config:
-                config[key] = convert_type(key, value)
-
-    # Update config with command-line arguments
-    for arg, value in vars(args).items():
-        if value is not None:
-            config[arg] = convert_type(arg, str(value))
+    file_config = load_config(path)
+    for key, value in file_config.items():
+        if key in config:
+            config[key] = convert_type(key, value)
 
     return config
 
@@ -124,12 +121,11 @@ def get_configuration() -> Dict[str, Any]:
 def print_config(config):
     if config['testing_json']:
         try:
-            data = validate_json(config['testing_json'])
+            # data = validate_json(config['testing_json'])
             print(f"Valid JSON file loaded: {config['testing_json']}")
             # Process the data here
         except (ValueError, FileNotFoundError) as e:
             print(f"Error: {str(e)}")
-
 
     print(f"Embedding model: {config['embedding_model']}")
     print(f"Chunking method: {config['chunking_method']}")

@@ -22,7 +22,7 @@ bucket_name = os.environ.get("BUCKET_NAME")
 TRAIN_DATASET = f"gs://{bucket_name}/mental_dataset_TRAIN.jsonl"
 VAL_DATASET = f"gs://{bucket_name}/mental_dataset_VAL.jsonl"
 TEST_DATASET = f"gs://{bucket_name}/mental_dataset_TEST.jsonl"
-GENERATIVE_SOURCE_MODEL = "gemini-1.5-flash-002" # gemini-1.5-pro-002
+GENERATIVE_SOURCE_MODEL = "gemini-1.5-flash-002"  # gemini-1.5-pro-002
 
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../secrets/llm-service-account.json"
 
@@ -32,12 +32,14 @@ GENERATIVE_SOURCE_MODEL = "gemini-1.5-flash-002" # gemini-1.5-pro-002
 #     "top_p": 0.95,  # Use nucleus sampling
 # }
 
+
 def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
     print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
 
 def clean(dataset_fname="kaggle_mental_dataset.json"):
     # Download and unzip https://www.kaggle.com/datasets/jiscecseaiml/mental-health-dataset
@@ -80,6 +82,7 @@ def clean(dataset_fname="kaggle_mental_dataset.json"):
     upload_to_bucket(bucket_name, "mental_dataset_VAL.jsonl", "mental_dataset_VAL.jsonl")
     upload_to_bucket(bucket_name, "mental_dataset_TEST.jsonl", "mental_dataset_TEST.jsonl")
 
+
 # Task 2: finetune on it
 def train(wait_for_job=False, train_config=None):
     # Supervised Fine Tuning
@@ -87,9 +90,9 @@ def train(wait_for_job=False, train_config=None):
         source_model=GENERATIVE_SOURCE_MODEL,
         train_dataset=TRAIN_DATASET,
         validation_dataset=VAL_DATASET,
-        epochs=train_config["epochs"], # should be 2-3
-        adapter_size=train_config["adapter_size"], # should be ~4
-        learning_rate_multiplier=train_config["learning_rate_multiplier"], # should be ~1.0
+        epochs=train_config["epochs"],  # should be 2-3
+        adapter_size=train_config["adapter_size"],  # should be ~4
+        learning_rate_multiplier=train_config["learning_rate_multiplier"],  # should be ~1.0
         tuned_model_display_name=f"crimson-chat-v{train_config['version']}",
     )
     print("Training job started. Monitoring progress...\n\n")
@@ -111,6 +114,7 @@ def train(wait_for_job=False, train_config=None):
     print(f"Tuned model endpoint name: {sft_tuning_job.tuned_model_endpoint_name}")
     print(f"Experiment: {sft_tuning_job.experiment}")
 
+
 def chat(query="I'm feeling so sad about my stressful homework. What should I do?", generation_config=None):
     print("chat()")
     # Get the model endpoint from Vertex AI: https://console.cloud.google.com/vertex-ai/studio/tuning?project=ac2215-project
@@ -124,6 +128,7 @@ def chat(query="I'm feeling so sad about my stressful homework. What should I do
     )
     generated_text = response.text
     print("Fine-tuned LLM Response:", generated_text)
+
 
 def main(args=None):
     print("CLI Arguments:", args)
@@ -147,6 +152,7 @@ def main(args=None):
             generation_config = json.loads(f.read())
 
         chat(query=args.query, generation_config=generation_config)
+
 
 if __name__ == "__main__":
     # Generate the inputs arguments parser

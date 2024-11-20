@@ -53,7 +53,7 @@ def chat(conversation_history, documents_llm):
 
     generation_config = {
         "temperature": 0.75,
-        "max_output_tokens": 2000, # response length limit
+        "max_output_tokens": 2000,  # response length limit
         "top_p": 0.95,
     }
 
