@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - milestone4
 
 jobs:
-  lint:
-    name: Code Linting
+  lint-and-test:
+    name: Lint and Test Microservices
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,42 +25,28 @@ jobs:
           - vector_database
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
-
-      - name: Install Pipenv
-        run: pip install pipenv
-
-      - name: Install Dependencies
-        run: pipenv install --dev
-
-      - name: Run Linter
-        run: pipenv run flake8 api-service
-
-  test:
-    name: Automated Testing
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
+      # Checkout the code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      # Set up Python
+      - name: Set Up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
-      - name: Install Pipenv
+      # Install pipenv
+      - name: Install pipenv
         run: pip install pipenv
 
-      - name: Install Dependencies
-        run: pipenv install --dev
+      # Lint the service
+      - name: Lint Code
+        working-directory: src/${{ matrix.service }}
+        run: |
+          pipenv install --dev
+          pipenv run flake8 .
 
+      # Run tests if the tests folder exists
       - name: Run Tests
         working-directory: src/${{ matrix.service }}
         run: |
