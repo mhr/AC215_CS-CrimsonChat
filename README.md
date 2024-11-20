@@ -292,8 +292,8 @@ This design creates a **moodboard-like experience**, helping users save importan
 - Chat Process  
   ![alt text](images/chatflow.gif)  
 
-- Saving Notes 
-![alt text](images/notesdrag.gif)
+- Saving Notes  
+  ![alt text](images/notesdrag.gif)
 
 ---
 
