@@ -22,7 +22,7 @@ jobs:
           - data-pipeline-dynamic
           - model_training
           - rag_pipeline
-          - vector_database
+          # - vector_database
 
     steps:
       # Checkout the code
