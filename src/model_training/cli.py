@@ -1,18 +1,18 @@
 import os
 import argparse
-import pandas as pd
+# import pandas as pd
 import json
 import time
-import glob
+# import glob
 from google.cloud import storage
 import vertexai
 from vertexai.preview.tuning import sft
-from vertexai.generative_models import GenerativeModel, GenerationConfig
-from pprint import pprint
+from vertexai.generative_models import GenerativeModel  # , GenerationConfig
+# from pprint import pprint
 from sklearn.model_selection import train_test_split
 import random
 
-from google.cloud import aiplatform
+# from google.cloud import aiplatform
 
 GCP_PROJECT = os.environ.get("GCP_PROJECT")
 LOCATION = os.environ.get("LOCATION")
@@ -100,7 +100,7 @@ def train(wait_for_job=False, train_config=None):
     # Wait and refresh
     time.sleep(60)
     sft_tuning_job.refresh()
-    
+
     if wait_for_job:
         print("Check status of tuning job:")
         print(sft_tuning_job)
@@ -177,8 +177,6 @@ if __name__ == "__main__":
         type=str,  # Ensure the argument is treated as a string (filename)
         help="Path to the dataset file (JSONL format)"
     )
-
-
     # $ python cli.py --chat --generation_config generation_config.json --query "I'm so stressed out."
     parser.add_argument(
         "--chat",
