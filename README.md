@@ -181,13 +181,6 @@ This project aims to develop an **AI chatbot** for Harvard CS students, designed
 
 The system will employ a **RAG + LLM architecture** with a **vector database**, featuring a **continuous data pipeline** from Harvard CS sources, cloud-based storage and processing, and a user-friendly interface with authentication.  
 
-The chatbot will provide information on:
-- Courses  
-- Events  
-- Degree requirements  
-- Faculty  
-
----
 
 ## 🎯 Milestone 4  
 
