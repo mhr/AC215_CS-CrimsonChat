@@ -1,9 +1,10 @@
 import json
-from typing import List
+# from typing import List
 from langchain.schema import Document
 from google.cloud import storage
 from datetime import datetime
-    
+
+
 def load_and_validate_json_from_bucket(bucket_name, source_blob_name):
     """
     Downloads a JSON file from the specified GCS bucket,
@@ -37,7 +38,7 @@ def load_and_validate_json_from_bucket(bucket_name, source_blob_name):
             required_fields = ['last_modified', 'scraped_at', 'word_count']
             if not all(field in metadata for field in required_fields):
                 raise ValueError("Metadata must include 'last_modified', 'scraped_at', and 'word_count' fields")
-            
+
             # Handle None values for datetime fields
             scraped_at = metadata['scraped_at']
             last_modified = metadata['last_modified']
@@ -51,15 +52,15 @@ def load_and_validate_json_from_bucket(bucket_name, source_blob_name):
                     datetime.fromisoformat(last_modified.replace('Z', '+00:00'))
                 except ValueError:
                     raise ValueError("'last_modified' must be a valid ISO 8601 format")
-            
+
             # Handle None value for word_count
             word_count = metadata['word_count']
             if word_count is not None and not isinstance(word_count, int):
                 raise ValueError("'word_count' must be an integer")
-            
+
             # Set text_content to empty string if it's None
             text_content = "" if content['text_content'] is None else content['text_content']
-            
+
             doc = Document(
                 page_content=text_content,
                 metadata={
@@ -79,6 +80,7 @@ def load_and_validate_json_from_bucket(bucket_name, source_blob_name):
     except ValueError as e:
         print(f"Error: {str(e)}")
         return None
+
 
 def load_all_documents_in_json(config):
     # only loading from bucket, no support for local json file anymore

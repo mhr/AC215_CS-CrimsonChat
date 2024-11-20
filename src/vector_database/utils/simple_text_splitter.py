@@ -49,6 +49,7 @@ from typing import List, Iterable
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 
+
 class SimpleChunker:
     def __init__(self, chunk_size: int = 50, chunk_overlap: int = 10):
         """
@@ -60,7 +61,7 @@ class SimpleChunker:
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=int(chunk_size),          # Force chunk_size to be an integer
             chunk_overlap=int(chunk_overlap),    # Force chunk_overlap to be an integer
-            length_function=len,  
+            length_function=len,
         )
 
     def transform_documents(self, documents: Iterable[Document]) -> List[Document]:
@@ -81,11 +82,12 @@ class SimpleChunker:
                 split_docs.append(Document(page_content=split, metadata=metadata))
         return split_docs
 
+
 # Example usage
 if __name__ == "__main__":
     chunker = SimpleChunker(chunk_size=50, chunk_overlap=10)
-    sample_doc = Document(page_content="This is a sample text that will be split into smaller chunks using the SimpleChunker. It preserves metadata for each chunk.", metadata={"source": "example.txt"})
-    
+    sample_doc = Document(page_content="This is sample text that will be split into smaller chunks using the SimpleChunker. It preserves metadata for each chunk.", metadata={"source": "example.txt"})
+
     result = chunker.transform_documents([sample_doc])
 
     print(f"Original document:\n{sample_doc.page_content}")

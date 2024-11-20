@@ -41,6 +41,7 @@ EMBEDDING_MODEL = "text-embedding-004"
 VECTOR_DIM = 256
 QDRANT_COLLECTION = "ms3-production_v256_te004"
 
+
 # Function: initialize_qdrant_client
 # Description: Initializes and returns a Qdrant client instance to interact with Qdrant's vector database.
 # Inputs:
@@ -51,7 +52,7 @@ QDRANT_COLLECTION = "ms3-production_v256_te004"
 def test_initialize_qdrant_client():
     """
     Tests the initialize_qdrant_client function.
-    
+
     This function checks:
     - If a valid QdrantClient instance is returned.
     - The correctness of the API key and URL in the client instance.
@@ -61,6 +62,7 @@ def test_initialize_qdrant_client():
 
     # Validate that a QdrantClient instance is returned
     assert isinstance(qdrant_client, QdrantClient), "Expected QdrantClient instance"
+
 
 # Function: qdrant_search
 # Description: Performs a search in a Qdrant collection using a query vector and optional filters.
@@ -74,7 +76,7 @@ def test_initialize_qdrant_client():
 def test_qdrant_search():
     """
     Tests the qdrant_search function for a basic search operation in Qdrant.
-    
+
     This function checks:
     - If the search returns a list of documents with required fields.
     - If the returned documents are within the specified limit.
@@ -98,6 +100,7 @@ def test_qdrant_search():
         assert "payload" in result, "Expected 'payload' in result"
         assert isinstance(result["payload"], dict), "Expected payload to be a dictionary"
 
+
 # Function: get_documents_from_qdrant
 # Description: Retrieves relevant documents from Qdrant based on a given query by using vector embeddings.
 # Inputs:
@@ -110,7 +113,7 @@ def test_qdrant_search():
 def test_get_documents_from_qdrant():
     """
     Tests get_documents_from_qdrant function to retrieve documents from Qdrant.
-    
+
     This function checks:
     - If the function returns a list of documents for a given query.
     - The structure and content of each document, ensuring metadata fields like 'url' are appended.
