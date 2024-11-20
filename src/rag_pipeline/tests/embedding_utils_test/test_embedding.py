@@ -1,10 +1,9 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from rag_pipeline.utils.embedding_utils import (
     initialize_vertex_ai,
     get_dense_embedding,
 )
-from langchain.docstore.document import Document
 
 # Define base patch path for mocking
 BASE_PATCH_PATH = "rag_pipeline.utils.embedding_utils"
@@ -24,6 +23,7 @@ Function Overview:
 """
 
 # --- Tests for initialize_vertex_ai ---
+
 
 @patch(f"{BASE_PATCH_PATH}.aiplatform.init")
 def test_initialize_vertex_ai_valid(mock_init):
@@ -55,5 +55,3 @@ def test_get_dense_embedding_invalid_model(mock_from_pretrained):
 
     # Ensure the mock was called
     mock_from_pretrained.assert_called_once_with("invalid_model")
-
-

@@ -2,7 +2,6 @@ import json
 from rag_pipeline.utils.llm_utils import get_llm_response
 
 
-
 def manage_chat_session(query, chat_history, rag_config):
     """
     Check if session should end based on user input or chat history limits.

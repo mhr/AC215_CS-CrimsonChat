@@ -125,4 +125,3 @@ async def chat_query(
     chat_history.append(f"Response: {llm_response}")
 
     return ChatResponse(response=llm_response, updated_history=chat_history)
-
