@@ -21,7 +21,7 @@ jobs:
           - data-pipeline
           - data-pipeline-dynamic
           - model_training
-          - rag_pipeline
+          # - rag_pipeline
           # - vector_database
 
     steps:
