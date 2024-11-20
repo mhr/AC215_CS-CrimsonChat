@@ -48,10 +48,12 @@ QDRANT_COLLECTION = "ms3-production_v256_te004"
 # - qdrant_api_key (str): API key for authenticating with Qdrant.
 # Outputs:
 # - QdrantClient: An instance of the Qdrant client, ready for database operations.
+
+
 def test_initialize_qdrant_client():
     """
     Tests the initialize_qdrant_client function.
-    
+
     This function checks:
     - If a valid QdrantClient instance is returned.
     - The correctness of the API key and URL in the client instance.
@@ -71,10 +73,12 @@ def test_initialize_qdrant_client():
 # - limit (int): Maximum number of results. Default is 10.
 # Outputs:
 # - List[Dict[str, Any]]: List of search result dictionaries containing document metadata.
+
+
 def test_qdrant_search():
     """
     Tests the qdrant_search function for a basic search operation in Qdrant.
-    
+
     This function checks:
     - If the search returns a list of documents with required fields.
     - If the returned documents are within the specified limit.
@@ -107,10 +111,12 @@ def test_qdrant_search():
 # - qdrant_client (QdrantClient): The initialized Qdrant client.
 # Outputs:
 # - list: List of document texts retrieved from Qdrant, with metadata appended.
+
+
 def test_get_documents_from_qdrant():
     """
     Tests get_documents_from_qdrant function to retrieve documents from Qdrant.
-    
+
     This function checks:
     - If the function returns a list of documents for a given query.
     - The structure and content of each document, ensuring metadata fields like 'url' are appended.

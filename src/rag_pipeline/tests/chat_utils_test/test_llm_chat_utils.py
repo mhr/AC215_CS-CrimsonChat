@@ -48,13 +48,12 @@ Additional Notes:
 
 import json
 import os
-import json
 from dotenv import load_dotenv
 from utils.chat_utils import (
-    manage_chat_session,
-    history_estimate_tokens_from_words,
-    add_context_to_query,
-    parse_and_validate_llm_response,
+    # manage_chat_session,
+    # history_estimate_tokens_from_words,
+    # add_context_to_query,
+    # parse_and_validate_llm_response,
     get_fallback_response,
     preprocess_user_query,
     get_llm_preprocess_user_prompt,
@@ -71,6 +70,7 @@ GCP_PROJECT = os.environ.get("GCP_PROJECT")
 LOCATION = os.environ.get("LOCATION")
 MODEL_ENDPOINT = os.environ.get("MODEL_ENDPOINT")
 
+
 def get_rag_config():
     """
     Returns the default configuration dictionary for the Retrieval-Augmented Generation (RAG) settings.
@@ -83,6 +83,7 @@ def get_rag_config():
         "max_history_tokens": 8000
     }
 
+
 def initialize_llm():
     """
     Initializes and returns the generative model instance using Vertex AI.
@@ -90,6 +91,7 @@ def initialize_llm():
         GenerativeModel: The initialized Vertex AI model.
     """
     return GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+
 
 # Initialize global config and model for testing
 rag_config = get_rag_config()
@@ -109,10 +111,12 @@ prompts = {
 # - config (dict): Configuration for the LLM interaction.
 # Outputs:
 # - dict or None: Parsed response dictionary if valid, otherwise the fallback response.
+
+
 def test_retry_with_json_format_prompt():
     """
     Tests the retry_with_json_format_prompt function from chat_utils.
-    
+
     This function tests:
     - Whether the function returns a valid structured JSON response with required fields.
     - Fallback response handling if the JSON response is invalid.
@@ -149,10 +153,12 @@ def test_retry_with_json_format_prompt():
 # - dict: JSON-like response structured as:
 #     - "retrieval_component": relevant information
 #     - "llm_instruction_component": { "format": ..., "content_structure": ..., "additional_instructions": ... }
+
+
 def test_get_llm_preprocess_user_prompt_valid_response():
     """
     Tests get_llm_preprocess_user_prompt function from chat_utils for a valid model response.
-    
+
     This function tests:
     - Whether the function returns a structured JSON response with required keys.
     - The presence of "retrieval_component" and "llm_instruction_component" fields in the JSON response.
@@ -181,10 +187,12 @@ def test_get_llm_preprocess_user_prompt_valid_response():
 # - config (dict): Configuration for the LLM interaction.
 # Outputs:
 # - dict: Fallback response structure when the LLM response is invalid.
+
+
 def test_get_llm_preprocess_user_prompt_fallback_response():
     """
     Tests get_llm_preprocess_user_prompt function from chat_utils for scenarios where fallback is needed.
-    
+
     This function tests:
     - The handling of invalid responses by checking if the fallback response is returned.
     - The structure and content of the fallback response to ensure it meets expected format.
@@ -215,12 +223,12 @@ def test_get_llm_preprocess_user_prompt_fallback_response():
 # - config (dict): Configuration for the LLM interaction.
 # Outputs:
 # - dict: JSON-like response where missing fields are supplemented with defaults.
-import json
+
 
 def test_get_llm_preprocess_user_prompt_valid_response():
     """
     Tests get_llm_preprocess_user_prompt function from chat_utils for a valid model response.
-    
+
     This function tests:
     - Whether the function returns a structured JSON response with required keys.
     - The presence of "retrieval_component" and "llm_instruction_component" fields in the JSON response.
@@ -263,6 +271,8 @@ def test_get_llm_preprocess_user_prompt_valid_response():
 # - prompts (dict): Dictionary containing the LLM prompts.
 # Outputs:
 # - dict: A dictionary containing structured components for retrieval and LLM instruction formatting.
+
+
 def test_preprocess_user_query():
     """
     Tests the preprocess_user_query function from chat_utils.
@@ -286,7 +296,7 @@ def test_preprocess_user_query():
     assert isinstance(result, dict), "Expected a dictionary response."
     assert "retrieval_component" in result, "Missing 'retrieval_component' in the result."
     assert "llm_instruction_component" in result, "Missing 'llm_instruction_component' in the result."
-    
+
     llm_component = result["llm_instruction_component"]
     assert isinstance(llm_component, dict), "Expected 'llm_instruction_component' to be a dictionary."
 

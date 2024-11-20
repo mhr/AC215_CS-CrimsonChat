@@ -69,7 +69,7 @@ def get_llm_response(prompt, generative_model, rag_config):
         prompt (str): Prompt text to guide the model's response
         generative_model: The LLM model instance
         rag_config (dict): Configuration parameters for generation
-    
+
     Returns:
         str: Generated response from the LLM
     """

@@ -130,7 +130,7 @@ def print_config(config):
     print(f"Embedding model: {config['embedding_model']}")
     print(f"Chunking method: {config['chunking_method']}")
     print(f"Qdrant collection: {config['qdrant_collection']}")
-    
+
     if config['chunking_method'] == "semantic":
         for key in ['breakpoint_threshold_type', 'buffer_size', 'breakpoint_threshold_amount']:
             if config.get(key):
