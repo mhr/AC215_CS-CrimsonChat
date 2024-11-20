@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
-// const API_BASE_URL = "http://0.0.0.0:8000";
 
 /**
  * Sends a user message and chat history to the AI backend for processing and retrieves a response.
