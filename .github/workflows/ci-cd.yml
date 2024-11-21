@@ -16,9 +16,9 @@ jobs:
     strategy:
       matrix:
         service:
-          - api-service
-          - data-pipeline
-          - data-pipeline-dynamic
+          - api_service
+          - data_pipeline
+          - data_pipeline_dynamic
           - model_training
           - rag_pipeline
           - vector_database
