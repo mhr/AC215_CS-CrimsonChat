@@ -297,6 +297,14 @@ This design creates a **moodboard-like experience**, helping users save importan
 - Saving Notes  
   ![alt text](images/notesdrag.gif)
 
+
+---
+
+## 🏗️ Linting & CI/CD  
+
+[Suki to add]
+
+
 ---
 
 ## 🔬 Testing  
@@ -451,6 +459,8 @@ export MODEL_ENDPOINT="dummy-model-endpoint-id"
 
 - **Frontend Deployment:**  
   Before deploying, update the `REACT_APP_API_BASE_URL` in the `.env` file to point to the production backend URL.  
+
+
 
 ---
 
