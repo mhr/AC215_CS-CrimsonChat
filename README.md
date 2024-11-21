@@ -302,8 +302,11 @@ This design creates a **moodboard-like experience**, helping users save importan
 
 ## 🏗️ Linting & CI/CD  
 
-[Suki to add]
+The Continuous Integration (CI) pipeline is run using GitHub Actions, which triggers workflows automatically on events such as pushes or pull requests. The CI setup focuses on two core tasks: linting and automated testing.
 
+Linting is implemented to enforce consistent code style and quality. Flake8 was used to scan the codebase for errors, stylistic issues, and adherence to custom coding standards. This step is executed in the CI pipeline through a dedicated job that installs project dependencies, including linting tools and runs them against the code. If any issues are detected, the job fails, providing detailed feedback to developers to address the problems before merging.
+
+Automated Testing ensures the functionality and reliability of the code. The pipeline includes a testing stage that executes unit tests, integration tests, and system-level tests where applicable. This is achieved by setting up the project environment, installing testing dependencies (i.e. pytest), and running the test suite. Test results are collected and reported directly in the pipeline, enabling developers to identify and resolve issues early.
 
 ---
 
