@@ -10,12 +10,23 @@ on:
 
 jobs:
   test-secret-accessibility:
+<<<<<<< HEAD
     name: Test GitHub Secret
     runs-on: ubuntu-latest
     steps:
+=======
+    name: Test Secret Accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Test if the secret is accessible
+>>>>>>> b69ab4e161e1e90bc6aa3b98b72627869345f912
       - name: Test GitHub Secret
         run: |
-          if [ -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" ]; then
+          if test -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}"; then
             echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is NOT accessible."
             exit 1
           else
@@ -68,4 +79,7 @@ jobs:
             pipenv run pytest tests
           else
             echo "No tests found. Skipping..."
+<<<<<<< HEAD
           fi
+=======
+>>>>>>> b69ab4e161e1e90bc6aa3b98b72627869345f912
