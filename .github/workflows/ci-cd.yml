@@ -65,7 +65,7 @@ jobs:
         run: |
           if [ -d "tests" ] && [ "$(find tests -type f -name 'test_*.py')" ]; then
             pipenv install --dev
-            pipenv run pytest --cov tests
+            pipenv run pytest --cov=. --cov-report=xml --cov-report=term
           else
             echo "No tests found. Skipping..."
           fi
