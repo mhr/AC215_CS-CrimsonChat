@@ -69,7 +69,7 @@ jobs:
       - name: Authenticate with Google Cloud
         if: env.changed == 'true'
         run: |
-          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" > /tmp/gcp-sa-key.json
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > /tmp/gcp-sa-key.json
           gcloud auth activate-service-account --key-file=/tmp/gcp-sa-key.json
           gcloud config set project cs-crimsonchat
           gcloud config set compute/region us-central1
