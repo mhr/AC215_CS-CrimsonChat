@@ -3,10 +3,10 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - milestone4
+      - milestone5
   pull_request:
     branches:
-      - milestone4
+      - milestone5
 
 jobs:
   lint-and-test:
@@ -55,4 +55,13 @@ jobs:
             pipenv run pytest tests
           else
             echo "No tests found. Skipping..."
+
+      # Test Secret Accessibility
+      - name: Test GitHub Secret
+        run: |
+          if [ -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" ]; then
+            echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is NOT accessible."
+            exit 1
+          else
+            echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is accessible."
           fi
