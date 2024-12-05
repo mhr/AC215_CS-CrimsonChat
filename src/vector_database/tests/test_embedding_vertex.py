@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from ..utils.embedding_utils import (
+from embedding_utils import (
     initialize_vertex_ai,
     get_dense_embedding,
     process_and_embed_documents,
