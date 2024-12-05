@@ -8,7 +8,7 @@ from embedding_utils import (
 from langchain.docstore.document import Document
 
 # Define base patch path for mocking
-BASE_PATCH_PATH = "utils.embedding_utils"
+BASE_PATCH_PATH = "embedding_utils"
 
 # Master docstring
 """

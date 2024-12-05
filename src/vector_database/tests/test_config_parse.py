@@ -4,7 +4,7 @@ from unittest.mock import patch, mock_open
 from config_utils import load_config, get_configuration
 
 # Define the base path for patching
-BASE_PATCH_PATH = "utils.config_utils"
+BASE_PATCH_PATH = "config_utils"
 
 # Master docstring
 """

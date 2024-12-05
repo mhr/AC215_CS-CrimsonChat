@@ -12,7 +12,7 @@ BASE_PATCH_PATH = "google.cloud.storage.Client"
 
 # Master docstring
 """
-Unit tests for functions in utils.json_utils.
+Unit tests for functions in json_utils.
 
 Functions Overview:
 1. load_and_validate_json_from_bucket:
@@ -169,7 +169,7 @@ def test_load_all_documents_in_json_default_path(mock_gcs_blob):
     Expected Output: List of Document objects.
     Why: Ensures default path handling works correctly.
     """
-    with patch("utils.json_utils.load_and_validate_json_from_bucket") as mock_load:
+    with patch("json_utils.load_and_validate_json_from_bucket") as mock_load:
         mock_load.return_value = [Document(page_content="content", metadata={"url": "test-url"})]
         config = {}
         documents = load_all_documents_in_json(config)
@@ -184,7 +184,7 @@ def test_load_all_documents_in_json_custom_path(mock_gcs_blob):
     Expected Output: List of Document objects.
     Why: Ensures custom path is handled correctly.
     """
-    with patch("utils.json_utils.load_and_validate_json_from_bucket") as mock_load:
+    with patch("json_utils.load_and_validate_json_from_bucket") as mock_load:
         mock_load.return_value = [Document(page_content="content", metadata={"url": "test-url"})]
         config = {"bucket_name": "custom-bucket", "bucket_file_path": "custom-path"}
         documents = load_all_documents_in_json(config)
