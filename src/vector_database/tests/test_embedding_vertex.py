@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from vector_database.utils.embedding_utils import (
+from utils.embedding_utils import (
     initialize_vertex_ai,
     get_dense_embedding,
     process_and_embed_documents,
@@ -8,7 +8,7 @@ from vector_database.utils.embedding_utils import (
 from langchain.docstore.document import Document
 
 # Define base patch path for mocking
-BASE_PATCH_PATH = "vector_database.utils.embedding_utils"
+BASE_PATCH_PATH = "utils.embedding_utils"
 
 # Master docstring
 """

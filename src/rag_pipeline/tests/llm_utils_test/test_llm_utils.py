@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, mock_open
-from rag_pipeline.utils.llm_utils import get_prompts, create_final_prompt
+from utils.llm_utils import get_prompts, create_final_prompt
 
 
 def test_get_prompts_empty_files():

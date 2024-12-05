@@ -8,8 +8,8 @@ from unittest.mock import patch, MagicMock
 import pytest
 
 # Patch paths
-PATCH_QDRANT_CLIENT = "rag_pipeline.utils.qdrant_utils.QdrantClient"
-PATCH_GET_EMBEDDING = "rag_pipeline.utils.embedding_utils.get_dense_embedding"
+PATCH_QDRANT_CLIENT = "utils.qdrant_utils.QdrantClient"
+PATCH_GET_EMBEDDING = "utils.embedding_utils.get_dense_embedding"
 
 # Test constants
 MOCK_QDRANT_URL = "http://mock-qdrant-url.com"
@@ -35,7 +35,7 @@ def test_initialize_qdrant_client(mock_client_class):
     """
     Tests initialization of QdrantClient.
     """
-    from rag_pipeline.utils.qdrant_utils import initialize_qdrant_client
+    from utils.qdrant_utils import initialize_qdrant_client
 
     # Call the function
     client = initialize_qdrant_client(MOCK_QDRANT_URL, MOCK_QDRANT_API_KEY)
@@ -49,7 +49,7 @@ def test_qdrant_search(mocked_qdrant_client):
     """
     Tests the qdrant_search function.
     """
-    from rag_pipeline.utils.qdrant_utils import qdrant_search
+    from utils.qdrant_utils import qdrant_search
     from qdrant_client.http.models import ScoredPoint  # Import the model for consistency in mocking
 
     # Mock Qdrant search response with required fields

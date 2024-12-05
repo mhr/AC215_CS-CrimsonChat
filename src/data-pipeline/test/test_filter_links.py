@@ -1,7 +1,7 @@
 import json
 import pytest
 # from pathlib import Path
-from data_pipeline.filter_links import (
+from filter_links import (
     load_links_by_depth,
     get_unique_links,
     normalize_urls,

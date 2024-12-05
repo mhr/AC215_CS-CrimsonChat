@@ -1,10 +1,10 @@
 import pytest
 import argparse
 from unittest.mock import patch, mock_open
-from vector_database.utils.config_utils import load_config, get_configuration
+from utils.config_utils import load_config, get_configuration
 
 # Define the base path for patching
-BASE_PATCH_PATH = "vector_database.utils.config_utils"
+BASE_PATCH_PATH = "utils.config_utils"
 
 # Master docstring
 """

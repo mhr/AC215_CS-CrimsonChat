@@ -1,8 +1,8 @@
 import pytest
 import json
-from rag_pipeline.utils.config_utils import validate_json, load_config
+from utils.config_utils import validate_json, load_config
 
-BASE_PATH = "rag_pipeline.utils.config_utils"
+BASE_PATH = "utils.config_utils"
 """
 Unit tests for the `validate_json` function.
 

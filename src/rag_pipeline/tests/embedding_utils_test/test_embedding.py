@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import patch
-from rag_pipeline.utils.embedding_utils import (
+from utils.embedding_utils import (
     initialize_vertex_ai,
     get_dense_embedding,
 )
 
 # Define base patch path for mocking
-BASE_PATCH_PATH = "rag_pipeline.utils.embedding_utils"
+BASE_PATCH_PATH = "utils.embedding_utils"
 
 # Master docstring
 """
