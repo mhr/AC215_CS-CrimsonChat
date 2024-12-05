@@ -44,6 +44,8 @@ jobs:
       - name: Generate New Checksums
         id: generate_checksums
         run: |
+          # Ensure the checksum directory exists
+          mkdir -p checksum
           # Generate checksum for all files in model_training
           find src/model_training -type f -exec sha256sum {} + | sort | sha256sum > checksum/new_model_training_checksum.txt
 
