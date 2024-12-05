@@ -127,46 +127,19 @@ def train(wait_for_job=False, train_config=None):
     model = aiplatform.Model(model_name=tuned_model_name)
 
     if endpoint:
-        # Update existing endpoint with the new model
         endpoint.deploy(
             model=model,
-            traffic_split={"0": 100},  # Send all traffic to the new model
+            traffic_split={"0": 100},  # Send all traffic to this model
             deployed_model_display_name="crimson-chat-deployment"
         )
     else:
-        # Create a new endpoint and deploy the model
         endpoint = aiplatform.Endpoint.create(display_name=endpoint_name)
         endpoint.deploy(
             model=model,
-            traffic_split={"0": 100},  # Send all traffic to the new model
+            traffic_split={"0": 100},  # Send all traffic to this model
             deployed_model_display_name="crimson-chat-deployment"
         )
 
-
-def test_endpoint():
-    try:
-        endpoint = aiplatform.Endpoint(endpoint_name=f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
-        print(f"Endpoint exists: {endpoint}")
-    except Exception as e:
-        print(f"Error fetching endpoint: {e}")
-        raise
-
-    if endpoint:
-        endpoint.deploy(
-            model=model,
-            traffic_split={"0": 100},
-            deployed_model_display_name="crimson-chat-deployment"
-        )
-    else:
-        # Create a new endpoint and deploy the model
-        endpoint = aiplatform.Endpoint.create(display_name=endpoint_name)
-        endpoint.deploy(
-            model=model,
-            traffic_split={"0": 100},
-            deployed_model_display_name="crimson-chat-deployment"
-        )
-
-    print(f"Model successfully deployed to endpoint: {endpoint_name}")
 
 def chat(query="I'm feeling so sad about my stressful homework. What should I do?", generation_config=None):
     print("chat()")
