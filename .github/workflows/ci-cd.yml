@@ -10,6 +10,14 @@ on:
 
 jobs:
   test-secret-accessibility:
+    name: Test Secret Accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Test if the secret is accessible
       - name: Test GitHub Secret
         run: |
           if [ -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" ]; then
@@ -18,6 +26,7 @@ jobs:
           else
             echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is accessible."
           fi
+
   lint-and-test:
     name: Lint and Test Microservices
     runs-on: ubuntu-latest
