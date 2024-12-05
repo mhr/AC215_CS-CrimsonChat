@@ -39,6 +39,7 @@ def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
     blob.upload_from_filename(source_file_name)
     print(f"File {source_file_name} uploaded to {destination_blob_name}.")
 
+
 def clean(dataset_fname="kaggle_mental_dataset.json"):
     # Download and unzip https://www.kaggle.com/datasets/jiscecseaiml/mental-health-dataset
     """
@@ -79,6 +80,7 @@ def clean(dataset_fname="kaggle_mental_dataset.json"):
     upload_to_bucket(bucket_name, "mental_dataset_TRAIN.jsonl", "mental_dataset_TRAIN.jsonl")
     upload_to_bucket(bucket_name, "mental_dataset_VAL.jsonl", "mental_dataset_VAL.jsonl")
     upload_to_bucket(bucket_name, "mental_dataset_TEST.jsonl", "mental_dataset_TEST.jsonl")
+
 
 def train(wait_for_job=False, train_config=None):
     # Supervised Fine Tuning
@@ -139,6 +141,7 @@ def train(wait_for_job=False, train_config=None):
             traffic_split={"0": 100},  # Send all traffic to the new model
             deployed_model_display_name="crimson-chat-deployment"
         )
+
 
 def test_endpoint():
     try:
@@ -202,6 +205,7 @@ def main(args=None):
             generation_config = json.loads(f.read())
 
         chat(query=args.query, generation_config=generation_config)
+
 
 if __name__ == "__main__":
     # Generate the inputs arguments parser
