@@ -32,6 +32,7 @@ GENERATIVE_SOURCE_MODEL = "gemini-1.5-flash-002"  # gemini-1.5-pro-002
 #     "top_p": 0.95,  # Use nucleus sampling
 # }
 
+
 def upload_to_bucket(bucket_name, source_file_name, destination_blob_name):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
