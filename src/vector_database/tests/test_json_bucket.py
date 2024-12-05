@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 # from datetime import datetime
 import json
 from langchain.schema import Document
-from utils.json_utils import (
+from ..utils.json_utils import (
     load_and_validate_json_from_bucket,
     load_all_documents_in_json
 )

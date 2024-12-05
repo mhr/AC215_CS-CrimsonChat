@@ -2,7 +2,7 @@
 from unittest.mock import MagicMock, patch
 from qdrant_client import models
 from langchain.schema import Document
-from utils.qdrant_utils import ensure_collection_exists, qdrant_transform_and_upsert
+from ..utils.qdrant_utils import ensure_collection_exists, qdrant_transform_and_upsert
 
 # Define base path for patching
 BASE_PATCH_PATH = 'utils.qdrant_upsert_utils'

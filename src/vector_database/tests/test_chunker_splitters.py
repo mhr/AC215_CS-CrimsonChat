@@ -1,10 +1,10 @@
 import pytest
 # from unittest.mock import Mock
 from langchain.schema import Document
-from utils.chunker_utils import run_chunking
+from ..utils.chunker_utils import run_chunking
 from langchain_core.documents import Document
-from utils.simple_text_splitter import SimpleChunker
-from utils.semantic_splitter import (
+from ..utils.simple_text_splitter import SimpleChunker
+from ..utils.semantic_splitter import (
     combine_sentences,
     calculate_cosine_distances,
 )
