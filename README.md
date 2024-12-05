@@ -1,7 +1,11 @@
-# Milestone 4: CS-CrimsonChat
+# 🌟 Milestone 4: CS-CrimsonChat
 
 ## 📂 Project Milestone 4 Organization
 
+### Test app here: **https://crimson-chat-ui-692586115434.us-central1.run.app/** (password: cheese)
+---
+
+This structure ensures a logical and easy-to-follow format, guiding readers through the project's details while allowing for efficient navigation.
 ```
 simplified projet tree
 📦AC215_CS-CrimsonChat
@@ -158,8 +162,6 @@ simplified projet tree
  ┣ 📜README.md
 ```
 
-## 🌟 AC215 - Milestone3 - Cheesy App
-
 ---
 
 ### 👩‍💻 Team Members
@@ -294,6 +296,17 @@ This design creates a **moodboard-like experience**, helping users save importan
 
 - Saving Notes  
   ![alt text](images/notesdrag.gif)
+
+
+---
+
+## 🏗️ Linting & CI/CD  
+
+The Continuous Integration (CI) pipeline is run using GitHub Actions, which triggers workflows automatically on events such as pushes or pull requests. The CI setup focuses on two core tasks: linting and automated testing.
+
+Linting is implemented to enforce consistent code style and quality. Flake8 was used to scan the codebase for errors, stylistic issues, and adherence to custom coding standards. This step is executed in the CI pipeline through a dedicated job that installs project dependencies, including linting tools and runs them against the code. If any issues are detected, the job fails, providing detailed feedback to developers to address the problems before merging.
+
+Automated Testing ensures the functionality and reliability of the code. The pipeline includes a testing stage that executes unit tests, integration tests, and system-level tests where applicable. This is achieved by setting up the project environment, installing testing dependencies (i.e. pytest), and running the test suite. Test results are collected and reported directly in the pipeline, enabling developers to identify and resolve issues early.
 
 ---
 
@@ -450,6 +463,8 @@ export MODEL_ENDPOINT="dummy-model-endpoint-id"
 - **Frontend Deployment:**  
   Before deploying, update the `REACT_APP_API_BASE_URL` in the `.env` file to point to the production backend URL.  
 
+
+
 ---
 
 ## 🙏 Acknowledgements  
@@ -464,4 +479,3 @@ We would like to express our heartfelt gratitude to:
 
 - **MyMind**:  
   For inspiring the **design and user experience** of our application
-
