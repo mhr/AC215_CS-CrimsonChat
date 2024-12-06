@@ -60,6 +60,9 @@ jobs:
         if: env.changed != 'true'
         run: echo "No changes detected. Skipping training and deployment."
 
+      - name:
+        run: ls
+
       - name: Load Environment Variables
         run: source /src/model_training/env.dev
 
