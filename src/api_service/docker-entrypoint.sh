@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default to port 8000 if not set
-PORT=${PORT:-8000}
+PORT=${PORT:-8080}
 
 echo "Container is running!!!"
 
@@ -19,6 +19,8 @@ uvicorn_server_production() {
 export -f uvicorn_server
 export -f uvicorn_server_production
 
+export PATH="$PATH:/usr/local/bin"
+
 echo -e "\033[92m
 The following commands are available:
     uvicorn_server
@@ -31,8 +33,8 @@ The following commands are available:
 # Determine whether to run in development or production mode
 if [ "${DEV}" = "1" ]; then
     echo "Starting in development mode..."
-    uvicorn_server
+    pipenv run uvicorn service:app --host 0.0.0.0 --port "$PORT" --log-level debug --reload
 else
     echo "Starting in production mode..."
-    uvicorn_server_production
+    pipenv run uvicorn service:app --host 0.0.0.0 --port "$PORT" --lifespan on
 fi

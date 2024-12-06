@@ -17,6 +17,7 @@ export IMAGE_NAME="api-service-test"
 export PORT="8000"
 
 
+
 # Create the network if we don't have it yet
 #connect a network to the container - inspect asking whether the network already exists
 docker network inspect llm-crimsonchat >/dev/null 2>&1 || docker network create llm-crimsonchat

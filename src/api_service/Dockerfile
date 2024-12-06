@@ -41,12 +41,14 @@ WORKDIR /app
 # Install python packages
 ADD --chown=app:app Pipfile Pipfile.lock /app/
 
-RUN pipenv sync
+RUN pipenv install --dev
 
 # Add the rest of the source code. This is done last so we don't invalidate all
 # layers when we change a line of code.
 ADD --chown=app:app . /app
 
+EXPOSE 8080
+
+
 # Entry point
 ENTRYPOINT ["/bin/bash","./docker-entrypoint.sh"]
-# ENTRYPOINT ["/bin/bash"]

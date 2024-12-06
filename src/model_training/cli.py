@@ -12,7 +12,7 @@ from vertexai.generative_models import GenerativeModel  # , GenerationConfig
 from sklearn.model_selection import train_test_split
 import random
 
-# from google.cloud import aiplatform
+from google.cloud import aiplatform
 
 GCP_PROJECT = os.environ.get("GCP_PROJECT")
 LOCATION = os.environ.get("LOCATION")
@@ -83,7 +83,6 @@ def clean(dataset_fname="kaggle_mental_dataset.json"):
     upload_to_bucket(bucket_name, "mental_dataset_TEST.jsonl", "mental_dataset_TEST.jsonl")
 
 
-# Task 2: finetune on it
 def train(wait_for_job=False, train_config=None):
     # Supervised Fine Tuning
     sft_tuning_job = sft.train(
@@ -113,6 +112,34 @@ def train(wait_for_job=False, train_config=None):
     print(f"Tuned model name: {sft_tuning_job.tuned_model_name}")
     print(f"Tuned model endpoint name: {sft_tuning_job.tuned_model_endpoint_name}")
     print(f"Experiment: {sft_tuning_job.experiment}")
+
+    # add a random comment
+
+    try:
+        endpoint = aiplatform.Endpoint(endpoint_name=f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+        print(f"Endpoint exists: {endpoint}")
+    except Exception as e:
+        print(f"Error fetching endpoint: {e}")
+        raise
+
+    tuned_model_name = sft_tuning_job.tuned_model_name
+    endpoint_name = f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}"
+
+    model = aiplatform.Model(model_name=tuned_model_name)
+
+    if endpoint:
+        endpoint.deploy(
+            model=model,
+            traffic_split={"0": 100},  # Send all traffic to this model
+            deployed_model_display_name="crimson-chat-deployment"
+        )
+    else:
+        endpoint = aiplatform.Endpoint.create(display_name=endpoint_name)
+        endpoint.deploy(
+            model=model,
+            traffic_split={"0": 100},  # Send all traffic to this model
+            deployed_model_display_name="crimson-chat-deployment"
+        )
 
 
 def chat(query="I'm feeling so sad about my stressful homework. What should I do?", generation_config=None):
