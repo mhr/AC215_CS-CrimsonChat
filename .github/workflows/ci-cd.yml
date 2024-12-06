@@ -61,10 +61,10 @@ jobs:
         run: echo "No changes detected. Skipping training and deployment."
 
       - name:
-        run: ls
+        run: ls src/model_training/
 
       - name: Load Environment Variables
-        run: source /src/model_training/env.dev
+        run: source ./src/model_training/env.dev
 
       - name: Authenticate with Google Cloud
         if: env.changed == 'true'
