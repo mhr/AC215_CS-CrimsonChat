@@ -26,18 +26,6 @@ docker network inspect llm-crimsonchat >/dev/null 2>&1 || docker network create 
 # M1/2 chip macs use this line
 docker build -t $IMAGE_NAME --platform=linux/arm64/v8 -f Dockerfile .
 
-# # Run the container
-# docker run --rm --name $IMAGE_NAME -ti \
-# -v "$BASE_DIR":/app \
-# -v "$SECRETS_DIR":/secrets \
-# -p 9000:9000 \
-# -e DEV=1 \
-# -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
-# -e GCP_PROJECT=$GCP_PROJECT \
-# -e GCS_BUCKET_NAME=$GCS_BUCKET_NAME \
-# --network llm-crimsonchat \
-# $IMAGE_NAME
-
 docker run --rm --name $IMAGE_NAME -ti \
   -p 8000:$PORT \
   -e DEV=0 \

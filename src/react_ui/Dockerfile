@@ -40,7 +40,7 @@ RUN chmod +x /docker-entrypoint.sh
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose the port (Cloud Run uses the PORT environment variable)
-EXPOSE 8080
+EXPOSE 8000
 
 # Set the entrypoint to the custom script
 ENTRYPOINT ["/docker-entrypoint.sh"]
