@@ -28,7 +28,7 @@ if [[ "$1" == "--run-cli" ]]; then
     -e BUCKET_NAME=$BUCKET_NAME \
     -e LOCATION=$LOCATION \
     -e MODEL_ENDPOINT=$MODEL_ENDPOINT \
-    $IMAGE_NAME pipenv run python /app/cli.py --train --train_config /app/train_config.json --dataset /app/kaggle_mental_dataset.json
+    $IMAGE_NAME python /app/cli.py --train --train_config /app/train_config.json --dataset /app/kaggle_mental_dataset.json
 else
   # Default: Drop into the container's shell because we're local
   docker run --rm --name $IMAGE_NAME $DOCKER_FLAGS \
