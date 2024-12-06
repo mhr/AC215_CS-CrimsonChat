@@ -27,16 +27,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      # Step 2: Set Working Directory and Run docker-shell.sh
+      - name: Get secret
+        run: |
+          mkdir -p ../secrets
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > ../secrets/crimsonchat.json
+
       - name: Run docker-shell.sh for Model Training
         working-directory: ./src/model_training
         run: |
           chmod +x docker-shell.sh
           ./docker-shell.sh --run-cli
+
+      - name: Clean Up Temp Key
+        if: always()
+        run: rm -f ../secrets/crimsonchat.json
 
   lint-and-test:
     name: Lint and Test Microservices
