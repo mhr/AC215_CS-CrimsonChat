@@ -22,93 +22,21 @@ jobs:
             echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is accessible."
           fi
 
-  finetune-and-deploy:
-    name: Finetune and Deploy LLM
+  model-training:
+    if: contains(github.event.head_commit.message, '/run-model-training')
     runs-on: ubuntu-latest
-    needs: lint-and-test
 
     steps:
-      - name: Checkout Code
+      # Step 1: Check out the repository
+      - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Download Previous Checksums
-        uses: actions/download-artifact@v3
-        with:
-          name: model-training-checksum
-          path: checksum/
-        continue-on-error: true  # Allow if no checksum exists (e.g., first run)
-
-      - name: Generate New Checksums
-        id: generate_checksums
+      # Step 2: Set Working Directory and Run docker-shell.sh
+      - name: Run docker-shell.sh for Model Training
+        working-directory: ./src/model_training
         run: |
-          # Ensure the checksum directory exists
-          mkdir -p checksum
-          # Generate checksum for all files in model_training
-          find src/model_training -type f -exec sha256sum {} + | sort | sha256sum > checksum/new_model_training_checksum.txt
-
-      - name: Compare Checksums
-        id: compare_checksums
-        run: |
-          if [ -f "checksum/old_model_training_checksum.txt" ]; then
-            cmp --silent checksum/old_model_training_checksum.txt checksum/new_model_training_checksum.txt && CHANGED="false" || CHANGED="true"
-          else
-            CHANGED="true"
-          fi
-          echo "changed=$CHANGED" >> $GITHUB_ENV
-
-      - name: Skip Training and Deployment
-        if: env.changed != 'true'
-        run: echo "No changes detected. Skipping training and deployment."
-
-      - name: Load Environment Variables
-        run: source ./src/model_training/env.dev
-
-      - name: Authenticate with Google Cloud
-        if: env.changed == 'true'
-        run: |
-          mkdir -p ./secrets
-          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > ./secrets/crimsonchat.json
-          export GOOGLE_APPLICATION_CREDENTIALS=./secrets/crimsonchat.json
-          gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-          gcloud config set project $GCP_PROJECT
-          gcloud config set compute/region $LOCATION
-
-      - name: Set Up Python
-        if: env.changed == 'true'
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install Dependencies
-        if: env.changed == 'true'
-        working-directory: src/model_training
-        run: |
-          pip install pipenv
-          pipenv install
-
-      - name: Train and Deploy
-        if: env.changed == 'true'
-        working-directory: src/model_training
-        run: |
-          pipenv run python cli.py --train \
-            --train_config train_config.json \
-            --dataset kaggle_mental_dataset.json
-
-      - name: Save New Checksums
-        if: env.changed == 'true'
-        run: |
-          mv checksum/new_model_training_checksum.txt checksum/old_model_training_checksum.txt
-
-      - name: Upload New Checksums
-        if: env.changed == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: model-training-checksum
-          path: checksum/
-
-      - name: Clean Up Temp Key
-        if: always()
-        run: rm -f ./secrets/crimsonchat.json
+          chmod +x docker-shell.sh
+          ./docker-shell.sh
 
   lint-and-test:
     name: Lint and Test Microservices
