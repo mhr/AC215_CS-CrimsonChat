@@ -60,18 +60,15 @@ jobs:
         if: env.changed != 'true'
         run: echo "No changes detected. Skipping training and deployment."
 
-      - name:
-        run: ls src/model_training/
-
       - name: Load Environment Variables
         run: source ./src/model_training/env.dev
 
       - name: Authenticate with Google Cloud
         if: env.changed == 'true'
         run: |
-          mkdir -p /secrets
-          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > /secrets/crimsonchat.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/secrets/crimsonchat.json
+          mkdir -p ./secrets
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > ./secrets/crimsonchat.json
+          export GOOGLE_APPLICATION_CREDENTIALS=./secrets/crimsonchat.json
           gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
           gcloud config set project $GCP_PROJECT
           gcloud config set compute/region $LOCATION
@@ -111,7 +108,7 @@ jobs:
 
       - name: Clean Up Temp Key
         if: always()
-        run: rm -f /tmp/gcp-sa-key.json
+        run: rm -f ./secrets/crimsonchat.json
 
   lint-and-test:
     name: Lint and Test Microservices
