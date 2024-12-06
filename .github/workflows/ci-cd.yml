@@ -28,11 +28,9 @@ jobs:
     needs: lint-and-test
 
     steps:
-      # Step 1: Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Download Previous Checksums
       - name: Download Previous Checksums
         uses: actions/download-artifact@v3
         with:
@@ -40,7 +38,6 @@ jobs:
           path: checksum/
         continue-on-error: true  # Allow if no checksum exists (e.g., first run)
 
-      # Step 3: Generate New Checksums
       - name: Generate New Checksums
         id: generate_checksums
         run: |
@@ -49,7 +46,6 @@ jobs:
           # Generate checksum for all files in model_training
           find src/model_training -type f -exec sha256sum {} + | sort | sha256sum > checksum/new_model_training_checksum.txt
 
-      # Step 4: Compare Checksums
       - name: Compare Checksums
         id: compare_checksums
         run: |
@@ -60,28 +56,29 @@ jobs:
           fi
           echo "changed=$CHANGED" >> $GITHUB_ENV
 
-      # Step 5: Stop Early If No Changes Detected
       - name: Skip Training and Deployment
         if: env.changed != 'true'
         run: echo "No changes detected. Skipping training and deployment."
 
-      # Step 6: Authenticate with Google Cloud
+      - name: Load Environment Variables
+        run: source /src/model_training/env.dev
+
       - name: Authenticate with Google Cloud
         if: env.changed == 'true'
         run: |
-          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > /tmp/gcp-sa-key.json
-          gcloud auth activate-service-account --key-file=/tmp/gcp-sa-key.json
-          gcloud config set project cs-crimsonchat
-          gcloud config set compute/region us-central1
+          mkdir -p /secrets
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > /secrets/crimsonchat.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/secrets/crimsonchat.json
+          gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+          gcloud config set project $GCP_PROJECT
+          gcloud config set compute/region $LOCATION
 
-      # Step 7: Set Up Python
       - name: Set Up Python
         if: env.changed == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
-      # Step 8: Install Dependencies
       - name: Install Dependencies
         if: env.changed == 'true'
         working-directory: src/model_training
@@ -89,7 +86,6 @@ jobs:
           pip install pipenv
           pipenv install
 
-      # Step 9: Train and Deploy
       - name: Train and Deploy
         if: env.changed == 'true'
         working-directory: src/model_training
@@ -98,7 +94,6 @@ jobs:
             --train_config train_config.json \
             --dataset kaggle_mental_dataset.json
 
-      # Step 10: Save New Checksums
       - name: Save New Checksums
         if: env.changed == 'true'
         run: |
@@ -111,7 +106,6 @@ jobs:
           name: model-training-checksum
           path: checksum/
 
-      # Step 11: Clean Up Temp Key
       - name: Clean Up Temp Key
         if: always()
         run: rm -f /tmp/gcp-sa-key.json
