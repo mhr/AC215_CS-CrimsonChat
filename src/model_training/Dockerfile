@@ -30,4 +30,4 @@ COPY . /app
 ENTRYPOINT ["/bin/bash"]
 
 # Start pipenv shell
-CMD ["-c", "pipenv shell"]
+# CMD ["-c", "pipenv shell"]
