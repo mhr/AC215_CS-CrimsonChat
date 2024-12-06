@@ -31,3 +31,6 @@ ENTRYPOINT ["/bin/bash"]
 
 # Start pipenv shell
 # CMD ["-c", "pipenv shell"]
+
+RUN python --version
+CMD ["python", "--version"]
