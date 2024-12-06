@@ -11,6 +11,12 @@ export IMAGE_NAME="model_training"
 # Build the image based on the Dockerfile
 docker build -t $IMAGE_NAME -f Dockerfile .
 
+if [ -t 1 ]; then
+  DOCKER_FLAGS="-ti"
+else
+  DOCKER_FLAGS=""
+fi
+
 if [[ "$1" == "--run-cli" ]]; then
   # Run the container and execute the Python CLI
   docker run --rm --name $IMAGE_NAME -ti \
