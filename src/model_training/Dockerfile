@@ -26,11 +26,5 @@ RUN pipenv install
 # Copy the rest of the application code into the container
 COPY . /app
 
-# Entry point
-ENTRYPOINT ["/bin/bash"]
-
-# Start pipenv shell
-# CMD ["-c", "pipenv shell"]
-
-RUN python --version
-CMD ["python", "--version"]
+ENTRYPOINT ["pipenv"]
+CMD ["run", "python", "--version"]
