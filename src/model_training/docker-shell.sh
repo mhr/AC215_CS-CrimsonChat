@@ -19,7 +19,7 @@ fi
 
 if [[ "$1" == "--run-cli" ]]; then
   # Run the container and execute the Python CLI
-  docker run --rm --name $IMAGE_NAME -ti \
+  docker run --rm --name $IMAGE_NAME $DOCKER_FLAGS \
     -v "$BASE_DIR":/app \
     -v "$SECRETS_DIR":/secrets \
     -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
@@ -30,7 +30,7 @@ if [[ "$1" == "--run-cli" ]]; then
     $IMAGE_NAME python /app/cli.py --train --train_config /app/train_config.json --dataset /app/kaggle_mental_dataset.json
 else
   # Default: Drop into the container's shell because we're local
-  docker run --rm --name $IMAGE_NAME -ti \
+  docker run --rm --name $IMAGE_NAME $DOCKER_FLAGS \
     -v "$BASE_DIR":/app \
     -v "$SECRETS_DIR":/secrets \
     -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
