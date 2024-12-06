@@ -23,7 +23,7 @@ if [[ "$1" == "--run-cli" ]]; then
     -e MODEL_ENDPOINT=$MODEL_ENDPOINT \
     $IMAGE_NAME python /app/cli.py --train --train_config /app/train_config.json --dataset /app/kaggle_mental_dataset.json
 else
-  # Default: Drop into the container's shell
+  # Default: Drop into the container's shell because we're local
   docker run --rm --name $IMAGE_NAME -ti \
     -v "$BASE_DIR":/app \
     -v "$SECRETS_DIR":/secrets \
