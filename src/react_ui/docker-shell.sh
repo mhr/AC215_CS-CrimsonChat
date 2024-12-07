@@ -6,7 +6,7 @@ export IMAGE_NAME="crimson-chat-ui"
 export IMAGE_TAG="latest"
 
 # Set build-time arguments (update REACT_APP_API_URL as needed)
-REACT_APP_API_URL="http://35.237.221.78:9000"
+REACT_APP_API_URL="http://35.237.221.78/api"
 
 # Build the Docker image for amd64 architecture
 docker build --platform linux/amd64 \
