@@ -24,7 +24,7 @@ FROM nginx:alpine
 RUN apk add --no-cache gettext
 
 # Set environment variable for PORT
-ENV PORT=8080
+ENV PORT=9000
 
 # Remove default Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
@@ -40,7 +40,7 @@ RUN chmod +x /docker-entrypoint.sh
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose the port (Cloud Run uses the PORT environment variable)
-EXPOSE 8000
+EXPOSE 9000
 
 # Set the entrypoint to the custom script
 ENTRYPOINT ["/docker-entrypoint.sh"]
