@@ -1,0 +1,44 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - milestone5 # Trigger workflow on commits to the milestone5 branch
+  pull_request:
+    branches:
+      - milestone5 # Trigger workflow for pull requests targeting the milestone5 branch
+
+jobs:
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12 # Match your project’s Python version
+
+      # Step 3: Install dependencies using pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest requests python-dotenv
+
+      # Step 4: Load environment variables
+      - name: Load environment variables
+        env:
+          # BACKEND_URL: ${{ secrets.BACKEND_URL }}  # Set in GitHub Secrets or variables
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }} # Set in GitHub Secrets
+        run: |
+          # echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
+          echo "TEST_PASSWORD=${TEST_PASSWORD}" >> $GITHUB_ENV
+
+      # Step 5: Run integration tests
+      - name: Run Integration Tests
+        run: pytest --rootdir=. tests/integration/
