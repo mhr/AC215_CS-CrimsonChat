@@ -2,7 +2,7 @@
 
 set -e
 
-export IMAGE_NAME="crimson-chat-ui"
+export IMAGE_NAME="react-ui"
 export IMAGE_TAG="latest"
 
 # Set build-time arguments (update REACT_APP_API_URL as needed)
