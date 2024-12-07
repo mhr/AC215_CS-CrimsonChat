@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default to port 8000 if not set
-PORT=${PORT:-8080}
+PORT=${PORT:-9000}
 
 echo "Container is running!!!"
 

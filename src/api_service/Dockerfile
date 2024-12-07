@@ -47,7 +47,7 @@ RUN pipenv install --dev
 # layers when we change a line of code.
 ADD --chown=app:app . /app
 
-EXPOSE 8080
+EXPOSE 9000
 
 
 # Entry point

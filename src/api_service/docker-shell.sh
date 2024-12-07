@@ -11,10 +11,10 @@ source ./env.dev
 
 
 # export PERSISTENT_DIR=$(pwd)/../../../persistent-folder/
-export IMAGE_NAME="api-service-test"
+export IMAGE_NAME="api-service"
 
 # export PORT="8000:8000"
-export PORT="8000"
+export PORT="9000"
 
 
 
@@ -28,7 +28,7 @@ docker network inspect llm-crimsonchat >/dev/null 2>&1 || docker network create 
 docker build -t $IMAGE_NAME --platform=linux/arm64/v8 -f Dockerfile .
 
 docker run --rm --name $IMAGE_NAME -ti \
-  -p 8000:$PORT \
+  -p 9000:$PORT \
   -e DEV=0 \
   -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
   -e GCP_PROJECT=$GCP_PROJECT \
