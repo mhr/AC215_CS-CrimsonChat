@@ -21,7 +21,12 @@ MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
 
 # Initialize global dependencies
 qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
-generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+temp_model_path = "projects/cs-crimsonchat/locations/us-central1/endpoints/1654493420430819328"
+print(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+print("temp model path", temp_model_path)
+generative_model = GenerativeModel(temp_model_path)
+# generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
+# f"projects/cs-crimsonchat/locations/us-central1/endpoints/1654493420430819328"
 prompts = get_prompts()
 rag_config = {
     "temperature": 0.75,
