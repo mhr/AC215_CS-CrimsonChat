@@ -42,3 +42,40 @@ jobs:
       # Step 5: Run integration tests
       - name: Run Integration Tests
         run: pytest --rootdir=. tests/integration/
+  spin-up-backend-containers:
+    name: Spin Up Backend Containers
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Decrypt GCP Service Account Key
+      - name: Decrypt GCP Service Account Key
+        run: |
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > gcp.json
+      - name: Create Environment File
+        run: |
+          echo "QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}" >> .env
+          echo "QDRANT_URL=${{ env.QDRANT_URL }}" >> .env
+          echo "QDRANT_COLLECTION_NAME=${{ env.QDRANT_COLLECTION_NAME }}" >> .env
+          echo "GCP_PROJECT=${{ env.GCP_PROJECT }}" >> .env
+          echo "LOCATION=${{ env.LOCATION }}" >> .env
+          echo "GCP_SERVICE_ACCOUNT=${{ env.GCP_SERVICE_ACCOUNT }}" >> .env
+
+      # Step 3: Start Docker containers using docker-compose
+      - name: Start Backend and Frontend with Docker Compose
+        run: |
+          docker-compose up -d --build
+
+      # Step 4: Wait for Containers
+      - name: Wait for Containers to be Ready
+        run: |
+          echo "Waiting for services to be ready..."
+          sleep 15
+
+      # Step 5: Clean up containers after the tests
+      - name: Tear Down Docker Containers
+        if: always()
+        run: docker-compose down

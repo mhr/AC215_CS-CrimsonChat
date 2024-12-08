@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./src/api_service
+      dockerfile: Dockerfile
+    image: api-service-test
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./src/api_service:/app
+    networks:
+      - llm-crimsonchat
+
+  frontend:
+    build:
+      context: ./src/react_ui
+      dockerfile: Dockerfile
+    image: frontend-image
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - llm-crimsonchat
+
+networks:
+  llm-crimsonchat:
+    driver: bridge
