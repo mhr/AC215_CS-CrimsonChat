@@ -90,6 +90,8 @@ jobs:
         run: |
           echo "Waiting for services to be ready..."
           sleep 15
+      - name: Check Docker Status
+        run: docker ps
 
       # Step 7: Clean up containers after the tests
       - name: Tear Down Docker Containers
