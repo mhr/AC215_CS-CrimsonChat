@@ -53,6 +53,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       # Step 3: Verify GCP Service Account Key secret
       - name: Test GitHub Secret
         run: |
@@ -84,18 +89,22 @@ jobs:
       - name: Debug .env File Path
         run: ls -la
 
-      # Step 6: Start Docker container
-      - name: Run docker-shell.sh for API-Service
-        working-directory: ./src/api_service
-        run: |
-          chmod +x docker-shell.sh
-          ./docker-shell.sh
-      # Step 7: Start Docker container
-      - name: Run docker-shell.sh for Frontend
-        working-directory: ./src/react_ui
-        run: |
-          chmod +x docker-shell.sh
-          ./docker-shell.sh
+      # # Step 6: Start Docker container
+      # - name: Run docker-shell.sh for API-Service
+      #   working-directory: ./src/api_service
+      #   run: |
+      #     chmod +x docker-shell.sh
+      #     ./docker-shell.sh
+      # # Step 7: Start Docker container
+      # - name: Run docker-shell.sh for Frontend
+      #   working-directory: ./src/react_ui
+      #   run: |
+      #     chmod +x docker-shell.sh
+      #     ./docker-shell.sh
+
+      # Step 6: Start Docker containers using docker-compose
+      - name: Start Backend and Frontend with Docker Compose
+        run: docker-compose --env-file $GITHUB_WORKSPACE/.env up -d --build
 
       # Step 8: Check Docker Status
       - name: Check Docker Status
