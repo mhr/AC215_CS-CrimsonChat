@@ -39,7 +39,7 @@
     - name: Create frontend container
       docker_container:
         name: "frontend"
-        image: "gcr.io/{{ gcp_project }}/cheese-app-frontend-react:{{ tag.stdout}}"
+        image: "gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout}}"
         state: started
         recreate: yes
         pull: yes
@@ -61,29 +61,10 @@
         state: "directory"
         mode: 0777
 
-    - name: Create vector-db container
-      docker_container:
-        name: "vector-db"
-        image: "chromadb/chroma:0.5.6"
-        state: started
-        recreate: yes
-        published_ports:
-          - 8000:8000
-        env:
-          IS_PERSISTENT: "TRUE"
-          ANONYMIZED_TELEMETRY: "FALSE"
-        networks:
-          - name: "{{docker_network_name}}"
-        volumes:
-          - /mnt/disk-1/chromadb:/chroma/chroma
-
-    - name: Load Vector DB
-      shell: docker run --rm -it -e GCP_PROJECT="{{ gcp_project }}" -e CHROMADB_HOST="vector-db" -e CHROMADB_PORT="8000" -e GOOGLE_APPLICATION_CREDENTIALS="/secrets/gcp-service.json" -v /srv/secrets:/secrets --network "{{docker_network_name}}" "gcr.io/{{ gcp_project }}/cheese-app-vector-db-cli:{{ tag.stdout}}" cli.py --download --load --chunk_type recursive-split
-
     - name: Create api-service container
       docker_container:
         name: "api-service"
-        image: "gcr.io/{{ gcp_project }}/cheese-app-api-service:{{ tag.stdout}}"
+        image: "gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}"
         state: started
         recreate: yes
         published_ports:
@@ -91,9 +72,10 @@
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "/secrets/gcp-service.json"
           GCP_PROJECT: "{{ gcp_project }}"
-          GCS_BUCKET_NAME: "cheese-app-models"
-          CHROMADB_HOST: "vector-db"
-          CHROMADB_PORT: "8000"
+          BUCKET_NAME: "cs-crimsonchat"
+          QDRANT_URL: "https://1494f517-c19c-490b-8a4e-43ff3b02bbb7.europe-west3-0.gcp.cloud.qdrant.io:6333"
+          QDRANT_API_KEY: "5qJBIKdEycPYlWfaDiAwd-1Hz2z88qaBsSV_UAa4AljpqWpWGzmRTg"
+          QDRANT_COLLECTION_NAME: "ms3-production_v256_te004"
         networks:
           - name: "{{docker_network_name}}"
         volumes:

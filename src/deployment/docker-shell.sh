@@ -2,6 +2,8 @@
 
 # exit immediately if a command exits with a non-zero status
 #set -e
+# Disable path conversion for Windows
+export MSYS_NO_PATHCONV=1
 
 # Define some environment variables
 export IMAGE_NAME="crimsonchat-deployment"
@@ -10,16 +12,6 @@ export SECRETS_DIR=$(pwd)/../../../secrets/
 export GCP_PROJECT="cs-crimsonchat" # CHANGE TO YOUR PROJECT ID
 export GCP_ZONE="us-central1"
 export GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json
-
-export GOOGLE_APPLICATION_CREDENTIALS="/secrets/crimsonchat.json"
-
-#using secret - embedding goes to this account (grabbing the model)
-#the following works when testing locally
-# export GOOGLE_APPLICATION_CREDENTIALS="../../../secrets/llm-service-account.json"
-export GCP_SERVICE_ACCOUNT="crimsonchat@cs-crimsonchat.iam.gserviceaccount.com"
-export BUCKET_NAME="cs-crimsonchat"
-export MODEL_ENDPOINT="1654493420430819328"
-
 
 # Build the image based on the Dockerfile
 #docker build -t $IMAGE_NAME -f Dockerfile .
