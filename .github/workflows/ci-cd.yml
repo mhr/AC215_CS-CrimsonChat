@@ -40,6 +40,37 @@ jobs:
         run: |
           chmod +x docker-shell.sh
           ./docker-shell.sh --run-cli
+        # Step 5: Create Environment File
+      - name: Create Environment File
+        run: |
+          echo "QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}" >> $GITHUB_WORKSPACE/.env
+          echo "QDRANT_URL=${{ env.QDRANT_URL }}" >> $GITHUB_WORKSPACE/.env
+          echo "QDRANT_COLLECTION_NAME=${{ env.QDRANT_COLLECTION_NAME }}" >> $GITHUB_WORKSPACE/.env
+          echo "GCP_PROJECT=${{ env.GCP_PROJECT }}" >> $GITHUB_WORKSPACE/.env
+          echo "LOCATION=${{ env.LOCATION }}" >> $GITHUB_WORKSPACE/.env
+          echo "GCP_SERVICE_ACCOUNT=${{ env.GCP_SERVICE_ACCOUNT }}" >> $GITHUB_WORKSPACE/.env
+          # Set the path to the service account credentials inside the container
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_key.json" >> $GITHUB_WORKSPACE/.env
+
+      - name: Debug .env File Path
+        run: ls -la
+
+      # Step 6: Start Docker container
+      - name: Run docker-shell.sh for API-Service
+        working-directory: ./src/api_service
+        run: |
+          chmod +x docker-shell.sh
+          ./docker-shell.sh
+      # Step 7: Start Docker container
+      - name: Run docker-shell.sh for Frontend
+        working-directory: ./src/react_ui
+        run: |
+          chmod +x docker-shell.sh
+          ./docker-shell.sh
+
+      # Step 8: Check Docker Status
+      - name: Check Docker Status
+        run: docker ps
 
       - name: Clean Up Temp Key
         if: always()
