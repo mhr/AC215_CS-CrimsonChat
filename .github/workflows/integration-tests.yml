@@ -3,10 +3,10 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone5 # Trigger workflow on commits to the milestone5 branch
+      - milestone5
   pull_request:
     branches:
-      - milestone5 # Trigger workflow for pull requests targeting the milestone5 branch
+      - milestone5
 
 jobs:
   integration-tests:
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12 # Match your project’s Python version
+          python-version: 3.12
 
       # Step 3: Install dependencies using pip
       - name: Install dependencies
@@ -30,10 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest requests python-dotenv
 
-      # Step 4: Load environment variables
+      # Step 4: Load environment variables (e.g., TEST_PASSWORD)
       - name: Load environment variables
         env:
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }} # Set in GitHub Secrets
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: echo "TEST_PASSWORD=${TEST_PASSWORD}" >> $GITHUB_ENV
 
       # Step 5: Run integration tests
@@ -49,8 +49,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install Docker and Docker Compose
-      - name: Set up Docker
+      # Step 2: Set up Docker and Docker Compose
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Install Docker Compose
@@ -58,8 +58,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # Step 3: Decrypt GCP Service Account Key
-      - name: Decrypt GCP Service Account Key
+      # Step 3: Verify GCP Service Account Key secret
+      - name: Verify GCP SA Key
         run: |
           if [ -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" ]; then
             echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is NOT accessible."
@@ -68,7 +68,13 @@ jobs:
             echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is accessible."
           fi
 
-      # Step 4: Create Environment File
+      # Step 4: Write GCP Service Account Key to a file
+      - name: Write GCP Key File
+        run: |
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" > $GITHUB_WORKSPACE/gcp_key.json
+
+      # Step 5: Create Environment File
+      # Adjust these environment variables as needed.
       - name: Create Environment File
         run: |
           echo "QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}" >> $GITHUB_WORKSPACE/.env
@@ -77,25 +83,31 @@ jobs:
           echo "GCP_PROJECT=${{ env.GCP_PROJECT }}" >> $GITHUB_WORKSPACE/.env
           echo "LOCATION=${{ env.LOCATION }}" >> $GITHUB_WORKSPACE/.env
           echo "GCP_SERVICE_ACCOUNT=${{ env.GCP_SERVICE_ACCOUNT }}" >> $GITHUB_WORKSPACE/.env
+          # Set the path to the service account credentials inside the container
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_key.json" >> $GITHUB_WORKSPACE/.env
 
       - name: Debug .env File Path
         run: ls -la
 
-      # Step 5: Start Docker containers using docker-compose
+      # Step 6: Start Docker containers using docker-compose
       - name: Start Backend and Frontend with Docker Compose
         run: docker-compose --env-file $GITHUB_WORKSPACE/.env up -d --build
 
-      # Step 6: Wait for Containers
+      # Step 7: Wait for Containers
       - name: Wait for Containers to be Ready
         run: |
           echo "Waiting for services to be ready..."
           sleep 15
+
+      # Step 8: Check Docker Status
       - name: Check Docker Status
         run: docker ps
+
+      # Step 9: Print Backend Logs
       - name: Print Backend Logs
         run: docker-compose logs backend
 
-      # Step 7: Clean up containers after the tests
+      # Step 10: Tear Down Docker Containers
       - name: Tear Down Docker Containers
         if: always()
         run: docker-compose down
