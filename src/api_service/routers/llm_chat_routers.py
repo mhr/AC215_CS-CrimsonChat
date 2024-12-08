@@ -16,7 +16,7 @@ GCP_PROJECT = os.getenv("GCP_PROJECT")
 LOCATION = os.getenv("LOCATION")
 # QDRANT_URL = os.getenv("QDRANT_URL")
 # QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-# MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
+MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
 QDRANT_URL = "https://1494f517-c19c-490b-8a4e-43ff3b02bbb7.europe-west3-0.gcp.cloud.qdrant.io:6333"
 QDRANT_API_KEY = "5qJBIKdEycPYlWfaDiAwd-1Hz2z88qaBsSV_UAa4AljpqWpWGzmRTg"
 # MODEL_ENDPOINT = os.getenv("MODEL_ENDPOINT")
@@ -24,7 +24,6 @@ QDRANT_API_KEY = "5qJBIKdEycPYlWfaDiAwd-1Hz2z88qaBsSV_UAa4AljpqWpWGzmRTg"
 # Initialize global dependencies
 qdrant_client = initialize_qdrant_client(QDRANT_URL, QDRANT_API_KEY)
 temp_model_path = "projects/cs-crimsonchat/locations/us-central1/endpoints/1654493420430819328"
-print(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
 print("temp model path", temp_model_path)
 generative_model = GenerativeModel(temp_model_path)
 # generative_model = GenerativeModel(f"projects/{GCP_PROJECT}/locations/{LOCATION}/endpoints/{MODEL_ENDPOINT}")
