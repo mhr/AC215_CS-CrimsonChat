@@ -6,12 +6,23 @@ services:
     image: api-service-test
     ports:
       - "8000:8000"
-    env_file:
-      - .env
+    environment:
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_COLLECTION_NAME=${QDRANT_COLLECTION_NAME}
+      - GCP_PROJECT=${GCP_PROJECT}
+      - LOCATION=${LOCATION}
+      - GCP_SERVICE_ACCOUNT=${GCP_SERVICE_ACCOUNT}
     volumes:
       - ./src/api_service:/app
     networks:
       - llm-crimsonchat
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   frontend:
     build:

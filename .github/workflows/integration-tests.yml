@@ -78,11 +78,12 @@ jobs:
           echo "LOCATION=${{ env.LOCATION }}" >> $GITHUB_WORKSPACE/.env
           echo "GCP_SERVICE_ACCOUNT=${{ env.GCP_SERVICE_ACCOUNT }}" >> $GITHUB_WORKSPACE/.env
 
+      - name: Debug .env File Path
+        run: ls -la
+
       # Step 5: Start Docker containers using docker-compose
       - name: Start Backend and Frontend with Docker Compose
         run: docker-compose --env-file $GITHUB_WORKSPACE/.env up -d --build
-      - name: Debug .env File Path
-        run: ls -la
 
       # Step 6: Wait for Containers
       - name: Wait for Containers to be Ready
