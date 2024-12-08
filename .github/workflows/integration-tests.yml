@@ -43,6 +43,7 @@ jobs:
   spin-up-backend-containers:
     name: Spin Up Backend Containers
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       # Step 1: Checkout the repository
