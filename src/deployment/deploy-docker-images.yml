@@ -9,10 +9,16 @@
   - name: Print tag
     debug:
       var: tag
+  - name: Get the PWD
+    shell: "pwd"
+    register: mydir
+  - name: Print the PWD
+    debug:
+      var: mydir
   - name: Build frontend container image
     community.general.docker_image:
       build:
-        path: ../react_ui
+        path: /react_ui # /frontend-react
         platform: linux/amd64/v2
       name: gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout}}
       source: build
@@ -25,7 +31,7 @@
   - name: Build api-service container image
     community.general.docker_image:
       build:
-        path: ../api_service
+        path: /api_service
         platform: linux/amd64/v2
       name: gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}
       source: build
