@@ -92,6 +92,8 @@ jobs:
           sleep 15
       - name: Check Docker Status
         run: docker ps
+      - name: Print Backend Logs
+        run: docker-compose logs backend
 
       # Step 7: Clean up containers after the tests
       - name: Tear Down Docker Containers
