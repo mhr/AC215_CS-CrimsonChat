@@ -108,3 +108,18 @@
         name: docker
         state: started
 
+    - name: Add user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+      
+    # Authenticate with GCP for Docker
+    - name: Authenticate Docker with service account
+      command: gcloud auth configure-docker --quiet
+      
+    - name: Restart Docker service
+      service:
+        name: docker
+        state: restarted
+

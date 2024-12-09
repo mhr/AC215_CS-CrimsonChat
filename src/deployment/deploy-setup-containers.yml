@@ -18,12 +18,13 @@
         path: "/srv/secrets"
         state: "directory"
         mode: 0755
+
     - name: Copy service account key file
       copy:
-        src: ../secrets/gcp-service.json # ../secrets/gcp-service.json
+        src: /secrets/gcp-service.json # ../secrets/gcp-service.json
         dest: "/srv/secrets/gcp-service.json"
         mode: 0644
-        
+
     - name: Authenticate gcloud using service account
       shell: "gcloud auth activate-service-account --key-file /srv/secrets/gcp-service.json"
     
@@ -34,17 +35,27 @@
           driver: "bridge"
           attachable: "yes"
 
+    - name: Debug Docker networks
+      shell: docker network ls
+      register: docker_networks
+    - name: Print Docker networks
+      debug:
+        var: docker_networks.stdout_lines
+
     - name: Copy docker tag file
       copy:
         src: .docker-tag
         dest: .docker-tag
         mode: 0644
+
     - name: "Get docker tag"
       shell: "cat .docker-tag"
       register: tag
+
     - name: Print tag
       debug:
-        var: tag
+        var: tag.stdout
+
     - name: Create frontend container
       docker_container:
         name: "frontend"
@@ -58,15 +69,25 @@
         networks:
           - name: "{{docker_network_name}}"
 
+    - name: Capture frontend container logs
+      shell: docker logs frontend
+      register: frontend_logs
+
+    - name: Print frontend container logs
+      debug:
+        var: frontend_logs.stdout_lines
+
+    - name: Debug frontend container details
+      shell: docker inspect frontend
+      register: frontend_details
+    - name: Print frontend container details
+      debug:
+        var: frontend_details.stdout_lines
+
     # Create a folder on persistent disk
     - name: Create persistent directory
       file:
         path: "/mnt/disk-1/persistent"
-        state: "directory"
-        mode: 0777
-    - name: Create chromadb directory
-      file:
-        path: "/mnt/disk-1/chromadb"
         state: "directory"
         mode: 0777
 
@@ -90,9 +111,28 @@
         volumes:
           - /mnt/disk-1/persistent:/persistent
           - /srv/secrets:/secrets
-  
-    - name: Check if containers are running
+
+    - name: Capture api-service container logs
+      shell: docker logs api-service
+      register: api_service_logs
+
+    - name: Print api-service container logs
+      debug:
+        var: api_service_logs.stdout_lines
+
+    - name: Debug api-service container details
+      shell: docker inspect api-service
+      register: api_service_details
+    - name: Print api-service container details
+      debug:
+        var: api_service_details.stdout_lines
+
+    - name: Check running containers
       shell: docker ps
-    
+      register: running_containers
+    - name: Print running containers
+      debug:
+        var: running_containers.stdout_lines
+
     - name: "Remove all unused containers"
       shell: docker system prune -a -f
