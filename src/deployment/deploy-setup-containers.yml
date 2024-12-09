@@ -5,6 +5,14 @@
 
   tasks:
     # Setup secrets so containers can have access to GCP resources 
+    - name: Get the PWD
+      shell: "pwd"
+      register: mydir
+      
+    - name: Print the PWD
+      debug:
+        var: mydir
+
     - name: Create secrets directory
       file:
         path: "/srv/secrets"
@@ -12,9 +20,10 @@
         mode: 0755
     - name: Copy service account key file
       copy:
-        src: ../secrets/gcp-service.json
+        src: ../secrets/gcp-service.json # ../secrets/gcp-service.json
         dest: "/srv/secrets/gcp-service.json"
         mode: 0644
+        
     - name: Authenticate gcloud using service account
       shell: "gcloud auth activate-service-account --key-file /srv/secrets/gcp-service.json"
     

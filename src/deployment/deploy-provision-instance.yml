@@ -4,6 +4,13 @@
   become: true
 
   tasks:
+    - name: Get the PWD
+      shell: "pwd"
+      register: mydir
+      
+    - name: Print the PWD
+      debug:
+        var: mydir
     # Format and mount persistent volume
     - name: "Format persistent disk if it does not contain a filesystem"
       shell: "blkid -o value -s TYPE /dev/disk/by-id/google-persistent-disk-1 || mkfs.ext4 /dev/disk/by-id/google-persistent-disk-1"
