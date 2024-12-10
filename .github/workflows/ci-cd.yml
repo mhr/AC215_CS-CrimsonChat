@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI-CD Pipeline
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Get secret
         run: |
@@ -44,6 +44,61 @@ jobs:
       - name: Clean Up Temp Key
         if: always()
         run: rm -f ../secrets/crimsonchat.json
+
+  kuber-deployment:
+    if: contains(github.event.head_commit.message, '/run-deployment')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: echo "Comment ${{ github.event.head_commit.message }}"
+      - run: echo "Job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "Job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "Branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - id: 'auth'
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}'
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker # --quiet #authenticate to gcr
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: Build Deployment Container 
+        run: |-
+          cd ${{ github.workspace }}/src/deployment/
+          docker build -t deployment -f Dockerfile .
+      
+      - name: Get secret deployment
+        run: |
+          mkdir -p ../secrets
+          echo "${{ secrets.GCP_SA_KEY_DEPLOYMENT }}" | base64 -d > ../secrets/deployment.json
+      
+      - name: Run Deploy App
+        run: |-
+          docker run --rm --name deployment \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $HOME/.ssh:/home/app/.ssh \
+            -v ${{ github.workspace }}/src/react_ui:/react_ui \
+            -v ${{ github.workspace }}/src/api-service:/api-service \
+            --volume $GITHUB_WORKSPACE:/workspace \
+            --mount type=bind,source=../secrets/deployment.json,target=/secrets/deployment.json \
+            --env GCP_SA_KEY_DEPLOYMENT=/secrets/deployment.json \
+            -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
+            -e GCP_PROJECT=cs-crimsonchat \
+            -e GCP_ZONE=us-central1-a \
+            deployment sh deploy-k8s-cluster.sh
+
+      - name: Clean Up Temp Key
+        if: always()
+        run: rm -f ../secrets/deployment.json
 
   lint-and-test:
     name: Lint and Test Microservices
@@ -63,7 +118,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       # Set up Python
       - name: Set Up Python

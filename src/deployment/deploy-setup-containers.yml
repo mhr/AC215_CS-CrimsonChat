@@ -134,5 +134,5 @@
       debug:
         var: running_containers.stdout_lines
 
-    - name: "Remove all unused containers"
-      shell: docker system prune -a -f
+    # - name: "Remove all unused containers"
+    #   shell: docker system prune -a -f

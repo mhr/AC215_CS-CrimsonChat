@@ -2,80 +2,46 @@
 - name: "Build react_ui and api_service docker images and push them to GCR"
   hosts: localhost
   gather_facts: false
-
   tasks:
-    # Get a timestamp for tagging
-    - name: "Get timestamp for docker tag"
-      shell: "(date +%Y%m%d%H%M%S)"
-      register: tag
-    - name: "Print generated tag"
-      debug:
-        var: tag.stdout
-
-    # Get the current working directory
-    - name: "Get the current working directory"
-      shell: "pwd"
-      register: mydir
-    - name: "Print the current working directory"
-      debug:
-        var: mydir.stdout
-
-    # Build the frontend container image
-    - name: "Build frontend container image"
-      community.general.docker_image:
-        build:
-          path: "/react_ui"
-          platform: linux/amd64
-        name: "gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout.strip() }}"
-        source: build
-
-    # Push the frontend image to GCR
-    - name: "Push frontend image to GCR"
-      community.general.docker_image:
-        name: "gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout.strip() }}"
-        repository: "gcr.io/{{ gcp_project }}/frontend"
-        tag: "{{ tag.stdout.strip() }}"
-        push: yes
-        source: local
-
-    # Validate the frontend image
-    - name: "Validate frontend image build"
-      shell: "docker images gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout.strip() }}"
-      register: frontend_image_check
-    - name: "Print frontend image details"
-      debug:
-        var: frontend_image_check.stdout_lines
-
-    # Build the API-service container image
-    - name: "Build API-service container image"
-      community.general.docker_image:
-        build:
-          path: "/api_service"
-          platform: linux/amd64
-        name: "gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout.strip() }}"
-        source: build
-
-    # Push the API-service image to GCR
-    - name: "Push API-service image to GCR"
-      community.general.docker_image:
-        name: "gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout.strip() }}"
-        repository: "gcr.io/{{ gcp_project }}/api-service"
-        tag: "{{ tag.stdout.strip() }}"
-        push: yes
-        source: local
-
-    # Validate the API-service image
-    - name: "Validate API-service image build"
-      shell: "docker images gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout.strip() }}"
-      register: api_service_image_check
-    - name: "Print API-service image details"
-      debug:
-        var: api_service_image_check.stdout_lines
-
-    # Save the Docker tag to a file
-    - name: "Save Docker tag to file"
-      shell: echo {{ tag.stdout.strip() }} > .docker-tag
-
-    # Clean up unused containers and images
-    - name: "Remove all unused containers and images"
-      shell: docker system prune -a --force
+  - name: "Get timestamp for docker tag"
+    shell: "(date +%Y%m%d%H%M%S)"
+    register: tag
+  - name: Print tag
+    debug:
+      var: tag
+  - name: Get the PWD
+    shell: "pwd"
+    register: mydir
+  - name: Print the PWD
+    debug:
+      var: mydir
+  - name: Build frontend container image
+    community.general.docker_image:
+      build:
+        path: /react_ui # /frontend-react
+        platform: linux/amd64
+      name: gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout}}
+      source: build
+  - name: Push frontend image to GCR
+    community.general.docker_image:
+      name: gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout}}
+      repository: gcr.io/{{ gcp_project }}/frontend:{{ tag.stdout}}
+      push: yes
+      source: local
+  - name: Build api-service container image
+    community.general.docker_image:
+      build:
+        path: /api_service
+        platform: linux/amd64
+      name: gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}
+      source: build
+  - name: Push api-service image to GCR
+    community.general.docker_image:
+      name: gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}
+      repository: gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}
+      push: yes
+      source: local
+  - name: "Save docker tag"
+    shell: echo {{ tag.stdout}} > .docker-tag
+  - name: "Remove all unused containers"
+    shell: docker system prune -a

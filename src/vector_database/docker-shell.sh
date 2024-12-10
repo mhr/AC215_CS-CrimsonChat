@@ -3,6 +3,9 @@
 # exit immediately if a command exits with a non-zero status
 set -e
 
+# Disable path conversion for Windows
+export MSYS_NO_PATHCONV=1
+
 # Read the settings file
 source ./env.dev
 
@@ -17,7 +20,7 @@ docker run --rm --name $IMAGE_NAME -ti \
 -v "$SECRETS_DIR":/secrets \
 -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
 -e GCP_PROJECT=$GCP_PROJECT \
--e =$BUCKET_NAME \
+-e BUCKET_NAME=$BUCKET_NAME \
 -e LOCATION=$LOCATION \
 -e QDRANT_BUCKET_NAMEURL=$QDRANT_URL \
 -e QDRANT_API_KEY=$QDRANT_API_KEY \

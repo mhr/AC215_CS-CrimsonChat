@@ -4,7 +4,7 @@
 """
 
 import os
-from vector_database.utils.qdrant_upsert_utils import qdrant_transform_and_upsert
+from utils.qdrant_upsert_utils import qdrant_transform_and_upsert
 from utils.embedding_utils import process_and_embed_documents, get_dense_embedding
 from utils.chunker_utils import run_chunking
 from utils.json_utils import load_all_documents_in_json
