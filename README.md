@@ -1,13 +1,11 @@
-# 🌟 Milestone 4: CS-CrimsonChat
+# 🌟 Milestone 5: CS-CrimsonChat
 
-## 📂 Project Milestone 4 Organization
+## 📂 Project Milestone 5 Organization
 
-### Test app here: **https://crimson-chat-ui-692586115434.us-central1.run.app/** (password: cheese)
 ---
 
-This structure ensures a logical and easy-to-follow format, guiding readers through the project's details while allowing for efficient navigation.
+This structure ensures a logical and easy-to-follow format, guiding readers through the project's details while allowing for efficient navigation. Below is an abridged version of the project directory tree.
 ```
-simplified projet tree
 📦AC215_CS-CrimsonChat
  ┣ 📂.github
  ┃ ┗ 📂workflows
@@ -173,7 +171,7 @@ simplified projet tree
 ---
 
 ### 🏆 Group Name
-The CrimsonChat Group  
+The CrimsonChat Group
 
 ---
 
@@ -184,20 +182,22 @@ This project aims to develop an **AI chatbot** for Harvard CS students, designed
 The system will employ a **RAG + LLM architecture** with a **vector database**, featuring a **continuous data pipeline** from Harvard CS sources, cloud-based storage and processing, and a user-friendly interface with authentication.  
 
 
-## 🎯 Milestone 4  
+## 🎯 Milestone 5
 
-In this milestone, we have developed the **frontend** and **API service** components while building upon components from previous milestones for:
+In this milestone, we have added automated model training, deployment, and scaling of the frontend and API servers through GitHub Actions, Ansible, and Kubernetes. We also wrote a blogpost and created a video, uploaded to Medium and YouTube respectively, that together explain what CrimsonChat is and how it works.
+
+We have refined all prior milestone code on the **frontend** and **API service** components while building upon components from previous milestones for:
 - Data scraping  
 - Embedding and storing in **Qdrant Cloud** vector database (with versioning)  
 - Fine-tuning of **VertexAI LLM model**  
 
-We integrated the **LLM and RAG pipeline** to answer user queries from the frontend with conversation memory for **continuous and natural conversation**. The **frontend** also features a **notes integration**, enabling users to highlight text or reference URLs and save them as notes.  
+Our **LLM and RAG pipeline** to answer user queries from the frontend with conversation memory for **continuous and natural conversation**. The **frontend** also features a **notes integration**, enabling users to highlight text or reference URLs and save them as notes.
 
 ---
 
 ## 🛠 Application Design
 
-The **university knowledge chatbot** streamlines access to university resources, helping students navigate information effortlessly.  
+The **university knowledge chatbot** streamlines access to university resources, helping students navigate information effortlessly.
 
 It integrates:  
 1. **A robust RAG (Retrieval-Augmented Generation) pipeline**
@@ -222,7 +222,7 @@ This **modular design** ensures a **responsive**, **up-to-date**, and **user-fri
 
 ## 🛡 Technical Architecture  
 
-![The technical architecture diagram outlines the deployment and operational setup of CrimsonChat, leveraging GCP services, containerized components, and Vertex AI for data processing, model training, and deployment](images/tech_arch.png)  
+![The technical architecture diagram outlines the deployment and operational setup of CrimsonChat, leveraging GCP services, containerized components, and Vertex AI for data processing, model training, and deployment](images/tech_arch.png)
 
 ---
 
@@ -478,4 +478,4 @@ We would like to express our heartfelt gratitude to:
   For their encouragement, collaboration, and feedback.
 
 - **MyMind**:  
-  For inspiring the **design and user experience** of our application
+  For inspiring the **design and user experience** of our application.
