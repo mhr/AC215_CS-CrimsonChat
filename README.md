@@ -461,9 +461,23 @@ export MODEL_ENDPOINT="dummy-model-endpoint-id"
    ```
 
 - **Frontend Deployment:**  
-  Before deploying, update the `REACT_APP_API_BASE_URL` in the `.env` file to point to the production backend URL.  
+  Before deploying, update the `REACT_APP_API_BASE_URL` in the `.env` file to point to the production backend URL.
 
+---
+## ⚠️ Known Limitations  
+1. **📝 Notes Disappear During Updates**  
+   - Currently, we don't use a database for storing notes; instead, they are saved in a JSON file.  
+   - **Problem**: Each time the application is rebuilt, all saved notes are lost.  
 
+2. **💥 Server Crashes Due to Spammy AI Messages**  
+   - The application doesn't prevent users from sending multiple messages in rapid succession during a chat with the AI.  
+   - **Problem**: This leads to:
+     - Weird rendering issues in the UI, as multiple AI responses print simultaneously.  
+     - Server shutdown when too many spammy messages overload the system.  
+
+3. **🎨 Frontend Response Style Not Persisted**  
+   - The app allows users to request specific response styles from the AI (e.g., "use bullet points" or "include many emojis") by parsing their messages and instructing the AI accordingly.  
+   - **Problem**: These style instructions are not stored in the conversation history, so the response format doesn't carry over across interactions.  
 
 ---
 
