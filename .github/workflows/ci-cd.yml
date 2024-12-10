@@ -55,7 +55,7 @@ jobs:
       - run: echo "Job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "Branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-      - name: Check out repository code
+      - name: Check out repository code hehe
         uses: actions/checkout@v3
       - id: 'auth'
         uses: google-github-actions/auth@v1
