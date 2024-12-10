@@ -3,10 +3,10 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone5 # Trigger workflow on commits to the milestone5 branch
+      - milestone5
   pull_request:
     branches:
-      - milestone5 # Trigger workflow for pull requests targeting the milestone5 branch
+      - milestone5
 
 jobs:
   integration-tests:
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12 # Match your project’s Python version
+          python-version: 3.12
 
       # Step 3: Install dependencies using pip
       - name: Install dependencies
@@ -30,15 +30,87 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest requests python-dotenv
 
-      # Step 4: Load environment variables
+      # Step 4: Load environment variables (e.g., TEST_PASSWORD)
       - name: Load environment variables
         env:
-          # BACKEND_URL: ${{ secrets.BACKEND_URL }}  # Set in GitHub Secrets or variables
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }} # Set in GitHub Secrets
-        run: |
-          # echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
-          echo "TEST_PASSWORD=${TEST_PASSWORD}" >> $GITHUB_ENV
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: echo "TEST_PASSWORD=${TEST_PASSWORD}" >> $GITHUB_ENV
 
       # Step 5: Run integration tests
       - name: Run Integration Tests
         run: pytest --rootdir=. tests/integration/
+
+  spin-up-backend-containers:
+    name: Spin Up Backend Containers
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker and Docker Compose
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      # Step 3: Verify GCP Service Account Key secret
+      - name: Test GitHub Secret
+        run: |
+          if [ -z "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" ]; then
+            echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is NOT accessible."
+            exit 1
+          else
+            echo "Secret GCP_SA_KEY_CS_CRIMSONCHAT is accessible."
+          fi
+
+      # Step 4: Write GCP Service Account Key to a file (the key should be converted to base64 when stored in secret)
+      - name: Write GCP Key File
+        run: |
+          mkdir -p ../secrets
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > ../secrets/crimsonchat.json
+
+      # Step 5: Create Environment File
+      - name: Create Environment File
+        run: |
+          echo "QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}" >> $GITHUB_WORKSPACE/.env
+          echo "QDRANT_URL=${{ env.QDRANT_URL }}" >> $GITHUB_WORKSPACE/.env
+          echo "QDRANT_COLLECTION_NAME=${{ env.QDRANT_COLLECTION_NAME }}" >> $GITHUB_WORKSPACE/.env
+          echo "GCP_PROJECT=${{ env.GCP_PROJECT }}" >> $GITHUB_WORKSPACE/.env
+          echo "LOCATION=${{ env.LOCATION }}" >> $GITHUB_WORKSPACE/.env
+          echo "GCP_SERVICE_ACCOUNT=${{ env.GCP_SERVICE_ACCOUNT }}" >> $GITHUB_WORKSPACE/.env
+          # Set the path to the service account credentials inside the container
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_key.json" >> $GITHUB_WORKSPACE/.env
+
+      - name: Debug .env File Path
+        run: ls -la
+
+      # # Step 6: Start Docker container
+      # - name: Run docker-shell.sh for API-Service
+      #   working-directory: ./src/api_service
+      #   run: |
+      #     chmod +x docker-shell.sh
+      #     ./docker-shell.sh
+      # # Step 7: Start Docker container
+      # - name: Run docker-shell.sh for Frontend
+      #   working-directory: ./src/react_ui
+      #   run: |
+      #     chmod +x docker-shell.sh
+      #     ./docker-shell.sh
+
+      # Step 6: Start Docker containers using docker-compose
+      - name: Start Backend and Frontend with Docker Compose
+        run: docker-compose --env-file $GITHUB_WORKSPACE/.env up -d --build
+
+      # Step 8: Check Docker Status
+      - name: Check Docker Status
+        run: docker ps
+
+      - name: Clean Up Temp Key
+        if: always()
+        run: rm -f ../secrets/crimsonchat.json
