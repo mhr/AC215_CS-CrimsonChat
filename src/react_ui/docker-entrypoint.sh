@@ -3,6 +3,7 @@
 set -e
 
 #REACT_APP_API_URL="http://35.237.221.78/api"
+#test
 # Default PORT to 8080 if not set
 PORT=${PORT:-3000}
 

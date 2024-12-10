@@ -1,4 +1,3 @@
-import os
 from fastapi import Depends, HTTPException, Header, APIRouter
 from pydantic import BaseModel
 from typing import List, Optional
