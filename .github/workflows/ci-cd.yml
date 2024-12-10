@@ -76,9 +76,10 @@ jobs:
           cd ${{ github.workspace }}/src/deployment/
           docker build -t deployment -f Dockerfile .
       
-      - name: Get secret deployment
+      - name: Get secret
         run: |
-          echo "${{ secrets.GCP_SA_KEY_DEPLOYMENT }}" | base64 -d > /deployment.json
+          mkdir -p ../secrets
+          echo "${{ secrets.GCP_SA_KEY_CS_CRIMSONCHAT }}" | base64 -d > ../secrets/crimsonchat.json
       
       - name: Run Deploy App
         run: |-
@@ -88,16 +89,16 @@ jobs:
             -v ${{ github.workspace }}/src/react_ui:/react_ui \
             -v ${{ github.workspace }}/src/api-service:/api-service \
             --volume $GITHUB_WORKSPACE:/workspace \
-            --mount type=bind,source=/deployment.json,target=/secrets/deployment.json \
-            --env GCP_SA_KEY_DEPLOYMENT=/secrets/deployment.json \
+            --mount type=bind,source=$GCP_SA_KEY_CS_CRIMSONCHAT,target=/secrets/deployment.json \
+            --env GCP_SA_KEY_CS_CRIMSONCHAT=/secrets/deployment.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=cs-crimsonchat \
             -e GCP_ZONE=us-central1-a \
-            deployment sh deploy-k8s-cluster.sh
+            deployment sh deploy-k8s-update.sh
 
       - name: Clean Up Temp Key
         if: always()
-        run: rm -f /deployment.json
+        run: rm -f ../secrets/crimsonchat.json
 
   lint-and-test:
     name: Lint and Test Microservices
