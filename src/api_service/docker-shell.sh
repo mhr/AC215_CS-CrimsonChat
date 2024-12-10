@@ -23,11 +23,11 @@ export PORT="9000"
 docker network inspect llm-crimsonchat >/dev/null 2>&1 || docker network create llm-crimsonchat
 
 # Build the image based on the Dockerfile
-#docker build -t $IMAGE_NAME -f Dockerfile .
+docker build -t $IMAGE_NAME -f Dockerfile .
 # M1/2 chip macs use this line
-docker build -t $IMAGE_NAME --platform=linux/arm64/v8 -f Dockerfile .
+# docker build -t $IMAGE_NAME --platform=linux/arm64/v8 -f Dockerfile .
 
-docker run --rm --name $IMAGE_NAME -ti \
+docker run --rm --name $IMAGE_NAME -i \
   -p 9000:$PORT \
   -e DEV=0 \
   -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
