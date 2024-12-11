@@ -78,6 +78,7 @@ jobs:
       
       - name: Get secret deployment
         run: |
+          mkdir -p ../secrets
           echo "${{ secrets.GCP_SA_KEY_DEPLOYMENT }}" | base64 -d > ../secrets/deployment.json
 
       - name: Run docker-shell.sh for Deployment
