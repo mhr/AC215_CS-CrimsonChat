@@ -29,5 +29,5 @@ docker run --rm --name $IMAGE_NAME -ti \
 -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
 -e GCP_PROJECT=$GCP_PROJECT \
 -e GCP_ZONE=$GCP_ZONE \
-$IMAGE_NAME
+$IMAGE_NAME sh deploy-k8s-update.sh
 
