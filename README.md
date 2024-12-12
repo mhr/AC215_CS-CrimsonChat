@@ -298,7 +298,6 @@ This design creates a **moodboard-like experience**, helping users save importan
   ![alt text](images/notesdrag.gif)
 
 - Deploying the Application using Ansible and Kubernetes
-![alt text](images/deployment1.png)
 ![alt text](images/deployment2.png)
 ![alt text](images/deployment3.png)
 
