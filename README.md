@@ -297,6 +297,15 @@ This design creates a **moodboard-like experience**, helping users save importan
 - Saving Notes  
   ![alt text](images/notesdrag.gif)
 
+- Deploying the Application using Ansible and Kubernetes
+![alt text](images/deployment1.png)
+![alt text](images/deployment2.png)
+![alt text](images/deployment3.png)
+
+- Pytest Coverage Reports
+![alt text](images/pytest1.png)
+![alt text](images/pytest2.png)
+![alt text](images/pytest3.png)
 
 ---
 
